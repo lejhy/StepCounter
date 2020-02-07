@@ -7,7 +7,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import strathclyde.emb15144.stepcounter.R
 
-class GoalsListAdapter(private val goals: Array<String>) : RecyclerView.Adapter<GoalsListAdapter.GoalViewHolder>() {
+class GoalsListAdapter() : RecyclerView.Adapter<GoalsListAdapter.GoalViewHolder>() {
+
+    private var goals = mutableListOf<String>()
 
     class GoalViewHolder(val linearLayout: LinearLayout) : RecyclerView.ViewHolder(linearLayout) {
         val textView: TextView = linearLayout.findViewById(R.id.list_goal_text)
@@ -25,4 +27,9 @@ class GoalsListAdapter(private val goals: Array<String>) : RecyclerView.Adapter<
     }
 
     override fun getItemCount() = goals.size
+
+    fun setData(data: MutableList<String>) {
+        goals = data
+        notifyDataSetChanged()
+    }
 }
