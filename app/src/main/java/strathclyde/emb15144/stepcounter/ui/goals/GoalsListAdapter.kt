@@ -6,10 +6,11 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import strathclyde.emb15144.stepcounter.R
+import strathclyde.emb15144.stepcounter.database.Goal
 
 class GoalsListAdapter() : RecyclerView.Adapter<GoalsListAdapter.GoalViewHolder>() {
 
-    private var goals = mutableListOf<String>()
+    private var goals = listOf<Goal>()
 
     class GoalViewHolder(val linearLayout: LinearLayout) : RecyclerView.ViewHolder(linearLayout) {
         val textView: TextView = linearLayout.findViewById(R.id.list_goal_text)
@@ -23,12 +24,12 @@ class GoalsListAdapter() : RecyclerView.Adapter<GoalsListAdapter.GoalViewHolder>
 
     override fun onBindViewHolder(holder: GoalViewHolder, position: Int) {
 
-        holder.textView.text = goals[position]
+        holder.textView.text = goals[position].name
     }
 
     override fun getItemCount() = goals.size
 
-    fun setData(data: MutableList<String>) {
+    fun setData(data: List<Goal>) {
         goals = data
         notifyDataSetChanged()
     }

@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import strathclyde.emb15144.stepcounter.R
 import strathclyde.emb15144.stepcounter.SharedViewModel
+import strathclyde.emb15144.stepcounter.SharedViewModelFactory
+import strathclyde.emb15144.stepcounter.database.GoalDatabase
 import strathclyde.emb15144.stepcounter.databinding.FragmentGoalsBinding
 
 class GoalsFragment : Fragment() {
@@ -40,7 +42,14 @@ class GoalsFragment : Fragment() {
     ): View? {
         Log.i("GoalsFragment", "onCreateView Called")
         val binding = DataBindingUtil.inflate<FragmentGoalsBinding>(inflater, R.layout.fragment_goals, container, false)
-        goalsViewModel = ViewModelProviders.of(requireActivity()).get(SharedViewModel::class.java)
+
+//        val application = requireActivity().application
+        val application = requireNotNull(this.activity).application
+        val datasource = GoalDatabase.getInstance(application).goalDao
+        val viewModelFactory = SharedViewModelFactory(datasource, application)
+
+        goalsViewModel = ViewModelProviders.of(this, viewModelFactory).get(SharedViewModel::class.java)
+//        goalsViewModel = ViewModelProviders.of(requireActivity()).get(SharedViewModel::class.java)
 
         binding.goalsViewModel = goalsViewModel
         viewAdapter = GoalsListAdapter()
