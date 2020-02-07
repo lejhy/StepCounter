@@ -6,11 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import strathclyde.emb15144.stepcounter.R
+import strathclyde.emb15144.stepcounter.databinding.FragmentGoalsBinding
 
 class GoalsFragment : Fragment() {
 
@@ -25,23 +27,15 @@ class GoalsFragment : Fragment() {
     ): View? {
         goalsViewModel =
                 ViewModelProviders.of(this).get(GoalsViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_goals, container, false)
-//        val textView: TextView = root.findViewById(R.id.text_goals)
-//        goalsViewModel.text.observe(this, Observer {
-//            textView.text = it
-//        })
+        val binding = DataBindingUtil.inflate<FragmentGoalsBinding>(inflater, R.layout.fragment_goals, container, false)
 
         val array = arrayOf("Item1", "Item2", "Item3")
         viewAdapter = GoalsListAdapter(array)
 
-        recyclerView = root.findViewById<RecyclerView>(R.id.recycler_view_goals).apply {
+        recyclerView = binding.recyclerViewGoals.apply {
             adapter = viewAdapter
         }
 
-//        val adapter = ArrayAdapter<String>(root.context, android.R.layout.simple_list_item_1, array)
-//        listView = root.findViewById(R.id.recycler_view_goals)
-//        listView.adapter = adapter;
-
-        return root
+        return binding.root
     }
 }
