@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">StepCounter</string>
+    <string name="title_steps">Steps</string>
+    <string name="title_goals">Goals</string>
+    <string name="title_history">History</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Preferences -->
+    <string name="preference_notifications">Notifications</string>
+    <string name="preference_editable_goals">Editable Goals</string>
+
+</resources>
