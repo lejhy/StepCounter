@@ -5,18 +5,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.ListView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import strathclyde.emb15144.stepcounter.R
 import strathclyde.emb15144.stepcounter.SharedViewModel
 import strathclyde.emb15144.stepcounter.SharedViewModelFactory
-import strathclyde.emb15144.stepcounter.database.GoalDatabase
+import strathclyde.emb15144.stepcounter.database.MainDatabase
 import strathclyde.emb15144.stepcounter.databinding.FragmentGoalsBinding
 
 class GoalsFragment : Fragment() {
@@ -45,10 +43,10 @@ class GoalsFragment : Fragment() {
 
 //        val application = requireActivity().application
         val application = requireNotNull(this.activity).application
-        val datasource = GoalDatabase.getInstance(application).goalDao
+        val datasource = MainDatabase.getInstance(application).goalDao
         val viewModelFactory = SharedViewModelFactory(datasource, application)
 
-        goalsViewModel = ViewModelProviders.of(this, viewModelFactory).get(SharedViewModel::class.java)
+        goalsViewModel = ViewModelProvider(this, viewModelFactory).get(SharedViewModel::class.java)
 //        goalsViewModel = ViewModelProviders.of(requireActivity()).get(SharedViewModel::class.java)
 
         binding.goalsViewModel = goalsViewModel
