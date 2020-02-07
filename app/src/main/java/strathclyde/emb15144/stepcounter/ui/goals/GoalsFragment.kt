@@ -46,7 +46,7 @@ class GoalsFragment : Fragment() {
 
         viewAdapter = GoalsListAdapter()
         goalsViewModel.goals.observe(viewLifecycleOwner, Observer { array ->
-            viewAdapter.setData(array)
+            viewAdapter.goals = array
         })
         recyclerView = binding.recyclerViewGoals.apply {
             adapter = viewAdapter

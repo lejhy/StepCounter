@@ -10,27 +10,37 @@ import strathclyde.emb15144.stepcounter.database.Goal
 
 class GoalsListAdapter() : RecyclerView.Adapter<GoalsListAdapter.GoalViewHolder>() {
 
-    private var goals = listOf<Goal>()
-
-    class GoalViewHolder(val linearLayout: LinearLayout) : RecyclerView.ViewHolder(linearLayout) {
+    class GoalViewHolder private constructor(val linearLayout: LinearLayout) : RecyclerView.ViewHolder(linearLayout) {
         val textView: TextView = linearLayout.findViewById(R.id.list_goal_text)
+
+        fun bind(item: Goal) {
+            textView.text = item.name
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): GoalViewHolder {
+                val linearLayout = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.list_goal_item, parent, false) as LinearLayout
+
+                return GoalViewHolder(linearLayout)
+            }
+        }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GoalViewHolder {
-        val linearLayout = LayoutInflater.from(parent.context).inflate(R.layout.list_goal_item, parent, false) as LinearLayout
+    var goals = listOf<Goal>()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
-        return GoalViewHolder(linearLayout)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GoalViewHolder {
+        return GoalViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: GoalViewHolder, position: Int) {
-
-        holder.textView.text = goals[position].name
+        val item = goals[position]
+        holder.bind(item)
     }
 
     override fun getItemCount() = goals.size
-
-    fun setData(data: List<Goal>) {
-        goals = data
-        notifyDataSetChanged()
-    }
 }
