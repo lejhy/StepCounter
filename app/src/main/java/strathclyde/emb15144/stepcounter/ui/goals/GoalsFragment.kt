@@ -40,9 +40,8 @@ class GoalsFragment : Fragment() {
     ): View? {
         Log.i("GoalsFragment", "onCreateView Called")
         val binding = DataBindingUtil.inflate<FragmentGoalsBinding>(inflater, R.layout.fragment_goals, container, false)
-        goalsViewModel = activity?.run {
-            ViewModelProviders.of(this).get(SharedViewModel::class.java)
-        } ?: throw Exception("Invalid Activity")
+        goalsViewModel = ViewModelProviders.of(requireActivity()).get(SharedViewModel::class.java)
+
         binding.goalsViewModel = goalsViewModel
         viewAdapter = GoalsListAdapter()
 
