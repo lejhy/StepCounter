@@ -2,45 +2,49 @@ package strathclyde.emb15144.stepcounter.ui.goals
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import strathclyde.emb15144.stepcounter.R
 import strathclyde.emb15144.stepcounter.database.Goal
+import strathclyde.emb15144.stepcounter.databinding.ListGoalItemBinding
 
-class GoalsListAdapter() : RecyclerView.Adapter<GoalsListAdapter.GoalViewHolder>() {
+class GoalListDiffCallback : DiffUtil.ItemCallback<Goal>() {
+    override fun areItemsTheSame(oldItem: Goal, newItem: Goal): Boolean {
+        return oldItem.id == newItem.id
+    }
 
-    class GoalViewHolder private constructor(val linearLayout: LinearLayout) : RecyclerView.ViewHolder(linearLayout) {
-        val textView: TextView = linearLayout.findViewById(R.id.list_goal_text)
+    override fun areContentsTheSame(oldItem: Goal, newItem: Goal): Boolean {
+        return oldItem == newItem
+    }
+
+}
+
+class GoalsListAdapter() : ListAdapter<Goal, GoalsListAdapter.GoalViewHolder> (GoalListDiffCallback()) {
+
+    class GoalViewHolder private constructor(val binding: ListGoalItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Goal) {
-            textView.text = item.name
+            binding.goal = item
+            binding.executePendingBindings()
         }
 
         companion object {
             fun from(parent: ViewGroup): GoalViewHolder {
-                val linearLayout = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.list_goal_item, parent, false) as LinearLayout
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ListGoalItemBinding.inflate(layoutInflater, parent, false)
 
-                return GoalViewHolder(linearLayout)
+                return GoalViewHolder(binding)
             }
         }
     }
-
-    var goals = listOf<Goal>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GoalViewHolder {
         return GoalViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: GoalViewHolder, position: Int) {
-        val item = goals[position]
+        val item = getItem(position)
         holder.bind(item)
     }
 
-    override fun getItemCount() = goals.size
 }

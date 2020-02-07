@@ -1,10 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    <TextView
-            android:id="@+id/list_goal_text"
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+                name="goal"
+                type="strathclyde.emb15144.stepcounter.database.Goal"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-    </TextView>
-</LinearLayout>
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:id="@+id/list_goal_text"
+                android:text="@={goal.name}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+        </TextView>
+
+        <TextView
+                android:id="@+id/list_goal_steps"
+                app:goalSteps="@{goal}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintTop_toBottomOf="@id/list_goal_text">
+        </TextView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
