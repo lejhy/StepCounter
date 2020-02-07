@@ -14,11 +14,12 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import strathclyde.emb15144.stepcounter.R
+import strathclyde.emb15144.stepcounter.SharedViewModel
 import strathclyde.emb15144.stepcounter.databinding.FragmentGoalsBinding
 
 class GoalsFragment : Fragment() {
 
-    private lateinit var goalsViewModel: GoalsViewModel
+    private lateinit var goalsViewModel: SharedViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: GoalsListAdapter
 
@@ -38,10 +39,11 @@ class GoalsFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         Log.i("GoalsFragment", "onCreateView Called")
-        goalsViewModel =
-                ViewModelProviders.of(this).get(GoalsViewModel::class.java)
         val binding = DataBindingUtil.inflate<FragmentGoalsBinding>(inflater, R.layout.fragment_goals, container, false)
-
+        goalsViewModel = activity?.run {
+            ViewModelProviders.of(this).get(SharedViewModel::class.java)
+        } ?: throw Exception("Invalid Activity")
+        binding.goalsViewModel = goalsViewModel
         viewAdapter = GoalsListAdapter()
 
         goalsViewModel.array.observe(viewLifecycleOwner, Observer { array ->
