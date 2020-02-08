@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import strathclyde.emb15144.stepcounter.R
 import strathclyde.emb15144.stepcounter.databinding.DialogAddGoalBinding
 
-class EditGoalDialogFragment(
+class GoalDialogFragment(
     private val title: String,
     private val goalName: String,
     private val goalSteps: Int,

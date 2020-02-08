@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -50,7 +49,7 @@ class GoalsFragment : Fragment() {
                 mainViewModel.deleteGoal(it.id)
             },
             {
-                val goalDialog = EditGoalDialogFragment("Edit Goal", it.name, it.steps, editGoal(it.id))
+                val goalDialog = GoalDialogFragment("Edit Goal", it.name, it.steps, getEditGoalCallback(it.id))
                 goalDialog.show(requireActivity().supportFragmentManager, "editGoalDialog")
             }
         ))
@@ -64,18 +63,18 @@ class GoalsFragment : Fragment() {
         }
 
         binding.addGoal.setOnClickListener {
-            val goalDialog = EditGoalDialogFragment("Add Goal", "", 0, addGoal())
+            val goalDialog = GoalDialogFragment("Add Goal", "", 0, getAddGoalCallback())
             goalDialog.show(requireActivity().supportFragmentManager, "addGoalDialog")
         }
 
         return binding.root
     }
 
-    private fun addGoal() = { name: String, steps: Int ->
+    private fun getAddGoalCallback() = { name: String, steps: Int ->
         mainViewModel.addGoal(name, steps)
     }
 
-    private fun editGoal(id: Long) = { name: String, steps: Int ->
+    private fun getEditGoalCallback(id: Long) = { name: String, steps: Int ->
         mainViewModel.editGoal(Goal(id, name, steps))
     }
 }
