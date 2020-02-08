@@ -39,10 +39,11 @@ class GoalsFragment : Fragment() {
     ): View? {
         Log.i("GoalsFragment", "onCreateView Called")
         val binding = DataBindingUtil.inflate<FragmentGoalsBinding>(inflater, R.layout.fragment_goals, container, false)
+        binding.setLifecycleOwner(viewLifecycleOwner)
 
         val viewModelFactory = MainViewModelFactory(requireActivity().application)
         mainViewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
-        binding.goalsViewModel = mainViewModel
+        binding.mainViewModel = mainViewModel
 
         viewAdapter = GoalsListAdapter(GoalListListener(
             {

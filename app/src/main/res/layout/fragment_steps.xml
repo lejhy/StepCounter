@@ -2,6 +2,11 @@
 <layout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+                name="mainViewModel"
+                type="strathclyde.emb15144.stepcounter.MainViewModel"/>
+    </data>
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -54,7 +59,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/spinner3"/>
 
         <TextView
-                android:text="2,000"
+                app:intToText="@{mainViewModel.today.goal_steps}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView8"

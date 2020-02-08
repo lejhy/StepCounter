@@ -8,7 +8,7 @@ import java.sql.Date
 data class Day(
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0L,
-    var date: Long = 0L,
+    var date: String = "",
     var steps: Int = 0,
     var goal_id: Long = 0L,
     var goal_name: String = "",

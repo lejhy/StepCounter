@@ -4,7 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-                name="goalsViewModel"
+                name="mainViewModel"
                 type="strathclyde.emb15144.stepcounter.MainViewModel"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
