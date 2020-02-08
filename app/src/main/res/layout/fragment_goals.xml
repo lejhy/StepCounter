@@ -25,6 +25,8 @@
                 android:layout_margin="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:srcCompat="@drawable/ic_add_white_24dp"/>
+                app:srcCompat="@drawable/ic_add_white_24dp"
+                app:tint="#ffffff"
+                />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

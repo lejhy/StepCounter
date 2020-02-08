@@ -19,12 +19,16 @@ class GoalListDiffCallback : DiffUtil.ItemCallback<Goal>() {
 
 }
 
-class GoalsListAdapter() : ListAdapter<Goal, GoalsListAdapter.GoalViewHolder> (GoalListDiffCallback()) {
+class GoalsListAdapter(val clickListener: GoalListListener) : ListAdapter<Goal, GoalsListAdapter.GoalViewHolder> (GoalListDiffCallback()) {
 
     class GoalViewHolder private constructor(val binding: ListItemGoalBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Goal) {
-            binding.goal = item
+        fun bind(
+            goal: Goal,
+            clickListener: GoalListListener
+        ) {
+            binding.goal = goal
+            binding.clickListener = clickListener
             binding.executePendingBindings()
         }
 
@@ -44,7 +48,12 @@ class GoalsListAdapter() : ListAdapter<Goal, GoalsListAdapter.GoalViewHolder> (G
 
     override fun onBindViewHolder(holder: GoalViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        holder.bind(item, clickListener)
     }
 
+}
+
+class GoalListListener(val onDelete: (id: Long) -> Unit, val onEdit: (id: Long) -> Unit) {
+    fun onDelete(goal: Goal) = onDelete(goal.id)
+    fun onEdit(goal: Goal) = onEdit(goal.id)
 }

@@ -19,11 +19,15 @@ class AddGoalDialogFragment(val accept: (name: String, steps: Int) -> Unit) : Di
             builder.setView(binding.root)
                 .setTitle("Add Goal")
                 .setPositiveButton("Accept") { dialog, id ->
+                    val name = binding.addGoalName.text.toString()
+                    val steps = binding.addGoalSteps.text.toString()
+                    if (name.isNotEmpty() && steps.isNotEmpty()) {
                         accept(
-                            binding.addGoalName.text.toString(),
-                            Integer.parseInt(binding.addGoalSteps.text.toString())
+                            name,
+                            Integer.parseInt(steps)
                         )
                     }
+                }
                 .setNegativeButton("Cancel") { dialog, id ->
                     dialog.cancel()
                 }

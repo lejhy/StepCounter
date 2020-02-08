@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -43,7 +44,14 @@ class GoalsFragment : Fragment() {
         mainViewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
         binding.goalsViewModel = mainViewModel
 
-        viewAdapter = GoalsListAdapter()
+        viewAdapter = GoalsListAdapter(GoalListListener(
+            {
+                mainViewModel.deleteGoal(it)
+            },
+            {
+                Toast.makeText(context, "Edit ${it}", Toast.LENGTH_LONG).show()
+            }
+        ))
         mainViewModel.goals.observe(viewLifecycleOwner, Observer {
             it?.let {
                 viewAdapter.submitList(it)

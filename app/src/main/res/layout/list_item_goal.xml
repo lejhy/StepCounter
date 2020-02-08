@@ -7,43 +7,78 @@
         <variable
                 name="goal"
                 type="strathclyde.emb15144.stepcounter.database.Goal"/>
+        <variable
+                name="clickListener"
+                type="strathclyde.emb15144.stepcounter.ui.goals.GoalListListener"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            >
 
         <TextView
-                android:id="@+id/list_goal_text"
+                android:id="@+id/goal_name"
                 android:text="@={goal.name}"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="16dp"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="12dp"
                 android:textSize="16sp"
                 tools:text="My Personal Goal"
-                android:textColor="@android:color/primary_text_light">
+                android:textColor="@android:color/primary_text_light"
+                android:layout_marginTop="12dp">
         </TextView>
 
         <TextView
-                android:id="@+id/list_goal_steps"
+                android:id="@+id/goal_steps"
                 app:goalSteps="@{goal}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_constraintTop_toBottomOf="@id/list_goal_text"
+                app:layout_constraintTop_toBottomOf="@id/goal_name"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="17dp"
                 android:textSize="14sp"
                 tools:text="2,000 steps"
-                >
+                android:layout_marginBottom="17dp">
         </TextView>
+
+        <com.google.android.material.button.MaterialButton
+                android:id="@+id/delete_goal"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="48dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:icon="@drawable/ic_edit_black_24dp"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                android:onClick="@{() -> clickListener.onEdit(goal)}"
+                android:padding="0dp"
+                app:layout_constraintEnd_toStartOf="@id/edit_goal"
+                android:layout_marginEnd="16dp"
+                />
+
+        <com.google.android.material.button.MaterialButton
+                android:id="@+id/edit_goal"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="48dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:icon="@drawable/ic_delete_black_24dp"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                android:onClick="@{() -> clickListener.onDelete(goal)}"
+                android:padding="0dp"
+                app:iconTint="@color/design_default_color_error"
+                app:rippleColor="@color/design_default_color_error"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

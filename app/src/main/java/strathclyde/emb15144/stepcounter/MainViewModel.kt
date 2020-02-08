@@ -31,13 +31,17 @@ class MainViewModel(
 
     fun addGoal(goal: String, steps: Int) {
         uiScope.launch {
-            saveGoal(Goal(0, goal, steps))
+            withContext(Dispatchers.IO) {
+                goalDao.insert(Goal(0, goal, steps))
+            }
         }
     }
 
-    private suspend fun saveGoal(goal: Goal) {
-        withContext(Dispatchers.IO) {
-            goalDao.insert(goal)
+    fun deleteGoal(id: Long) {
+        uiScope.launch {
+            withContext(Dispatchers.IO) {
+                goalDao.delete(Goal(id))
+            }
         }
     }
 }
