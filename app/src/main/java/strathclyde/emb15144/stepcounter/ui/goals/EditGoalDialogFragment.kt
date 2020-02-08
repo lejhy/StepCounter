@@ -9,15 +9,23 @@ import kotlinx.android.synthetic.main.activity_main.*
 import strathclyde.emb15144.stepcounter.R
 import strathclyde.emb15144.stepcounter.databinding.DialogAddGoalBinding
 
-class AddGoalDialogFragment(val accept: (name: String, steps: Int) -> Unit) : DialogFragment() {
+class EditGoalDialogFragment(
+    private val title: String,
+    private val goalName: String,
+    private val goalSteps: Int,
+    private val accept: (name: String, steps: Int) -> Unit
+) : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val builder = AlertDialog.Builder(it)
             val inflater = requireActivity().layoutInflater
             val binding = DataBindingUtil.inflate<DialogAddGoalBinding>(inflater, R.layout.dialog_add_goal, container, false)
 
+            binding.addGoalName.setText(goalName)
+            binding.addGoalSteps.setText(goalSteps.toString())
+
             builder.setView(binding.root)
-                .setTitle("Add Goal")
+                .setTitle(title)
                 .setPositiveButton("Accept") { dialog, id ->
                     val name = binding.addGoalName.text.toString()
                     val steps = binding.addGoalSteps.text.toString()

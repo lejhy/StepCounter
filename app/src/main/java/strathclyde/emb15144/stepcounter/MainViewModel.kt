@@ -37,6 +37,14 @@ class MainViewModel(
         }
     }
 
+    fun editGoal(goal: Goal) {
+        uiScope.launch {
+            withContext(Dispatchers.IO) {
+                goalDao.update(goal)
+            }
+        }
+    }
+
     fun deleteGoal(id: Long) {
         uiScope.launch {
             withContext(Dispatchers.IO) {

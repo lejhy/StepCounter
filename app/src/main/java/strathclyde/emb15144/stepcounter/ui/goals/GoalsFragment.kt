@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import strathclyde.emb15144.stepcounter.MainViewModel
 import strathclyde.emb15144.stepcounter.MainViewModelFactory
 import strathclyde.emb15144.stepcounter.R
+import strathclyde.emb15144.stepcounter.database.Goal
 import strathclyde.emb15144.stepcounter.databinding.FragmentGoalsBinding
 
 class GoalsFragment : Fragment() {
@@ -46,10 +47,11 @@ class GoalsFragment : Fragment() {
 
         viewAdapter = GoalsListAdapter(GoalListListener(
             {
-                mainViewModel.deleteGoal(it)
+                mainViewModel.deleteGoal(it.id)
             },
             {
-                Toast.makeText(context, "Edit ${it}", Toast.LENGTH_LONG).show()
+                val goalDialog = EditGoalDialogFragment("Edit Goal", it.name, it.steps, editGoal(it.id))
+                goalDialog.show(requireActivity().supportFragmentManager, "editGoalDialog")
             }
         ))
         mainViewModel.goals.observe(viewLifecycleOwner, Observer {
@@ -62,14 +64,18 @@ class GoalsFragment : Fragment() {
         }
 
         binding.addGoal.setOnClickListener {
-            val goalDialog = AddGoalDialogFragment(addGoal)
+            val goalDialog = EditGoalDialogFragment("Add Goal", "", 0, addGoal())
             goalDialog.show(requireActivity().supportFragmentManager, "addGoalDialog")
         }
 
         return binding.root
     }
 
-    private val addGoal = { name: String, steps: Int ->
+    private fun addGoal() = { name: String, steps: Int ->
         mainViewModel.addGoal(name, steps)
+    }
+
+    private fun editGoal(id: Long) = { name: String, steps: Int ->
+        mainViewModel.editGoal(Goal(id, name, steps))
     }
 }

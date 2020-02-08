@@ -53,7 +53,10 @@ class GoalsListAdapter(val clickListener: GoalListListener) : ListAdapter<Goal, 
 
 }
 
-class GoalListListener(val onDelete: (id: Long) -> Unit, val onEdit: (id: Long) -> Unit) {
-    fun onDelete(goal: Goal) = onDelete(goal.id)
-    fun onEdit(goal: Goal) = onEdit(goal.id)
+class GoalListListener(
+    val onDeleteCallback: (goal: Goal) -> Unit,
+    val onEditCallback: (goal: Goal) -> Unit
+) {
+    fun onDelete(goal: Goal) : Unit = onDeleteCallback(goal)
+    fun onEdit(goal: Goal) : Unit = onEditCallback(goal)
 }
