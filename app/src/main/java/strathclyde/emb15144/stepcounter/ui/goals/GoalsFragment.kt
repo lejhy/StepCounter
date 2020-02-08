@@ -10,15 +10,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import strathclyde.emb15144.stepcounter.R
 import strathclyde.emb15144.stepcounter.MainViewModel
 import strathclyde.emb15144.stepcounter.MainViewModelFactory
-import strathclyde.emb15144.stepcounter.database.MainDatabase
+import strathclyde.emb15144.stepcounter.R
 import strathclyde.emb15144.stepcounter.databinding.FragmentGoalsBinding
 
 class GoalsFragment : Fragment() {
 
-    private lateinit var goalsViewModel: MainViewModel
+    private lateinit var mainViewModel: MainViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: GoalsListAdapter
 
@@ -41,11 +40,11 @@ class GoalsFragment : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentGoalsBinding>(inflater, R.layout.fragment_goals, container, false)
 
         val viewModelFactory = MainViewModelFactory(requireActivity().application)
-        goalsViewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
-        binding.goalsViewModel = goalsViewModel
+        mainViewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
+        binding.goalsViewModel = mainViewModel
 
         viewAdapter = GoalsListAdapter()
-        goalsViewModel.goals.observe(viewLifecycleOwner, Observer {
+        mainViewModel.goals.observe(viewLifecycleOwner, Observer {
             it?.let {
                 viewAdapter.submitList(it)
             }
@@ -55,9 +54,14 @@ class GoalsFragment : Fragment() {
         }
 
         binding.addGoal.setOnClickListener {
-            goalsViewModel.addGoal("asdf")
+            val goalDialog = AddGoalDialogFragment(addGoal)
+            goalDialog.show(requireActivity().supportFragmentManager, "addGoalDialog")
         }
 
         return binding.root
+    }
+
+    private val addGoal = { name: String, steps: Int ->
+        mainViewModel.addGoal(name, steps)
     }
 }

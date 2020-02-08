@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import strathclyde.emb15144.stepcounter.database.Goal
-import strathclyde.emb15144.stepcounter.databinding.ListGoalItemBinding
+import strathclyde.emb15144.stepcounter.databinding.ListItemGoalBinding
 
 class GoalListDiffCallback : DiffUtil.ItemCallback<Goal>() {
     override fun areItemsTheSame(oldItem: Goal, newItem: Goal): Boolean {
@@ -21,7 +21,7 @@ class GoalListDiffCallback : DiffUtil.ItemCallback<Goal>() {
 
 class GoalsListAdapter() : ListAdapter<Goal, GoalsListAdapter.GoalViewHolder> (GoalListDiffCallback()) {
 
-    class GoalViewHolder private constructor(val binding: ListGoalItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class GoalViewHolder private constructor(val binding: ListItemGoalBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Goal) {
             binding.goal = item
@@ -31,7 +31,7 @@ class GoalsListAdapter() : ListAdapter<Goal, GoalsListAdapter.GoalViewHolder> (G
         companion object {
             fun from(parent: ViewGroup): GoalViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ListGoalItemBinding.inflate(layoutInflater, parent, false)
+                val binding = ListItemGoalBinding.inflate(layoutInflater, parent, false)
 
                 return GoalViewHolder(binding)
             }

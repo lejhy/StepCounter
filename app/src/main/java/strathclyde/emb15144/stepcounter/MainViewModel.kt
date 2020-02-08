@@ -29,9 +29,9 @@ class MainViewModel(
         Log.i("GoalsViewModel", "GoalsViewModel destroyed!")
     }
 
-    fun addGoal(goal: String) {
+    fun addGoal(goal: String, steps: Int) {
         uiScope.launch {
-            saveGoal(Goal(0, goal, 0))
+            saveGoal(Goal(0, goal, steps))
         }
     }
 
