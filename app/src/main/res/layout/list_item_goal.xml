@@ -21,7 +21,7 @@
 
         <TextView
                 android:id="@+id/goal_name"
-                android:text="@={goal.name}"
+                android:text="@{goal.name}"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 app:layout_constraintStart_toStartOf="parent"

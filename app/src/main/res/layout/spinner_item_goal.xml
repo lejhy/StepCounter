@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+                name="goal"
+                type="strathclyde.emb15144.stepcounter.database.Goal"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:id="@+id/spinner_item_goal_name"
+                android:text="@{goal.name}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/spinner_item_goal_steps"
+                android:textAlignment="textStart"
+                tools:text="My Default Goal"
+                android:textSize="18sp"
+                android:textColor="@android:color/primary_text_light">
+        </TextView>
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:id="@+id/spinner_item_goal_steps"
+                app:goalSteps="@{goal}"
+                app:layout_constraintStart_toEndOf="@+id/spinner_item_goal_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textAlignment="textEnd"
+                tools:text="2000 steps"
+                app:layout_constraintBaseline_toBaselineOf="@id/spinner_item_goal_name">
+        </TextView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

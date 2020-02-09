@@ -29,13 +29,15 @@ class MainViewModel(
     val goals: LiveData<List<Goal>> = goalDao.getAll()
     val days: LiveData<List<Day>> = dayDao.getAll()
     val today: LiveData<Day> = Transformations.map(days) {
-         it[0]
+         it.last()
     }
 
     private val newDayObserver: Observer<List<Day>> = Observer{ list ->
         Log.i("Days", "Days Changed: " + list.size)
         today.observeOnce(Observer<Day> {
             val now = dateFormat.format(Calendar.getInstance().time)
+            Log.i("StepFragment", "now: " + now)
+            Log.i("StepFragment", "today: " + it.id)
             if (it.date != now) {
                 insertDay(now, Goal(it.goal_id, it.goal_name, it.goal_steps))
             }
@@ -52,15 +54,6 @@ class MainViewModel(
         Log.i("GoalsViewModel", "GoalsViewModel destroyed!")
         viewModelJob.cancel()
         days.removeObserver(newDayObserver)
-    }
-
-    fun <T> LiveData<T>.observeOnce(observer: Observer<T>) {
-        observeForever(object : Observer<T> {
-            override fun onChanged(t: T?) {
-                observer.onChanged(t)
-                removeObserver(this)
-            }
-        })
     }
 
     private fun insertDay(date: String, goal: Goal) {
@@ -99,6 +92,30 @@ class MainViewModel(
         uiScope.launch {
             withContext(Dispatchers.IO) {
                 goalDao.delete(Goal(id))
+            }
+        }
+    }
+
+    fun updateGoalSelection(selection: Goal) {
+        if (today.value!!.goal_id != selection.id) {
+            val updated = today.value!!
+            updated.goal_id = selection.id
+            updated.goal_name = selection.name
+            updated.goal_steps = selection.steps
+            uiScope.launch {
+                withContext(Dispatchers.IO) {
+                    dayDao.update(updated)
+                }
+            }
+        }
+    }
+
+    fun addSteps(steps: Int) {
+        val updated = today.value!!
+        updated.steps += steps
+        uiScope.launch {
+            withContext(Dispatchers.IO) {
+                dayDao.update(updated)
             }
         }
     }
