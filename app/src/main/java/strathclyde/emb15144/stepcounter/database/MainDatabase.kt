@@ -8,7 +8,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
     entities = [Goal::class, Day::class],
-    version = 3,
+    version = 6,
     exportSchema = false
 )
 abstract class MainDatabase : RoomDatabase() {

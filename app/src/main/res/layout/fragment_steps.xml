@@ -61,8 +61,7 @@
                 app:layout_constraintDimensionRatio="1"
                 android:layout_marginTop="16dp"
                 android:progressDrawable="@drawable/progress"
-                android:indeterminateOnly="false"
-                app:layout_constraintHeight_min="0dp"/>
+                android:indeterminateOnly="false"/>
 
         <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="0dp"

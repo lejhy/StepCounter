@@ -15,3 +15,13 @@ fun TextView.setGoalStepsFormatted(item: Goal) {
 fun TextView.setIntToTextFormatted(item: Int) {
     text = item.toString()
 }
+
+@BindingAdapter("dateAndGoal")
+fun TextView.setDateAndGoalFormatted(item: Day) {
+    text = String.format("%s - %s", item.date, item.goal_name)
+}
+
+@BindingAdapter("daySteps")
+fun TextView.setDayStepsFormatted(item: Day) {
+    text = String.format("%s out of %s steps", item.steps, item.goal_steps)
+}

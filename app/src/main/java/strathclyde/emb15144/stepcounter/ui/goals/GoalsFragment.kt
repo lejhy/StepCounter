@@ -39,7 +39,7 @@ class GoalsFragment : Fragment() {
     ): View? {
         Log.i("GoalsFragment", "onCreateView Called")
         val binding = DataBindingUtil.inflate<FragmentGoalsBinding>(inflater, R.layout.fragment_goals, container, false)
-        binding.setLifecycleOwner(viewLifecycleOwner)
+        binding.lifecycleOwner = viewLifecycleOwner
 
         val viewModelFactory = MainViewModelFactory(requireActivity().application)
         mainViewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
