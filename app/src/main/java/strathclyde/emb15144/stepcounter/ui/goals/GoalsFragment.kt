@@ -16,6 +16,7 @@ import strathclyde.emb15144.stepcounter.R
 import strathclyde.emb15144.stepcounter.database.Goal
 import strathclyde.emb15144.stepcounter.databinding.FragmentGoalsBinding
 
+
 class GoalsFragment : Fragment() {
 
     private lateinit var mainViewModel: MainViewModel

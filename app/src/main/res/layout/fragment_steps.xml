@@ -24,29 +24,42 @@
                 android:layout_marginStart="32dp"/>
 
         <TextView
+                android:id="@+id/steps_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/steps"
                 app:layout_constraintTop_toTopOf="@+id/progressBar"
-                app:layout_constraintVertical_chainStyle="packed"
-                app:layout_constraintEnd_toEndOf="@+id/progressBar"
+                app:layout_constraintBottom_toTopOf="@id/steps"
                 app:layout_constraintStart_toStartOf="@+id/progressBar"
-                android:textSize="36sp"
-                android:textStyle="bold"
-                app:intToText="@{mainViewModel.today.steps}"
-                app:layout_constraintBottom_toTopOf="@+id/steps_label"
-                tools:text="1257"/>
+                app:layout_constraintEnd_toEndOf="@+id/progressBar"
+                app:layout_constraintVertical_chainStyle="packed"
+                android:text="Steps:"
+                android:textSize="18sp"/>
 
         <TextView
-                android:text="@string/title_steps"
+                android:id="@+id/steps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/steps_label"
+                app:layout_constraintTop_toBottomOf="@+id/steps_label"
+                app:layout_constraintBottom_toTopOf="@id/percentage"
+                app:layout_constraintStart_toStartOf="@+id/progressBar"
+                app:layout_constraintEnd_toEndOf="@+id/progressBar"
+                app:intToText="@{mainViewModel.today.steps}"
+                tools:text="1257"
+                android:textSize="36sp"
+                android:textStyle="bold"/>
+
+        <TextView
+                android:id="@+id/percentage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/steps"
-                app:layout_constraintStart_toStartOf="@id/progressBar"
-                app:layout_constraintEnd_toEndOf="@id/progressBar"
+                app:layout_constraintBottom_toBottomOf="@id/progressBar"
+                app:layout_constraintStart_toStartOf="@+id/progressBar"
+                app:layout_constraintEnd_toEndOf="@+id/progressBar"
+                app:stepsPercentage="@{mainViewModel.today}"
+                tools:text="(63%)"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="@+id/progressBar"/>
+                />
 
         <ProgressBar
                 style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"

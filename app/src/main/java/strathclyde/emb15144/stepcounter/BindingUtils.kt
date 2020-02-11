@@ -1,5 +1,6 @@
 package strathclyde.emb15144.stepcounter
 
+import android.util.Log
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import kotlinx.android.synthetic.main.list_item_goal.view.*
@@ -24,4 +25,11 @@ fun TextView.setDateAndGoalFormatted(item: Day) {
 @BindingAdapter("daySteps")
 fun TextView.setDayStepsFormatted(item: Day) {
     text = String.format("%s out of %s steps", item.steps, item.goal_steps)
+}
+
+@BindingAdapter("stepsPercentage")
+fun TextView.setStepsPercentageFormatted(item: Day?) {
+    item?.let {
+        text = String.format("(%d%%)", 100 * item.steps / item.goal_steps)
+    }
 }

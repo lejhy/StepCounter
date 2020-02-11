@@ -67,8 +67,11 @@ class StepsFragment : Fragment() {
         })
 
         binding.button.setOnClickListener {
-            mainViewModel.addSteps(Integer.parseInt(binding.textInputLayout.steps_input.text.toString()))
-            binding.textInputLayout.steps_input.setText("")
+            val steps = binding.textInputLayout.steps_input.text.toString()
+            if (steps.isNotEmpty()) {
+                mainViewModel.addSteps(Integer.parseInt(binding.textInputLayout.steps_input.text.toString()))
+                binding.textInputLayout.steps_input.setText("")
+            }
         }
 
         mainViewModel.today.observe(viewLifecycleOwner, Observer {
