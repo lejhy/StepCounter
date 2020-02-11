@@ -1,5 +1,6 @@
 package strathclyde.emb15144.stepcounter.ui.goals
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -10,11 +11,14 @@ class GoalViewHolder private constructor(val binding: ListItemGoalBinding) : Rec
 
     fun bind(
         goal: Goal,
-        clickListener: GoalListListener
+        clickListener: GoalListListener,
+        editable: Boolean
     ) {
         binding.goal = goal
         binding.clickListener = clickListener
+        binding.editable = editable
         binding.executePendingBindings()
+        Log.i("GoalViewHolder", ""+editable)
     }
 
     companion object {

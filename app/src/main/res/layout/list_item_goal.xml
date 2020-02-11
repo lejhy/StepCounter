@@ -4,12 +4,16 @@
         xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+        <import type="android.view.View"/>
         <variable
                 name="goal"
                 type="strathclyde.emb15144.stepcounter.database.Goal"/>
         <variable
                 name="clickListener"
                 type="strathclyde.emb15144.stepcounter.ui.goals.GoalListListener"/>
+        <variable
+                name="editable"
+                type="java.lang.Boolean"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -62,7 +66,7 @@
                 android:padding="0dp"
                 app:layout_constraintEnd_toStartOf="@id/edit_goal"
                 android:layout_marginEnd="16dp"
-                />
+                android:visibility="@{editable ? View.VISIBLE : View.GONE}"/>
 
         <com.google.android.material.button.MaterialButton
                 android:id="@+id/edit_goal"
@@ -79,6 +83,7 @@
                 android:onClick="@{() -> clickListener.onDelete(goal)}"
                 android:padding="0dp"
                 app:iconTint="@color/design_default_color_error"
-                app:rippleColor="@color/design_default_color_error"/>
+                app:rippleColor="@color/design_default_color_error"
+                android:visibility="@{editable ? View.VISIBLE : View.GONE}"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

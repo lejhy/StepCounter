@@ -45,15 +45,18 @@ class GoalsFragment : Fragment() {
         mainViewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
         binding.mainViewModel = mainViewModel
 
-        viewAdapter = GoalsListAdapter(GoalListListener(
-            {
-                mainViewModel.deleteGoal(it.id)
-            },
-            {
-                val goalDialog = GoalDialogFragment("Edit Goal", it.name, it.steps, getEditGoalCallback(it.id))
-                goalDialog.show(requireActivity().supportFragmentManager, "editGoalDialog")
-            }
-        ))
+        viewAdapter = GoalsListAdapter(
+            GoalListListener(
+                {
+                    mainViewModel.deleteGoal(it.id)
+                },
+                {
+                    val goalDialog = GoalDialogFragment("Edit Goal", it.name, it.steps, getEditGoalCallback(it.id))
+                    goalDialog.show(requireActivity().supportFragmentManager, "editGoalDialog")
+                }
+            ),
+            mainViewModel.editableGoals
+        )
         mainViewModel.goals.observe(viewLifecycleOwner, Observer {
             it?.let {
                 viewAdapter.submitList(it)

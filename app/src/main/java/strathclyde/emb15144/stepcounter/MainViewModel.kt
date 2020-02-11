@@ -2,11 +2,16 @@ package strathclyde.emb15144.stepcounter
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.content.BroadcastReceiver
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.SharedPreferences
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
+import androidx.core.content.contentValuesOf
+import androidx.lifecycle.*
 import androidx.lifecycle.Observer
-import androidx.lifecycle.Transformations
+import androidx.preference.Preference
+import androidx.preference.PreferenceManager
 import kotlinx.coroutines.*
 import strathclyde.emb15144.stepcounter.database.Day
 import strathclyde.emb15144.stepcounter.database.DayDao
@@ -25,6 +30,11 @@ class MainViewModel(
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
     @SuppressLint("SimpleDateFormat")
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+    private var dateChangedReceiver: DateChangedReceiver
+    private val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
+
+    var editableGoals = preferences.getBoolean("editable_goals", false)
+
 
     val goals: LiveData<List<Goal>> = goalDao.getAll()
     val days: LiveData<List<Day>> = dayDao.getAll()
@@ -35,49 +45,39 @@ class MainViewModel(
         Goal(it.goal_id, it.goal_name, it.goal_steps)
     }
 
-    private val newDayObserver: Observer<List<Day>> = Observer{ list ->
-        Log.i("Days", "Days Changed: " + list.size)
-        today.observeOnce(Observer<Day> {
-            val now = dateFormat.format(Calendar.getInstance().time)
-            Log.i("StepFragment", "now: " + now)
-            Log.i("StepFragment", "today: " + it.id)
-            if (it.date != now) {
-                insertDay(now, Goal(it.goal_id, it.goal_name, it.goal_steps))
-            }
-        })
-    }
-
-    private val goalChangeObserver: Observer<List<Goal>> = Observer {list ->
+    private val activeGoalChangeObserver: Observer<List<Goal>> = Observer { list ->
         Log.i("Goals", "Goals Changed: " + list.size)
         todayGoal.observeOnce(Observer<Goal> {todayGoal ->
             Log.i("Goals", "Today goal: " + list.size)
             val goal = list.find { it.id == todayGoal.id }!!
             if (todayGoal != goal) {
-                val updated = today.value!!
-                updated.goal_id = goal.id
-                updated.goal_name = goal.name
-                updated.goal_steps = goal.steps
-                uiScope.launch {
-                    withContext(Dispatchers.IO) {
-                        dayDao.update(updated)
-                    }
-                }
+                updateActiveGoal(goal)
             }
         })
     }
 
     init {
         Log.i("GoalsViewModel", "GoalsViewModel created!")
-        days.observeForever(newDayObserver)
-        goals.observeForever(goalChangeObserver)
+        today.observeOnce(Observer {
+            val now = dateFormat.format(Calendar.getInstance().time)
+            Log.i("StepFragment", "now: " + now)
+            Log.i("StepFragment", "today: " + it.id)
+            if (it.date != now) {
+                Log.i("StepFragment", "new day")
+                insertDay(now, Goal(it.goal_id, it.goal_name, it.goal_steps))
+            }
+        })
+        goals.observeForever(activeGoalChangeObserver)
+        dateChangedReceiver = DateChangedReceiver()
+        getApplication<Application>().registerReceiver(dateChangedReceiver, IntentFilter(Intent.ACTION_DATE_CHANGED))
     }
 
     override fun onCleared() {
         super.onCleared()
         Log.i("GoalsViewModel", "GoalsViewModel destroyed!")
         viewModelJob.cancel()
-        days.removeObserver(newDayObserver)
-        goals.removeObserver(goalChangeObserver)
+        goals.removeObserver(activeGoalChangeObserver)
+        getApplication<Application>().unregisterReceiver(dateChangedReceiver)
     }
 
     private fun insertDay(date: String, goal: Goal) {
@@ -120,23 +120,45 @@ class MainViewModel(
         }
     }
 
-    fun updateGoalSelection(selection: Goal) {
+    fun newGoalSelected(selection: Goal) {
         if (today.value!!.goal_id != selection.id) {
-            val updated = today.value!!
-            updated.goal_id = selection.id
-            updated.goal_name = selection.name
-            updated.goal_steps = selection.steps
-            uiScope.launch {
-                withContext(Dispatchers.IO) {
-                    dayDao.update(updated)
-                }
+            updateActiveGoal(selection)
+        }
+    }
+
+    fun updateActiveGoal(goal: Goal) {
+        val updated = today.value!!
+        updated.goal_id = goal.id
+        updated.goal_name = goal.name
+        updated.goal_steps = goal.steps
+        uiScope.launch {
+            withContext(Dispatchers.IO) {
+                dayDao.update(updated)
             }
         }
     }
 
     fun addSteps(steps: Int) {
-        val updated = today.value!!
+        addSteps(today.value!!, steps)
+    }
+
+    fun addSteps(day: Day, steps: Int) {
+        val updated = day.copy()
         updated.steps += steps
+        uiScope.launch {
+            withContext(Dispatchers.IO) {
+                dayDao.update(updated)
+            }
+        }
+    }
+
+    fun changeGoal(day: Day, goal: Goal) {
+        val updated = day.copy()
+        updated.apply {
+            goal_id = goal.id
+            goal_name = goal.name
+            goal_steps = goal.steps
+        }
         uiScope.launch {
             withContext(Dispatchers.IO) {
                 dayDao.update(updated)

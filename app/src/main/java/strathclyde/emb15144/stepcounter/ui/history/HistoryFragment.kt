@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import strathclyde.emb15144.stepcounter.MainViewModel
 import strathclyde.emb15144.stepcounter.MainViewModelFactory
 import strathclyde.emb15144.stepcounter.R
+import strathclyde.emb15144.stepcounter.database.Day
+import strathclyde.emb15144.stepcounter.database.Goal
 import strathclyde.emb15144.stepcounter.databinding.FragmentGoalsBinding
 import strathclyde.emb15144.stepcounter.databinding.FragmentHistoryBinding
 import strathclyde.emb15144.stepcounter.databinding.FragmentStepsBinding
@@ -54,9 +56,18 @@ class HistoryFragment : Fragment() {
         viewAdapter = HistoryListAdapter(HistoryListListener(
             {
                 Log.i("HistoryFragment", "AddSteps")
+                val dialog = AddStepsDialog("Add Steps", addStepsCallback(it))
+                dialog.show(requireActivity().supportFragmentManager, "addStepsDialog")
             },
             {
                 Log.i("HistoryFragment", "EditGoals")
+                val dialog = ChangeGoalDialog(
+                    "Change Goal",
+                    mainViewModel.goals.value!!,
+                    Goal(it.id, it.goal_name, it.goal_steps),
+                    changeGoalCallback(it)
+                )
+                dialog.show(requireActivity().supportFragmentManager, "changeGoalDialog")
             }
         ))
         mainViewModel.days.observe(viewLifecycleOwner, Observer {
@@ -69,5 +80,13 @@ class HistoryFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun addStepsCallback(day: Day) = { steps: Int ->
+        mainViewModel.addSteps(day, steps)
+    }
+
+    private fun changeGoalCallback(day: Day) = { goal: Goal ->
+        mainViewModel.changeGoal(day, goal)
     }
 }

@@ -6,20 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_steps.view.*
 import strathclyde.emb15144.stepcounter.MainViewModel
 import strathclyde.emb15144.stepcounter.MainViewModelFactory
 import strathclyde.emb15144.stepcounter.R
 import strathclyde.emb15144.stepcounter.database.Goal
-import strathclyde.emb15144.stepcounter.databinding.FragmentGoalsBinding
-import strathclyde.emb15144.stepcounter.databinding.FragmentHistoryBinding
 import strathclyde.emb15144.stepcounter.databinding.FragmentStepsBinding
 import strathclyde.emb15144.stepcounter.observeOnce
 
@@ -92,7 +87,7 @@ class StepsFragment : Fragment() {
 
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
             val selection = parent!!.adapter.getItem(position)!! as Goal
-            mainViewModel.updateGoalSelection(selection)
+            mainViewModel.newGoalSelected(selection)
             Log.i("StepFragment", "Item selected")
         }
     }
