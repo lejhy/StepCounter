@@ -59,7 +59,9 @@ class GoalsFragment : Fragment() {
         )
         mainViewModel.goals.observe(viewLifecycleOwner, Observer {
             it?.let {
-                viewAdapter.submitList(it)
+                viewAdapter.submitList(it.map { goal ->
+                    GoalListItem(goal, goal.id == mainViewModel.todayGoal.value!!.id)
+                })
             }
         })
         recyclerView = binding.recyclerViewGoals.apply {

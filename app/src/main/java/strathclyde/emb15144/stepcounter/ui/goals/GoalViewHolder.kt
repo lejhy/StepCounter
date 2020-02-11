@@ -10,13 +10,14 @@ import strathclyde.emb15144.stepcounter.databinding.ListItemGoalBinding
 class GoalViewHolder private constructor(val binding: ListItemGoalBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(
-        goal: Goal,
+        goalListItem: GoalListItem,
         clickListener: GoalListListener,
         editable: Boolean
     ) {
-        binding.goal = goal
+        binding.goal = goalListItem.goal
         binding.clickListener = clickListener
         binding.editable = editable
+        binding.active = goalListItem.active
         binding.executePendingBindings()
         Log.i("GoalViewHolder", ""+editable)
     }
