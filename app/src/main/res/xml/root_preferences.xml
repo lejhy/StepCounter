@@ -6,11 +6,11 @@
                 app:title="@string/notifications"/>
 
         <SwitchPreferenceCompat
-                app:key="editable_goals"
+                app:key="editableGoals"
                 app:title="@string/editableGoals"/>
 
         <Preference
-                app:key="delete_history"
-                app:title="Delete History"/>
+                app:key="deleteHistory"
+                app:title="@string/deleteHistory"/>
 
 </PreferenceScreen>

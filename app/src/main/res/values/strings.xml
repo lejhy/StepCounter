@@ -10,5 +10,6 @@
     <string name="stepsColon">Steps:</string>
     <string name="stepsInputHelperText">Use negative values to remove steps</string>
     <string name="addSteps">Add Steps</string>
+    <string name="deleteHistory">Delete History</string>
 
 </resources>
