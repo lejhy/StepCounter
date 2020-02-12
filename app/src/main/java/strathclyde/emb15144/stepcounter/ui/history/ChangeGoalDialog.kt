@@ -34,19 +34,19 @@ class ChangeGoalDialog(
 
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     Log.i("StepFragment", "Item selected")
-                    goal = spinnerAdapter.getItem(position)!! as Goal
+                    goal = spinnerAdapter.getItem(position)!!
                 }
             }
             binding.goalSpinner.adapter = spinnerAdapter
 
             builder.setView(binding.root)
                 .setTitle(title)
-                .setPositiveButton("Accept") { dialog, id ->
+                .setPositiveButton("Accept") { _, _ ->
                     accept(
                         goal
                     )
                 }
-                .setNegativeButton("Cancel") { dialog, id ->
+                .setNegativeButton("Cancel") { dialog, _ ->
                     dialog.cancel()
                 }
             builder.create()

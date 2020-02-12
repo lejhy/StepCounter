@@ -21,14 +21,14 @@ class GoalDialogFragment(
             val inflater = requireActivity().layoutInflater
             val binding = DataBindingUtil.inflate<DialogAddGoalBinding>(inflater, R.layout.dialog_add_goal, container, false)
 
-            binding.addGoalName.setText(goalName)
-            binding.addGoalSteps.setText(goalSteps.toString())
+            binding.nameInput.setText(goalName)
+            binding.stepsInput.setText(goalSteps.toString())
 
             builder.setView(binding.root)
                 .setTitle(title)
-                .setPositiveButton("Accept") { dialog, id ->
-                    val name = binding.addGoalName.text.toString()
-                    val steps = binding.addGoalSteps.text.toString()
+                .setPositiveButton("Accept") { _, _ ->
+                    val name = binding.nameInput.text.toString()
+                    val steps = binding.stepsInput.text.toString()
                     if (name.isNotEmpty() && steps.isNotEmpty()) {
                         accept(
                             name,
@@ -36,7 +36,7 @@ class GoalDialogFragment(
                         )
                     }
                 }
-                .setNegativeButton("Cancel") { dialog, id ->
+                .setNegativeButton("Cancel") { dialog, _ ->
                     dialog.cancel()
                 }
             builder.create()

@@ -21,15 +21,15 @@ class AddStepsDialog (
 
             builder.setView(binding.root)
                 .setTitle(title)
-                .setPositiveButton("Accept") { dialog, id ->
-                    val steps = binding.historyInputSteps.text.toString()
+                .setPositiveButton("Accept") { _, _ ->
+                    val steps = binding.stepsInput.text.toString()
                     if (steps.isNotEmpty()) {
                         accept(
                             Integer.parseInt(steps)
                         )
                     }
                 }
-                .setNegativeButton("Cancel") { dialog, id ->
+                .setNegativeButton("Cancel") { dialog, _ ->
                     dialog.cancel()
                 }
             builder.create()

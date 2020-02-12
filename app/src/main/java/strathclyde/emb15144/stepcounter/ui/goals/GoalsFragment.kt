@@ -44,7 +44,6 @@ class GoalsFragment : Fragment() {
 
         val viewModelFactory = MainViewModelFactory(requireActivity().application)
         mainViewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
-        binding.mainViewModel = mainViewModel
 
         viewAdapter = GoalsListAdapter(
             GoalListListener(
@@ -65,11 +64,11 @@ class GoalsFragment : Fragment() {
                 })
             }
         })
-        recyclerView = binding.recyclerViewGoals.apply {
+        recyclerView = binding.goalsRecyclerView.apply {
             adapter = viewAdapter
         }
 
-        binding.addGoal.setOnClickListener {
+        binding.addGoalButton.setOnClickListener {
             val goalDialog = GoalDialogFragment("Add Goal", "", 0, getAddGoalCallback())
             goalDialog.show(requireActivity().supportFragmentManager, "addGoalDialog")
         }

@@ -10,7 +10,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.fragment_steps.view.*
 import strathclyde.emb15144.stepcounter.MainViewModel
 import strathclyde.emb15144.stepcounter.MainViewModelFactory
 import strathclyde.emb15144.stepcounter.R
@@ -46,8 +45,8 @@ class StepsFragment : Fragment() {
         binding.mainViewModel = mainViewModel
 
         val spinnerAdapter = GoalSpinnerAdapter(requireActivity())
-        binding.spinner3.adapter = spinnerAdapter
-        binding.spinner3.onItemSelectedListener = onItemSelectedListener
+        binding.goalSpinner.adapter = spinnerAdapter
+        binding.goalSpinner.onItemSelectedListener = onItemSelectedListener
 
         mainViewModel.goals.observe(viewLifecycleOwner, Observer {
             spinnerAdapter.clear()
@@ -60,23 +59,23 @@ class StepsFragment : Fragment() {
                 Log.i("StepsFragment", "goal changed")
                 it.forEachIndexed { index, goal ->
                     if (goal.id == today.goal_id) {
-                        binding.spinner3.setSelection(index)
+                        binding.goalSpinner.setSelection(index)
                     }
                 }
             })
         })
 
-        binding.button.setOnClickListener {
-            val steps = binding.textInputLayout.steps_input.text.toString()
+        binding.addStepsButton.setOnClickListener {
+            val steps = binding.stepsInput.text.toString()
             if (steps.isNotEmpty()) {
-                mainViewModel.addSteps(Integer.parseInt(binding.textInputLayout.steps_input.text.toString()))
-                binding.textInputLayout.steps_input.setText("")
+                mainViewModel.addSteps(Integer.parseInt(binding.stepsInput.text.toString()))
+                binding.stepsInput.setText("")
             }
         }
 
         mainViewModel.today.observe(viewLifecycleOwner, Observer {
-            binding.progressBar.max = it.goal_steps
-            binding.progressBar.progress = it.steps
+            binding.progress.max = it.goal_steps
+            binding.progress.progress = it.steps
             Log.i("StepFragment", "Steps updated")
             Log.i("StepFragment", "steps: "+it.steps)
             Log.i("StepFragment", "goal: "+it.goal_steps)

@@ -3,15 +3,14 @@ package strathclyde.emb15144.stepcounter
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import strathclyde.emb15144.stepcounter.database.Day
-import strathclyde.emb15144.stepcounter.database.Goal
 
-@BindingAdapter("goalSteps")
-fun TextView.setGoalStepsFormatted(item: Goal) {
-    text = String.format("%d steps", item.steps)
+@BindingAdapter("steps")
+fun TextView.setStepsFormatted(item: Int) {
+    text = String.format("%d steps", item)
 }
 
-@BindingAdapter("intToText")
-fun TextView.setIntToTextFormatted(item: Int) {
+@BindingAdapter("int")
+fun TextView.setIntFormatted(item: Int) {
     text = item.toString()
 }
 

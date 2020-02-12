@@ -27,7 +27,7 @@
             >
 
         <TextView
-                android:id="@+id/goal_name"
+                android:id="@+id/name"
                 android:text="@{goal.name}"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -41,11 +41,11 @@
         </TextView>
 
         <TextView
-                android:id="@+id/goal_steps"
-                app:goalSteps="@{goal}"
+                android:id="@+id/steps"
+                app:steps="@{goal.steps}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_constraintTop_toBottomOf="@id/goal_name"
+                app:layout_constraintTop_toBottomOf="@id/name"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -55,12 +55,12 @@
         </TextView>
 
         <com.google.android.material.button.MaterialButton
-                android:id="@+id/delete_goal"
+                android:id="@+id/deleteButton"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minWidth="48dp"
-                app:layout_constraintEnd_toStartOf="@id/edit_goal"
+                app:layout_constraintEnd_toStartOf="@id/editButton"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:icon="@drawable/ic_delete_black_24dp"
@@ -73,7 +73,7 @@
                 android:visibility="@{!active ? View.VISIBLE : View.GONE}"/>
 
         <com.google.android.material.button.MaterialButton
-                android:id="@+id/edit_goal"
+                android:id="@+id/editButton"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

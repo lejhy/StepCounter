@@ -2,29 +2,24 @@
 <layout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
-    <data>
-        <variable
-                name="mainViewModel"
-                type="strathclyde.emb15144.stepcounter.MainViewModel"/>
-    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_goals"
+                android:id="@+id/goalsRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/add_goal"
+                android:id="@+id/addGoalButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_margin="16dp"
                 app:srcCompat="@drawable/ic_add_white_24dp"
                 app:tint="#ffffff"
                 />

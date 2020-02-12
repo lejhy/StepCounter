@@ -2,7 +2,6 @@ package strathclyde.emb15144.stepcounter.ui.goals
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import strathclyde.emb15144.stepcounter.database.Goal
 
 class GoalsListAdapter(val clickListener: GoalListListener, val editable: Boolean) : ListAdapter<GoalListItem, GoalViewHolder> (GoalListDiffCallback()) {
 

@@ -1,23 +1,20 @@
 package strathclyde.emb15144.stepcounter
 
-import android.annotation.SuppressLint
 import android.app.Application
-import android.content.BroadcastReceiver
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.util.Log
-import androidx.core.content.contentValuesOf
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.preference.Preference
+import androidx.lifecycle.Transformations
 import androidx.preference.PreferenceManager
 import kotlinx.coroutines.*
 import strathclyde.emb15144.stepcounter.database.Day
 import strathclyde.emb15144.stepcounter.database.DayDao
 import strathclyde.emb15144.stepcounter.database.Goal
 import strathclyde.emb15144.stepcounter.database.GoalDao
-import java.text.SimpleDateFormat
 import java.util.*
 
 class MainViewModel(

@@ -18,28 +18,28 @@
             android:paddingBottom="8dp">
 
         <TextView
+                android:id="@+id/name"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:id="@+id/spinner_item_goal_name"
-                android:text="@{goal.name}"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/spinner_item_goal_steps"
-                android:textAlignment="textStart"
+                app:layout_constraintEnd_toStartOf="@+id/steps"
+                android:text="@{goal.name}"
                 tools:text="My Default Goal"
+                android:textAlignment="textStart"
                 android:textSize="18sp"
                 android:textColor="@android:color/primary_text_light">
         </TextView>
 
         <TextView
+                android:id="@+id/steps"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:id="@+id/spinner_item_goal_steps"
-                app:goalSteps="@{goal}"
-                app:layout_constraintStart_toEndOf="@+id/spinner_item_goal_name"
+                app:layout_constraintStart_toEndOf="@+id/name"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:textAlignment="textEnd"
+                app:layout_constraintBaseline_toBaselineOf="@id/name"
+                app:steps="@{goal.steps}"
                 tools:text="2000 steps"
-                app:layout_constraintBaseline_toBaselineOf="@id/spinner_item_goal_name">
+                android:textAlignment="textEnd">
         </TextView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

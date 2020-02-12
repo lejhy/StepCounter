@@ -25,7 +25,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/edit"
+                app:layout_constraintEnd_toStartOf="@+id/editButton"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/goal"
                 app:dateReadable="@{day.date}"
@@ -39,7 +39,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/edit"
+                app:layout_constraintEnd_toStartOf="@+id/editButton"
                 app:layout_constraintTop_toBottomOf="@id/date"
                 app:layout_constraintBottom_toTopOf="@id/steps"
                 android:text="@{day.goal_name}"
@@ -53,7 +53,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/edit"
+                app:layout_constraintEnd_toStartOf="@id/editButton"
                 app:layout_constraintTop_toBottomOf="@id/goal"
                 app:layout_constraintBottom_toTopOf="@id/progress"
                 app:stepsProgress="@{day}"
@@ -74,11 +74,11 @@
                 android:progress="@{day.steps}"/>
 
         <com.google.android.material.button.MaterialButton
-                android:id="@+id/edit"
+                android:id="@+id/editButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toEndOf="@id/goal"
-                app:layout_constraintEnd_toStartOf="@id/add"
+                app:layout_constraintEnd_toStartOf="@id/addbutton"
                 app:layout_constraintTop_toTopOf="@+id/date"
                 app:layout_constraintBottom_toBottomOf="@+id/steps"
                 app:icon="@drawable/ic_edit_black_24dp"
@@ -91,13 +91,13 @@
                 android:onClick="@{() -> clickListener.onEditGoal(day)}"/>
 
         <com.google.android.material.button.MaterialButton
-                android:id="@+id/add"
+                android:id="@+id/addbutton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@+id/edit_goal"
+                app:layout_constraintStart_toEndOf="@+id/editButton"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/edit_goal"
-                app:layout_constraintBottom_toBottomOf="@+id/edit"
+                app:layout_constraintTop_toTopOf="@+id/editButton"
+                app:layout_constraintBottom_toBottomOf="@+id/editButton"
                 app:icon="@drawable/ic_add_white_24dp"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"

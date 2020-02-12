@@ -2,7 +2,6 @@ package strathclyde.emb15144.stepcounter.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.sql.Date
 
 @Entity(tableName = "days_table")
 data class Day(

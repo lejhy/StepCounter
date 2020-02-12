@@ -15,7 +15,7 @@
                 >
 
             <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/history_input_steps"
+                    android:id="@+id/stepsInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberSigned"/>
