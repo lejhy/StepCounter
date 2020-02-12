@@ -28,8 +28,6 @@ class MainViewModel(
 
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
-    @SuppressLint("SimpleDateFormat")
-    private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
     private var dateChangedReceiver: DateChangedReceiver
     private val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
 
@@ -59,7 +57,7 @@ class MainViewModel(
     init {
         Log.i("GoalsViewModel", "GoalsViewModel created!")
         today.observeOnce(Observer {
-            val now = dateFormat.format(Calendar.getInstance().time)
+            val now = DateFormat.standardFormat(Calendar.getInstance().time)
             Log.i("StepFragment", "now: " + now)
             Log.i("StepFragment", "today: " + it.id)
             if (it.date != now) {

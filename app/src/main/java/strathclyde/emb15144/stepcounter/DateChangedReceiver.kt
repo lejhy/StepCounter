@@ -8,7 +8,6 @@ import android.util.Log
 import kotlinx.coroutines.*
 import strathclyde.emb15144.stepcounter.database.Day
 import strathclyde.emb15144.stepcounter.database.MainDatabase
-import java.text.SimpleDateFormat
 import java.util.*
 
 class DateChangedReceiver : BroadcastReceiver() {
@@ -23,8 +22,7 @@ class DateChangedReceiver : BroadcastReceiver() {
             uiScope.launch {
                 val datasource = MainDatabase.getInstance(context)
                 @SuppressLint("SimpleDateFormat")
-                val dateFormat = SimpleDateFormat("yyyy-MM-dd")
-                val newDate = dateFormat.format(Calendar.getInstance().time)
+                val newDate = DateFormat.standardFormat(Calendar.getInstance().time)
                 withContext(Dispatchers.IO) {
                     val lastDate = datasource.dayDao.getLast()
                     datasource.dayDao.insert(

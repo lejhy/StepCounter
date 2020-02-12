@@ -16,69 +16,97 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
-            android:paddingEnd="16dp">
+            android:paddingEnd="16dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp">
 
         <TextView
-                android:id="@+id/date_and_goal"
-                app:dateAndGoal="@{day}"
+                android:id="@+id/date"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/edit"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/goal"
+                app:dateReadable="@{day.date}"
+                tools:text="2020-01-01"
                 android:textSize="16sp"
-                tools:text="01/01/2020 - My Personal Goal"
-                android:textColor="@android:color/primary_text_light"
-                android:layout_marginTop="12dp">
+                android:textColor="@android:color/primary_text_light">
         </TextView>
 
         <TextView
-                android:id="@+id/day_steps"
-                app:daySteps="@{day}"
-                android:layout_width="match_parent"
+                android:id="@+id/goal"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                app:layout_constraintTop_toBottomOf="@id/date_and_goal"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:textSize="14sp"
-                tools:text="1257 out of 2,000 steps"
-                android:layout_marginBottom="17dp">
+                app:layout_constraintEnd_toStartOf="@+id/edit"
+                app:layout_constraintTop_toBottomOf="@id/date"
+                app:layout_constraintBottom_toTopOf="@id/steps"
+                android:text="@{day.goal_name}"
+                tools:text="My Personal Goal"
+                android:textSize="16sp"
+                android:textColor="@android:color/primary_text_light">
         </TextView>
 
+        <TextView
+                android:id="@+id/steps"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/edit"
+                app:layout_constraintTop_toBottomOf="@id/goal"
+                app:layout_constraintBottom_toTopOf="@id/progress"
+                app:stepsProgress="@{day}"
+                tools:text="1257 out of 2,000 steps"
+                android:textSize="14sp">
+        </TextView>
+
+        <ProgressBar
+                android:id="@+id/progress"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/steps"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:max="@{day.goal_steps}"
+                android:progress="@{day.steps}"/>
+
         <com.google.android.material.button.MaterialButton
-                android:id="@+id/edit_goal"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:id="@+id/edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minWidth="48dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/goal"
+                app:layout_constraintEnd_toStartOf="@id/add"
+                app:layout_constraintTop_toTopOf="@+id/date"
+                app:layout_constraintBottom_toBottomOf="@+id/steps"
                 app:icon="@drawable/ic_edit_black_24dp"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
-                android:onClick="@{() -> clickListener.onEditGoal(day)}"
                 android:padding="0dp"
-                app:layout_constraintEnd_toStartOf="@id/add_steps"
+                android:minWidth="48dp"
                 android:layout_marginEnd="16dp"
-                />
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:onClick="@{() -> clickListener.onEditGoal(day)}"/>
 
         <com.google.android.material.button.MaterialButton
-                android:id="@+id/add_steps"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:id="@+id/add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minWidth="48dp"
+                app:layout_constraintStart_toEndOf="@+id/edit_goal"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/edit_goal"
+                app:layout_constraintBottom_toBottomOf="@+id/edit"
                 app:icon="@drawable/ic_add_white_24dp"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
-                android:onClick="@{() -> clickListener.onAddSteps(day)}"
                 android:padding="0dp"
+                android:minWidth="48dp"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 app:iconTint="@color/design_default_color_secondary"
-                app:rippleColor="@color/design_default_color_secondary"/>
+                app:rippleColor="@color/design_default_color_secondary"
+                android:onClick="@{() -> clickListener.onAddSteps(day)}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

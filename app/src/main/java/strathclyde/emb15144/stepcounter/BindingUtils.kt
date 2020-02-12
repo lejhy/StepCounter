@@ -1,9 +1,7 @@
 package strathclyde.emb15144.stepcounter
 
-import android.util.Log
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import kotlinx.android.synthetic.main.list_item_goal.view.*
 import strathclyde.emb15144.stepcounter.database.Day
 import strathclyde.emb15144.stepcounter.database.Goal
 
@@ -17,14 +15,15 @@ fun TextView.setIntToTextFormatted(item: Int) {
     text = item.toString()
 }
 
-@BindingAdapter("dateAndGoal")
-fun TextView.setDateAndGoalFormatted(item: Day) {
-    text = String.format("%s - %s", item.date, item.goal_name)
+@BindingAdapter("dateReadable")
+fun TextView.setDateReadableFormatted(item: String) {
+    val date = DateFormat.standardParse(item)
+    text = DateFormat.readableFormat(date)
 }
 
-@BindingAdapter("daySteps")
-fun TextView.setDayStepsFormatted(item: Day) {
-    text = String.format("%s out of %s steps", item.steps, item.goal_steps)
+@BindingAdapter("stepsProgress")
+fun TextView.setStepsProgressFormatted(item: Day) {
+    text = String.format("%s out of %s steps (%d%%)", item.steps, item.goal_steps, 100 * item.steps / item.goal_steps)
 }
 
 @BindingAdapter("stepsPercentage")
