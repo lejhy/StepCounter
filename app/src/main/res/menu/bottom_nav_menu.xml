@@ -4,15 +4,15 @@
     <item
             android:id="@+id/navigation_history"
             android:icon="@drawable/ic_calendar_today_black_24dp"
-            android:title="@string/title_history"/>
+            android:title="@string/history"/>
     <item
             android:id="@+id/navigation_steps"
             android:icon="@drawable/ic_directions_run_black_24dp"
-            android:title="@string/title_steps"/>
+            android:title="@string/steps"/>
 
     <item
             android:id="@+id/navigation_goals"
             android:icon="@drawable/ic_star_border_black_24dp"
-            android:title="@string/title_goals"/>
+            android:title="@string/goals"/>
 
 </menu>

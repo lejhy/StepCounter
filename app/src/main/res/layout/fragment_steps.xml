@@ -32,7 +32,7 @@
                 app:layout_constraintTop_toTopOf="@+id/progress"
                 app:layout_constraintBottom_toTopOf="@id/steps"
                 app:layout_constraintVertical_chainStyle="packed"
-                android:text="Steps:"
+                android:text="@string/stepsColon"
                 android:textSize="18sp"/>
 
         <TextView
@@ -86,8 +86,8 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginBottom="16dp"
-                android:hint="Input steps"
-                app:helperText="Use negative values to remove steps"
+                android:hint="@string/steps"
+                app:helperText="@string/stepsInputHelperText"
                 app:helperTextEnabled="false">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -107,7 +107,7 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginBottom="16dp"
-                android:text="Add Steps"
+                android:text="@string/addSteps"
                 style="@style/Widget.AppCompat.Button.Colored"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

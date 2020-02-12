@@ -1,14 +1,13 @@
 <PreferenceScreen
-        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
         <SwitchPreferenceCompat
                 app:key="notifications"
-                app:title="@string/preference_notifications"/>
+                app:title="@string/notifications"/>
 
         <SwitchPreferenceCompat
                 app:key="editable_goals"
-                app:title="@string/preference_editable_goals"/>
+                app:title="@string/editableGoals"/>
 
         <Preference
                 app:key="delete_history"

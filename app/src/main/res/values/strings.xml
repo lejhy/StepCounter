@@ -1,13 +1,14 @@
 <resources>
     <string name="app_name">StepCounter</string>
-    <string name="title_steps">steps</string>
-    <string name="title_goals">Goals</string>
-    <string name="title_history">History</string>
-    <string name="title_settings">Settings</string>
-    <string name="title_activity_settings">Settings</string>
-
-    <!-- Preferences -->
-    <string name="preference_notifications">Notifications</string>
-    <string name="preference_editable_goals">Editable Goals</string>
+    <string name="steps">Steps</string>
+    <string name="goals">Goals</string>
+    <string name="history">History</string>
+    <string name="settings">Settings</string>
+    <string name="notifications">Notifications</string>
+    <string name="editableGoals">Editable Goals</string>
+    <string name="name">Name</string>
+    <string name="stepsColon">Steps:</string>
+    <string name="stepsInputHelperText">Use negative values to remove steps</string>
+    <string name="addSteps">Add Steps</string>
 
 </resources>

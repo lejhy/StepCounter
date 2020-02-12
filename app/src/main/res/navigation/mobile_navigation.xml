@@ -8,19 +8,19 @@
     <fragment
             android:id="@+id/navigation_history"
             android:name="strathclyde.emb15144.stepcounter.ui.history.HistoryFragment"
-            android:label="@string/title_history"
+            android:label="@string/history"
             tools:layout="@layout/fragment_history"/>
 
     <fragment
             android:id="@+id/navigation_steps"
             android:name="strathclyde.emb15144.stepcounter.ui.steps.StepsFragment"
-            android:label="@string/title_steps"
+            android:label="@string/steps"
             tools:layout="@layout/fragment_steps"/>
 
     <fragment
             android:id="@+id/navigation_goals"
             android:name="strathclyde.emb15144.stepcounter.ui.goals.GoalsFragment"
-            android:label="@string/title_goals"
+            android:label="@string/goals"
             tools:layout="@layout/fragment_goals"/>
 
 </navigation>
