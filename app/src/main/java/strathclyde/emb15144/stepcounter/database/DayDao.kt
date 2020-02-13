@@ -14,7 +14,7 @@ interface DayDao {
     fun update(day: Day)
     @Query("SELECT * FROM days_table WHERE id = :key")
     fun get(key: Long): Day?
-    @Query("SELECT * FROM days_table")
+    @Query("SELECT * FROM days_table ORDER BY date DESC")
     fun getAll(): LiveData<List<Day>>
     @Query("SELECT * FROM days_table ORDER BY id DESC LIMIT 1")
     fun getLast(): Day

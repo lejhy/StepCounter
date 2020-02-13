@@ -32,7 +32,7 @@ class MainViewModel(
     val goals: LiveData<List<Goal>> = goalDao.getAll()
     val days: LiveData<List<Day>> = dayDao.getAll()
     val today: LiveData<Day> = Transformations.map(days) {
-         it.last()
+         it.first()
     }
     val todayGoal: LiveData<Goal> = Transformations.map(today) {
         Goal(it.goal_id, it.goal_name, it.goal_steps)
