@@ -27,7 +27,7 @@ class MainViewModel(
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
     private var dateChangedReceiver: DateChangedReceiver
     private val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
-    private val _editableGoals = MutableLiveData<Boolean>(false)
+    private val _editableGoals = MutableLiveData<Boolean>(preferences.getBoolean("editableGoals", false))
 
     val goals: LiveData<List<Goal>> = goalDao.getAll()
     val days: LiveData<List<Day>> = dayDao.getAll()
