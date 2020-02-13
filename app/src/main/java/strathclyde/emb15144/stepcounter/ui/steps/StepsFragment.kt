@@ -1,10 +1,12 @@
 package strathclyde.emb15144.stepcounter.ui.steps
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -29,6 +31,12 @@ class StepsFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         Log.i("StepsFragment", "onStart Called")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.i("StepsFragment", "onPause Called")
+        hideKeyboard()
     }
 
     override fun onCreateView(
@@ -70,6 +78,7 @@ class StepsFragment : Fragment() {
             if (steps.isNotEmpty()) {
                 mainViewModel.addSteps(Integer.parseInt(binding.stepsInput.text.toString()))
                 binding.stepsInput.setText("")
+                hideKeyboard()
             }
         }
 
@@ -92,5 +101,10 @@ class StepsFragment : Fragment() {
             mainViewModel.newGoalSelected(selection)
             Log.i("StepFragment", "Item selected")
         }
+    }
+
+    fun hideKeyboard() {
+        val imm: InputMethodManager = requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
 }
