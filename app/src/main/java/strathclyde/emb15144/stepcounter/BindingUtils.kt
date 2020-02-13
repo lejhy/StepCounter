@@ -1,5 +1,7 @@
 package strathclyde.emb15144.stepcounter
 
+import android.util.Log
+import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import strathclyde.emb15144.stepcounter.database.Day
@@ -30,4 +32,9 @@ fun TextView.setStepsPercentageFormatted(item: Day?) {
     item?.let {
         text = String.format("(%d%%)", 100 * item.steps / item.goal_steps)
     }
+}
+
+@BindingAdapter("app:goneUnless")
+fun goneUnless(view: View, visible: Boolean) {
+    view.visibility = if (visible) View.VISIBLE else View.GONE
 }

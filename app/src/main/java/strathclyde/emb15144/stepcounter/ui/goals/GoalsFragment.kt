@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
 import strathclyde.emb15144.stepcounter.MainViewModel
 import strathclyde.emb15144.stepcounter.MainViewModelFactory
@@ -54,16 +55,12 @@ class GoalsFragment : Fragment() {
                     val goalDialog = GoalDialogFragment("Edit Goal", it.name, it.steps, getEditGoalCallback(it.id))
                     goalDialog.show(requireActivity().supportFragmentManager, "editGoalDialog")
                 }
-            ),
-            mainViewModel.editableGoals
+            )
         )
-        mainViewModel.goals.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                viewAdapter.submitList(it.map { goal ->
-                    GoalListItem(goal, goal.id == mainViewModel.todayGoal.value!!.id)
-                })
-            }
-        })
+        mainViewModel.goals.observe(viewLifecycleOwner) { updateGoalList(mainViewModel.goals.value) }
+        mainViewModel.todayGoal.observe(viewLifecycleOwner) { updateGoalList(mainViewModel.goals.value) }
+        mainViewModel.editableGoals.observe(viewLifecycleOwner) { updateGoalList(mainViewModel.goals.value) }
+
         recyclerView = binding.goalsRecyclerView.apply {
             adapter = viewAdapter
         }
@@ -74,6 +71,18 @@ class GoalsFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun updateGoalList(goals: List<Goal>?) {
+        goals?.let {
+            viewAdapter.submitList(goals.map { goal ->
+                GoalListItem(
+                    goal,
+                    goal.id != mainViewModel.todayGoal.value!!.id,
+                    mainViewModel.editableGoals.value!! && (goal.id != mainViewModel.todayGoal.value!!.id)
+                )
+            })
+        }
     }
 
     private fun getAddGoalCallback() = { name: String, steps: Int ->

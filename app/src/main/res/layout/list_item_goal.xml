@@ -4,19 +4,12 @@
         xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <import type="android.view.View"/>
         <variable
-                name="goal"
-                type="strathclyde.emb15144.stepcounter.database.Goal"/>
+                name="goalItem"
+                type="strathclyde.emb15144.stepcounter.ui.goals.GoalListItem"/>
         <variable
                 name="clickListener"
                 type="strathclyde.emb15144.stepcounter.ui.goals.GoalListListener"/>
-        <variable
-                name="editable"
-                type="java.lang.Boolean"/>
-        <variable
-                name="active"
-                type="java.lang.Boolean"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,7 +21,7 @@
 
         <TextView
                 android:id="@+id/name"
-                android:text="@{goal.name}"
+                android:text="@{goalItem.goal.name}"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +35,7 @@
 
         <TextView
                 android:id="@+id/steps"
-                app:steps="@{goal.steps}"
+                app:steps="@{goalItem.goal.steps}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_constraintTop_toBottomOf="@id/name"
@@ -66,11 +59,11 @@
                 app:icon="@drawable/ic_delete_black_24dp"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
-                android:onClick="@{() -> clickListener.onDelete(goal)}"
+                android:onClick="@{() -> clickListener.onDelete(goalItem.goal)}"
                 android:padding="0dp"
                 app:iconTint="@color/design_default_color_error"
                 app:rippleColor="@color/design_default_color_error"
-                android:visibility="@{!active ? View.VISIBLE : View.GONE}"/>
+                app:goneUnless="@{goalItem.deletable}"/>
 
         <com.google.android.material.button.MaterialButton
                 android:id="@+id/editButton"
@@ -84,9 +77,9 @@
                 app:icon="@drawable/ic_edit_black_24dp"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
-                android:onClick="@{() -> clickListener.onEdit(goal)}"
+                android:onClick="@{() -> clickListener.onEdit(goalItem.goal)}"
                 android:padding="0dp"
                 android:layout_marginEnd="16dp"
-                android:visibility="@{Boolean.logicalAnd(editable, !active) ? View.VISIBLE : View.GONE}"/>
+                app:goneUnless="@{goalItem.editable}"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

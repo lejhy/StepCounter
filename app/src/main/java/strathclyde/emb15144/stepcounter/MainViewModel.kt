@@ -5,10 +5,9 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
+import android.view.View
+import androidx.lifecycle.*
 import androidx.lifecycle.Observer
-import androidx.lifecycle.Transformations
 import androidx.preference.PreferenceManager
 import kotlinx.coroutines.*
 import strathclyde.emb15144.stepcounter.database.Day
@@ -27,9 +26,7 @@ class MainViewModel(
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
     private var dateChangedReceiver: DateChangedReceiver
     private val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
-
-    var editableGoals = preferences.getBoolean("editable_goals", false)
-
+    private val _editableGoals = MutableLiveData<Boolean>(false)
 
     val goals: LiveData<List<Goal>> = goalDao.getAll()
     val days: LiveData<List<Day>> = dayDao.getAll()
@@ -39,6 +36,7 @@ class MainViewModel(
     val todayGoal: LiveData<Goal> = Transformations.map(today) {
         Goal(it.goal_id, it.goal_name, it.goal_steps)
     }
+    val editableGoals: LiveData<Boolean> = _editableGoals
 
     private val activeGoalChangeObserver: Observer<List<Goal>> = Observer { list ->
         Log.i("Goals", "Goals Changed: " + list.size)
@@ -49,6 +47,14 @@ class MainViewModel(
                 updateActiveGoal(goal)
             }
         })
+    }
+
+    private val prefListener: SharedPreferences.OnSharedPreferenceChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { sp, key ->
+        when(key) {
+            "editableGoals" -> {
+                _editableGoals.value = sp.getBoolean(key, false)
+            }
+        }
     }
 
     init {
@@ -65,6 +71,7 @@ class MainViewModel(
         goals.observeForever(activeGoalChangeObserver)
         dateChangedReceiver = DateChangedReceiver()
         getApplication<Application>().registerReceiver(dateChangedReceiver, IntentFilter(Intent.ACTION_DATE_CHANGED))
+        preferences.registerOnSharedPreferenceChangeListener(prefListener)
     }
 
     override fun onCleared() {
@@ -73,6 +80,7 @@ class MainViewModel(
         viewModelJob.cancel()
         goals.removeObserver(activeGoalChangeObserver)
         getApplication<Application>().unregisterReceiver(dateChangedReceiver)
+        preferences.unregisterOnSharedPreferenceChangeListener(prefListener)
     }
 
     private fun insertDay(date: String, goal: Goal) {
