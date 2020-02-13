@@ -9,6 +9,7 @@ import android.view.View
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
 import androidx.preference.PreferenceManager
+import kotlinx.android.synthetic.main.list_item_history.view.*
 import kotlinx.coroutines.*
 import strathclyde.emb15144.stepcounter.database.Day
 import strathclyde.emb15144.stepcounter.database.DayDao
@@ -57,17 +58,38 @@ class MainViewModel(
         }
     }
 
+    private val newDayObserver: Observer<Day> = Observer {
+        val currentDate = Calendar.getInstance()
+        currentDate.set(Calendar.HOUR_OF_DAY, 0)
+        currentDate.set(Calendar.MINUTE, 0)
+        currentDate.set(Calendar.SECOND, 0)
+        currentDate.set(Calendar.MILLISECOND, 0)
+
+        val lastDate = Calendar.getInstance()
+        lastDate.time = DateFormat.standardParse(it.date)
+
+        while (lastDate.time < currentDate.time) {
+
+            lastDate.add(Calendar.DATE, 1)
+            val day = Day(
+                0,
+                DateFormat.standardFormat(lastDate.time),
+                0,
+                it.goal_id,
+                it.goal_name,
+                it.goal_steps
+            )
+            uiScope.launch {
+                withContext(Dispatchers.IO) {
+                    dayDao.insert(day)
+                }
+            }
+        }
+    }
+
     init {
         Log.i("GoalsViewModel", "GoalsViewModel created!")
-        today.observeOnce(Observer {
-            val now = DateFormat.standardFormat(Calendar.getInstance().time)
-            Log.i("StepFragment", "now: " + now)
-            Log.i("StepFragment", "today: " + it.id)
-            if (it.date != now) {
-                Log.i("StepFragment", "new day")
-                insertDay(now, Goal(it.goal_id, it.goal_name, it.goal_steps))
-            }
-        })
+        today.observeOnce(newDayObserver)
         goals.observeForever(activeGoalChangeObserver)
         dateChangedReceiver = DateChangedReceiver()
         getApplication<Application>().registerReceiver(dateChangedReceiver, IntentFilter(Intent.ACTION_DATE_CHANGED))
@@ -81,22 +103,6 @@ class MainViewModel(
         goals.removeObserver(activeGoalChangeObserver)
         getApplication<Application>().unregisterReceiver(dateChangedReceiver)
         preferences.unregisterOnSharedPreferenceChangeListener(prefListener)
-    }
-
-    private fun insertDay(date: String, goal: Goal) {
-        val day = Day(
-            0,
-            date,
-            0,
-            goal.id,
-            goal.name,
-            goal.steps
-        )
-        uiScope.launch {
-            withContext(Dispatchers.IO) {
-                dayDao.insert(day)
-            }
-        }
     }
 
     fun addGoal(goal: String, steps: Int) {
