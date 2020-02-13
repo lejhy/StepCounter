@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+                name="viewModel"
+                type="strathclyde.emb15144.stepcounter.ui.goals.GoalDialogViewModel"/>
+    </data>
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -12,12 +18,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/name"
+                app:helperText="@string/goalNameHelperText"
+                app:helperTextEnabled="false"
                 >
 
             <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/nameInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@={viewModel.name}"
                     />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -25,12 +34,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/steps"
+                app:helperText="@string/goalStepsHelperText"
+                app:helperTextEnabled="false"
                 >
 
             <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/stepsInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@={viewModel.steps}"
                     android:inputType="number"/>
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>

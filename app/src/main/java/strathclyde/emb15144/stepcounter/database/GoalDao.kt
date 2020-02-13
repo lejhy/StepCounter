@@ -13,6 +13,8 @@ interface GoalDao {
     fun delete(goal: Goal)
     @Query("SELECT * FROM goals_table WHERE id = :key")
     fun get(key: Long): Goal?
+    @Query("SELECT * FROM goals_table WHERE name = :name")
+    fun get(name: String): Goal?
     @Query("SELECT * FROM goals_table")
     fun getAll(): LiveData<List<Goal>>
 }
