@@ -16,6 +16,8 @@ interface DayDao {
     fun get(key: Long): Day?
     @Query("SELECT * FROM days_table ORDER BY date DESC")
     fun getAll(): LiveData<List<Day>>
-    @Query("SELECT * FROM days_table ORDER BY id DESC LIMIT 1")
-    fun getLast(): Day
+    @Query("SELECT * FROM days_table ORDER BY date DESC LIMIT 1")
+    fun getLatest(): Day
+    @Query("DELETE FROM days_table WHERE id NOT IN(SELECT id FROM days_table ORDER BY date DESC LIMIT 1)")
+    fun deleteAllButLatest()
 }

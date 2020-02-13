@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -49,7 +50,15 @@ class GoalsFragment : Fragment() {
         viewAdapter = GoalsListAdapter(
             GoalListListener(
                 {
-                    mainViewModel.deleteGoal(it.id)
+                    AlertDialog.Builder(requireActivity())
+                        .setTitle("Are you sure?")
+                        .setMessage("This goal will be deleted!")
+                        .setPositiveButton("Delete") { _, _ ->
+                            mainViewModel.deleteGoal(it.id)
+                        }
+                        .setNegativeButton("Cancel") { _, _ -> }
+                        .create()
+                        .show()
                 },
                 {
                     val goalDialog = GoalDialogFragment("Edit Goal", it.name, it.steps, getEditGoalCallback(it.id))

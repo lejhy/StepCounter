@@ -24,7 +24,7 @@ class DateChangedReceiver : BroadcastReceiver() {
                 @SuppressLint("SimpleDateFormat")
                 val newDate = DateFormat.standardFormat(Calendar.getInstance().time)
                 withContext(Dispatchers.IO) {
-                    val lastDate = datasource.dayDao.getLast()
+                    val lastDate = datasource.dayDao.getLatest()
                     datasource.dayDao.insert(
                         Day(
                             0,
