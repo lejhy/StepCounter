@@ -5,11 +5,9 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
 import androidx.preference.PreferenceManager
-import kotlinx.android.synthetic.main.list_item_history.view.*
 import kotlinx.coroutines.*
 import strathclyde.emb15144.stepcounter.database.Day
 import strathclyde.emb15144.stepcounter.database.DayDao
@@ -28,9 +26,10 @@ class MainViewModel(
     private var dateChangedReceiver: DateChangedReceiver
     private val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
     private val _editableGoals = MutableLiveData<Boolean>(preferences.getBoolean("editableGoals", false))
+    private val _automaticStepCounting = MutableLiveData<Boolean>(preferences.getBoolean("automaticStepCounting", false))
 
-    val goals: LiveData<List<Goal>> = goalDao.getAll()
-    val days: LiveData<List<Day>> = dayDao.getAll()
+    val goals: LiveData<List<Goal>> = goalDao.getAllObservable()
+    val days: LiveData<List<Day>> = dayDao.getAllObservable()
     val today: LiveData<Day> = Transformations.map(days) {
          it.first()
     }
@@ -38,6 +37,7 @@ class MainViewModel(
         Goal(it.goal_id, it.goal_name, it.goal_steps)
     }
     val editableGoals: LiveData<Boolean> = _editableGoals
+    val automaticStepCounting: LiveData<Boolean> = _automaticStepCounting
 
     private val activeGoalChangeObserver: Observer<List<Goal>> = Observer { list ->
         Log.i("Goals", "Goals Changed: " + list.size)
@@ -54,6 +54,9 @@ class MainViewModel(
         when(key) {
             "editableGoals" -> {
                 _editableGoals.value = sp.getBoolean(key, false)
+            }
+            "automaticStepCounting" -> {
+                _automaticStepCounting.value = sp.getBoolean(key, false)
             }
         }
     }
@@ -87,10 +90,20 @@ class MainViewModel(
         }
     }
 
+    private val automaticStepCountingObserver: Observer<Boolean> = Observer {
+        when(it) {
+            true -> application.startService(Intent(application, StepService::class.java))
+            false -> application.stopService(Intent(application, StepService::class.java))
+        }
+    }
+
     init {
         Log.i("GoalsViewModel", "GoalsViewModel created!")
         today.observeOnce(newDayObserver)
+
         goals.observeForever(activeGoalChangeObserver)
+        automaticStepCounting.observeForever(automaticStepCountingObserver)
+
         dateChangedReceiver = DateChangedReceiver()
         getApplication<Application>().registerReceiver(dateChangedReceiver, IntentFilter(Intent.ACTION_DATE_CHANGED))
         preferences.registerOnSharedPreferenceChangeListener(prefListener)
@@ -100,7 +113,11 @@ class MainViewModel(
         super.onCleared()
         Log.i("GoalsViewModel", "GoalsViewModel destroyed!")
         viewModelJob.cancel()
+
         goals.removeObserver(activeGoalChangeObserver)
+        automaticStepCounting.removeObserver(automaticStepCountingObserver)
+        getApplication<Application>().stopService(Intent(getApplication(), StepService::class.java))
+
         getApplication<Application>().unregisterReceiver(dateChangedReceiver)
         preferences.unregisterOnSharedPreferenceChangeListener(prefListener)
     }

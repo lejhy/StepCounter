@@ -13,5 +13,9 @@
     <string name="deleteHistory">Delete History</string>
     <string name="goalNameHelperText">Make sure that the name is unique</string>
     <string name="goalStepsHelperText">Input a non-zero value</string>
+    <string name="channel_name">StepService notification channel</string>
+    <string name="channel_id">STEPSERVICE CHANNEL</string>
+    <string name="automaticStepCounting">Automatic Step Counting</string>
+    <integer name="notification_id">1</integer>
 
 </resources>

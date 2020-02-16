@@ -16,5 +16,5 @@ interface GoalDao {
     @Query("SELECT * FROM goals_table WHERE name = :name")
     fun get(name: String): Goal?
     @Query("SELECT * FROM goals_table")
-    fun getAll(): LiveData<List<Goal>>
+    fun getAllObservable(): LiveData<List<Goal>>
 }

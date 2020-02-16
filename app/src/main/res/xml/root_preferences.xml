@@ -2,6 +2,10 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
         <SwitchPreferenceCompat
+                app:key="automaticStepCounting"
+                app:title="@string/automaticStepCounting"/>
+
+        <SwitchPreferenceCompat
                 app:key="notifications"
                 app:title="@string/notifications"/>
 
