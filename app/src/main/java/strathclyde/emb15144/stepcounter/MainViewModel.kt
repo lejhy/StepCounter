@@ -141,7 +141,6 @@ class MainViewModel(
         today.removeObserver(notificationObserver)
         goals.removeObserver(activeGoalChangeObserver)
         automaticStepCounting.removeObserver(automaticStepCountingObserver)
-        getApplication<Application>().stopService(Intent(getApplication(), StepService::class.java))
 
         getApplication<Application>().unregisterReceiver(dateChangedReceiver)
         preferences.unregisterOnSharedPreferenceChangeListener(prefListener)
