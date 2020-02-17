@@ -1,6 +1,10 @@
 package strathclyde.emb15144.stepcounter
 
 import android.app.Application
+import android.app.Notification
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
@@ -27,6 +31,7 @@ class MainViewModel(
     private val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
     private val _editableGoals = MutableLiveData<Boolean>(preferences.getBoolean("editableGoals", false))
     private val _automaticStepCounting = MutableLiveData<Boolean>(preferences.getBoolean("automaticStepCounting", false))
+    private val _notifications = MutableLiveData<Boolean>(preferences.getBoolean("notifications", false))
 
     val goals: LiveData<List<Goal>> = goalDao.getAllObservable()
     val days: LiveData<List<Day>> = dayDao.getAllObservable()
@@ -38,6 +43,7 @@ class MainViewModel(
     }
     val editableGoals: LiveData<Boolean> = _editableGoals
     val automaticStepCounting: LiveData<Boolean> = _automaticStepCounting
+    val notifications: LiveData<Boolean> = _notifications
 
     private val activeGoalChangeObserver: Observer<List<Goal>> = Observer { list ->
         Log.i("Goals", "Goals Changed: " + list.size)
@@ -57,6 +63,9 @@ class MainViewModel(
             }
             "automaticStepCounting" -> {
                 _automaticStepCounting.value = sp.getBoolean(key, false)
+            }
+            "notifications" -> {
+                _notifications.value = sp.getBoolean(key, false)
             }
         }
     }
@@ -97,10 +106,25 @@ class MainViewModel(
         }
     }
 
+    private var lastTodayStepsValue: Int = Int.MAX_VALUE
+    private val notificationObserver: Observer<Day> = Observer{
+        if (notifications.value!!) {
+            val lastStepRatio = lastTodayStepsValue.toFloat() / it.goal_steps.toFloat()
+            val newStepRatio = it.steps.toFloat() / it.goal_steps.toFloat()
+            if (lastStepRatio < 1.0 && newStepRatio > 1.0) {
+                createAllTheWayThereNotification(it)
+            } else if (lastStepRatio < 0.5 && newStepRatio >= 0.5) {
+                createHalfWayThereNotification(it)
+            }
+        }
+        lastTodayStepsValue = it.steps
+    }
+
     init {
         Log.i("GoalsViewModel", "GoalsViewModel created!")
         today.observeOnce(newDayObserver)
 
+        today.observeForever(notificationObserver)
         goals.observeForever(activeGoalChangeObserver)
         automaticStepCounting.observeForever(automaticStepCountingObserver)
 
@@ -114,12 +138,39 @@ class MainViewModel(
         Log.i("GoalsViewModel", "GoalsViewModel destroyed!")
         viewModelJob.cancel()
 
+        today.removeObserver(notificationObserver)
         goals.removeObserver(activeGoalChangeObserver)
         automaticStepCounting.removeObserver(automaticStepCountingObserver)
         getApplication<Application>().stopService(Intent(getApplication(), StepService::class.java))
 
         getApplication<Application>().unregisterReceiver(dateChangedReceiver)
         preferences.unregisterOnSharedPreferenceChangeListener(prefListener)
+    }
+
+    fun createHalfWayThereNotification(day: Day) {
+        createProgressNotification(day, "Half Way There!")
+    }
+
+    fun createAllTheWayThereNotification(day: Day) {
+        createProgressNotification(day, "All The Way There!")
+    }
+
+    fun createProgressNotification(day: Day, title: String) {
+        val application = getApplication<Application>()
+        val pendingIntent: PendingIntent =
+            Intent(application, MainActivity::class.java).let { notificationIntent ->
+                PendingIntent.getActivity(application, 0, notificationIntent, 0)
+            }
+
+        val notification: Notification = Notification.Builder(application, application.getString(R.string.channel_id))
+            .setContentTitle(title)
+            .setContentText(String.format("You have completed %d%% today's goal!", 100 * day.steps / day.goal_steps))
+            .setSmallIcon(R.drawable.ic_directions_run_black_24dp)
+            .setContentIntent(pendingIntent)
+            .build()
+
+        val notificationManager: NotificationManager = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(R.integer.progress_notification_id, notification)
     }
 
     fun addGoal(goal: String, steps: Int) {

@@ -16,6 +16,7 @@
     <string name="channel_name">StepService notification channel</string>
     <string name="channel_id">STEPSERVICE CHANNEL</string>
     <string name="automaticStepCounting">Automatic Step Counting</string>
-    <integer name="notification_id">1</integer>
+    <integer name="automaticStepCounting_notification_id">1</integer>
+    <integer name="progress_notification_id">2</integer>
 
 </resources>

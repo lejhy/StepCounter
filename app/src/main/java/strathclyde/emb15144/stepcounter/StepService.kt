@@ -37,7 +37,6 @@ class StepService : Service(), SensorEventListener {
     override fun onCreate() {
         Log.i("StepService", "OnCreate called")
         super.onCreate()
-        createNotificationChannel()
         val pendingIntent: PendingIntent =
             Intent(this, MainActivity::class.java).let { notificationIntent ->
                 PendingIntent.getActivity(this, 0, notificationIntent, 0)
@@ -48,10 +47,9 @@ class StepService : Service(), SensorEventListener {
             .setContentText("StepCounter now automatically records your steps")
             .setSmallIcon(R.drawable.ic_directions_run_black_24dp)
             .setContentIntent(pendingIntent)
-            .setTicker("Step notification ticker")
             .build()
 
-        startForeground(R.integer.notification_id, notification)
+        startForeground(R.integer.automaticStepCounting_notification_id, notification)
 
         val sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         val sensor: Sensor? = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
@@ -66,17 +64,6 @@ class StepService : Service(), SensorEventListener {
     override fun onDestroy() {
         Log.i("StepService", "OnDestroy called")
         super.onDestroy()
-    }
-
-    private fun createNotificationChannel() {
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel(
-            getString(R.string.channel_id),
-            getString(R.string.channel_name),
-            importance
-        )
-        val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
