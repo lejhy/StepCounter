@@ -2,7 +2,6 @@ package strathclyde.emb15144.stepcounter.ui.steps
 
 import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +11,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import strathclyde.emb15144.stepcounter.*
-import strathclyde.emb15144.stepcounter.model.Goal
+import strathclyde.emb15144.stepcounter.R
 import strathclyde.emb15144.stepcounter.databinding.FragmentStepsBinding
+import strathclyde.emb15144.stepcounter.model.Goal
 import strathclyde.emb15144.stepcounter.utils.observeOnce
 import strathclyde.emb15144.stepcounter.viewmodel.MainViewModel
 import strathclyde.emb15144.stepcounter.viewmodel.MainViewModelFactory

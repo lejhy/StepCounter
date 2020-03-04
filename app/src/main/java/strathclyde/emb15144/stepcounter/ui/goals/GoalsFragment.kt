@@ -1,7 +1,6 @@
 package strathclyde.emb15144.stepcounter.ui.goals
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,19 +9,17 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
-import androidx.recyclerview.widget.RecyclerView
+import strathclyde.emb15144.stepcounter.R
+import strathclyde.emb15144.stepcounter.databinding.FragmentGoalsBinding
+import strathclyde.emb15144.stepcounter.model.Goal
+import strathclyde.emb15144.stepcounter.viewmodel.EditGoalDialogViewModel
 import strathclyde.emb15144.stepcounter.viewmodel.MainViewModel
 import strathclyde.emb15144.stepcounter.viewmodel.MainViewModelFactory
-import strathclyde.emb15144.stepcounter.R
-import strathclyde.emb15144.stepcounter.model.Goal
-import strathclyde.emb15144.stepcounter.databinding.FragmentGoalsBinding
-import strathclyde.emb15144.stepcounter.viewmodel.EditGoalDialogViewModel
 
 
 class GoalsFragment : Fragment() {
 
     private lateinit var mainViewModel: MainViewModel
-    private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: GoalsListAdapter
 
     override fun onCreateView(
@@ -68,7 +65,7 @@ class GoalsFragment : Fragment() {
         mainViewModel.todayGoal.observe(viewLifecycleOwner) { updateGoalList(mainViewModel.goals.value) }
         mainViewModel.editableGoals.observe(viewLifecycleOwner) { updateGoalList(mainViewModel.goals.value) }
 
-        recyclerView = binding.goalsRecyclerView.apply {
+        binding.goalsRecyclerView.apply {
             adapter = viewAdapter
         }
 

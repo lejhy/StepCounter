@@ -8,7 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
 import androidx.preference.PreferenceManager
@@ -20,9 +19,9 @@ import strathclyde.emb15144.stepcounter.model.Goal
 import strathclyde.emb15144.stepcounter.model.GoalDao
 import strathclyde.emb15144.stepcounter.receiver.DateChangedBroadcastReceiver
 import strathclyde.emb15144.stepcounter.service.StepsSensorService
+import strathclyde.emb15144.stepcounter.ui.MainActivity
 import strathclyde.emb15144.stepcounter.utils.DateFormat
 import strathclyde.emb15144.stepcounter.utils.observeOnce
-import strathclyde.emb15144.stepcounter.ui.MainActivity
 import java.util.*
 
 class MainViewModel(

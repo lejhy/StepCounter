@@ -4,7 +4,6 @@ import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import strathclyde.emb15144.stepcounter.model.Day
-import strathclyde.emb15144.stepcounter.utils.DateFormat
 
 @BindingAdapter("steps")
 fun TextView.setStepsFormatted(item: Int) {

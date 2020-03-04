@@ -2,7 +2,6 @@ package strathclyde.emb15144.stepcounter.ui.history
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,12 +11,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import strathclyde.emb15144.stepcounter.viewmodel.MainViewModel
-import strathclyde.emb15144.stepcounter.viewmodel.MainViewModelFactory
 import strathclyde.emb15144.stepcounter.R
+import strathclyde.emb15144.stepcounter.databinding.FragmentHistoryBinding
 import strathclyde.emb15144.stepcounter.model.Day
 import strathclyde.emb15144.stepcounter.model.Goal
-import strathclyde.emb15144.stepcounter.databinding.FragmentHistoryBinding
+import strathclyde.emb15144.stepcounter.viewmodel.MainViewModel
+import strathclyde.emb15144.stepcounter.viewmodel.MainViewModelFactory
 import java.util.*
 
 class HistoryFragment : Fragment() {

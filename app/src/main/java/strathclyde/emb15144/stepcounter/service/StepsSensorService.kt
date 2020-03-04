@@ -1,6 +1,8 @@
 package strathclyde.emb15144.stepcounter.service
 
-import android.app.*
+import android.app.Notification
+import android.app.PendingIntent
+import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.hardware.Sensor
@@ -8,7 +10,6 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.IBinder
-import android.util.Log
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.*
 import strathclyde.emb15144.stepcounter.R

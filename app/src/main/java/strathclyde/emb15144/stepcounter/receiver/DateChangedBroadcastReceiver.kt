@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import kotlinx.coroutines.*
 import strathclyde.emb15144.stepcounter.model.Day
 import strathclyde.emb15144.stepcounter.model.MainDatabase

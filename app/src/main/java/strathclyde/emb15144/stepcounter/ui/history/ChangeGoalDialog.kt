@@ -2,7 +2,6 @@ package strathclyde.emb15144.stepcounter.ui.history
 
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import androidx.appcompat.app.AlertDialog
@@ -10,8 +9,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import strathclyde.emb15144.stepcounter.R
-import strathclyde.emb15144.stepcounter.model.Goal
 import strathclyde.emb15144.stepcounter.databinding.DialogChangeGoalBinding
+import strathclyde.emb15144.stepcounter.model.Goal
 import strathclyde.emb15144.stepcounter.ui.steps.GoalsSpinnerAdapter
 
 class ChangeGoalDialog(
