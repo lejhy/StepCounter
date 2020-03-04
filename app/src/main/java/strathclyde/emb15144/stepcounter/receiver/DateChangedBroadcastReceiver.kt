@@ -1,4 +1,4 @@
-package strathclyde.emb15144.stepcounter
+package strathclyde.emb15144.stepcounter.receiver
 
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
@@ -6,11 +6,12 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import kotlinx.coroutines.*
-import strathclyde.emb15144.stepcounter.database.Day
-import strathclyde.emb15144.stepcounter.database.MainDatabase
+import strathclyde.emb15144.stepcounter.model.Day
+import strathclyde.emb15144.stepcounter.model.MainDatabase
+import strathclyde.emb15144.stepcounter.utils.DateFormat
 import java.util.*
 
-class DateChangedReceiver : BroadcastReceiver() {
+class DateChangedBroadcastReceiver : BroadcastReceiver() {
     private var receiverJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + receiverJob)
 

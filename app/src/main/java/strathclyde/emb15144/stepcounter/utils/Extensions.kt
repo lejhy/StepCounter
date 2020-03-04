@@ -1,4 +1,4 @@
-package strathclyde.emb15144.stepcounter
+package strathclyde.emb15144.stepcounter.utils
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer

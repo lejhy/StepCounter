@@ -1,4 +1,4 @@
-package strathclyde.emb15144.stepcounter
+package strathclyde.emb15144.stepcounter.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
@@ -6,7 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import kotlinx.coroutines.*
-import strathclyde.emb15144.stepcounter.database.MainDatabase
+import strathclyde.emb15144.stepcounter.R
+import strathclyde.emb15144.stepcounter.model.MainDatabase
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -15,7 +16,10 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.settings, SettingsFragment())
+            .replace(
+                R.id.settings,
+                SettingsFragment()
+            )
             .commit()
     }
 

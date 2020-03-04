@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_main.*
 import strathclyde.emb15144.stepcounter.R
 import strathclyde.emb15144.stepcounter.databinding.DialogGoalBinding
+import strathclyde.emb15144.stepcounter.viewmodel.GoalDialogViewModel
 
 class GoalDialogFragment(
     private val viewModel: GoalDialogViewModel

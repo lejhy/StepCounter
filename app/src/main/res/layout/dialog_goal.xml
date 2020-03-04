@@ -5,7 +5,7 @@
     <data>
         <variable
                 name="viewModel"
-                type="strathclyde.emb15144.stepcounter.ui.goals.GoalDialogViewModel"/>
+                type="strathclyde.emb15144.stepcounter.viewmodel.GoalDialogViewModel"/>
     </data>
     <LinearLayout
             android:orientation="vertical"

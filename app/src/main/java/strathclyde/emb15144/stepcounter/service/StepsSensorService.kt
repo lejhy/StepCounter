@@ -1,4 +1,4 @@
-package strathclyde.emb15144.stepcounter
+package strathclyde.emb15144.stepcounter.service
 
 import android.app.*
 import android.content.Context
@@ -11,11 +11,13 @@ import android.os.IBinder
 import android.util.Log
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.*
-import strathclyde.emb15144.stepcounter.database.Day
-import strathclyde.emb15144.stepcounter.database.DayDao
-import strathclyde.emb15144.stepcounter.database.MainDatabase
+import strathclyde.emb15144.stepcounter.R
+import strathclyde.emb15144.stepcounter.model.Day
+import strathclyde.emb15144.stepcounter.model.DayDao
+import strathclyde.emb15144.stepcounter.model.MainDatabase
+import strathclyde.emb15144.stepcounter.ui.MainActivity
 
-class StepService : Service(), SensorEventListener {
+class StepsSensorService : Service(), SensorEventListener {
 
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)

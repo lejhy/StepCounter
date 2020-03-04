@@ -13,25 +13,25 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <service
-                android:name=".StepService"
+                android:name=".service.StepsSensorService"
                 android:enabled="true"
                 android:exported="false">
         </service>
 
         <activity
-                android:name=".SettingsActivity"
+                android:name=".ui.SettingsActivity"
                 android:label="@string/settings"
-                android:parentActivityName=".MainActivity">
+                android:parentActivityName=".ui.MainActivity">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value=".MainActivity"/>
+                    android:value=".ui.MainActivity"/>
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
             </intent-filter>
         </activity>
         <activity
-                android:name=".MainActivity"
+                android:name=".ui.MainActivity"
                 android:label="@string/app_name"
                 android:launchMode="singleTop">
             <intent-filter>
@@ -42,7 +42,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".DateChangedReceiver">
+        <receiver android:name=".receiver.DateChangedBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.DATE_CHANGED"/>
             </intent-filter>

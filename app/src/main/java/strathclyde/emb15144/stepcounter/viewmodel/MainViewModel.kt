@@ -1,4 +1,4 @@
-package strathclyde.emb15144.stepcounter
+package strathclyde.emb15144.stepcounter.viewmodel
 
 import android.app.Application
 import android.app.Notification
@@ -13,10 +13,16 @@ import androidx.lifecycle.*
 import androidx.lifecycle.Observer
 import androidx.preference.PreferenceManager
 import kotlinx.coroutines.*
-import strathclyde.emb15144.stepcounter.database.Day
-import strathclyde.emb15144.stepcounter.database.DayDao
-import strathclyde.emb15144.stepcounter.database.Goal
-import strathclyde.emb15144.stepcounter.database.GoalDao
+import strathclyde.emb15144.stepcounter.R
+import strathclyde.emb15144.stepcounter.model.Day
+import strathclyde.emb15144.stepcounter.model.DayDao
+import strathclyde.emb15144.stepcounter.model.Goal
+import strathclyde.emb15144.stepcounter.model.GoalDao
+import strathclyde.emb15144.stepcounter.receiver.DateChangedBroadcastReceiver
+import strathclyde.emb15144.stepcounter.service.StepsSensorService
+import strathclyde.emb15144.stepcounter.utils.DateFormat
+import strathclyde.emb15144.stepcounter.utils.observeOnce
+import strathclyde.emb15144.stepcounter.ui.MainActivity
 import java.util.*
 
 class MainViewModel(
@@ -27,7 +33,7 @@ class MainViewModel(
 
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
-    private var dateChangedReceiver: DateChangedReceiver
+    private var dateChangedBroadcastReceiver: DateChangedBroadcastReceiver
     private val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
     private val _editableGoals = MutableLiveData<Boolean>(preferences.getBoolean("editableGoals", false))
     private val _automaticStepCounting = MutableLiveData<Boolean>(preferences.getBoolean("automaticStepCounting", false))
@@ -101,8 +107,8 @@ class MainViewModel(
 
     private val automaticStepCountingObserver: Observer<Boolean> = Observer {
         when(it) {
-            true -> application.startService(Intent(application, StepService::class.java))
-            false -> application.stopService(Intent(application, StepService::class.java))
+            true -> application.startService(Intent(application, StepsSensorService::class.java))
+            false -> application.stopService(Intent(application, StepsSensorService::class.java))
         }
     }
 
@@ -128,8 +134,9 @@ class MainViewModel(
         goals.observeForever(activeGoalChangeObserver)
         automaticStepCounting.observeForever(automaticStepCountingObserver)
 
-        dateChangedReceiver = DateChangedReceiver()
-        getApplication<Application>().registerReceiver(dateChangedReceiver, IntentFilter(Intent.ACTION_DATE_CHANGED))
+        dateChangedBroadcastReceiver =
+            DateChangedBroadcastReceiver()
+        getApplication<Application>().registerReceiver(dateChangedBroadcastReceiver, IntentFilter(Intent.ACTION_DATE_CHANGED))
         preferences.registerOnSharedPreferenceChangeListener(prefListener)
     }
 
@@ -142,7 +149,7 @@ class MainViewModel(
         goals.removeObserver(activeGoalChangeObserver)
         automaticStepCounting.removeObserver(automaticStepCountingObserver)
 
-        getApplication<Application>().unregisterReceiver(dateChangedReceiver)
+        getApplication<Application>().unregisterReceiver(dateChangedBroadcastReceiver)
         preferences.unregisterOnSharedPreferenceChangeListener(prefListener)
     }
 
@@ -243,7 +250,7 @@ class MainViewModel(
     }
 
     fun addHistory(date: Date): Boolean {
-        val dateString = DateFormat.standardFormat(date);
+        val dateString = DateFormat.standardFormat(date)
         for(day in days.value!!) {
             if (day.date == dateString) {
                 return false

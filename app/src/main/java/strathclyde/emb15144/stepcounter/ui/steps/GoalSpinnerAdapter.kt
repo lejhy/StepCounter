@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import strathclyde.emb15144.stepcounter.database.Goal
+import strathclyde.emb15144.stepcounter.model.Goal
 import strathclyde.emb15144.stepcounter.databinding.SpinnerItemGoalBinding
 
 

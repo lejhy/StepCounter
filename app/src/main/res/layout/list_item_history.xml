@@ -6,7 +6,7 @@
     <data>
         <variable
                 name="day"
-                type="strathclyde.emb15144.stepcounter.database.Day"/>
+                type="strathclyde.emb15144.stepcounter.model.Day"/>
         <variable
                 name="clickListener"
                 type="strathclyde.emb15144.stepcounter.ui.history.HistoryListListener"/>

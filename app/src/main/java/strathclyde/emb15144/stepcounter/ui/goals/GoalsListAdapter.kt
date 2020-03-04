@@ -3,7 +3,9 @@ package strathclyde.emb15144.stepcounter.ui.goals
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 
-class GoalsListAdapter(val clickListener: GoalListListener) : ListAdapter<GoalListItem, GoalViewHolder> (GoalListDiffCallback()) {
+class GoalsListAdapter(val clickListener: GoalListListener) : ListAdapter<GoalListItem, GoalViewHolder> (
+    GoalListDiffCallback()
+) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GoalViewHolder {
         return GoalViewHolder.from(parent)

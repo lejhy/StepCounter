@@ -1,4 +1,4 @@
-package strathclyde.emb15144.stepcounter
+package strathclyde.emb15144.stepcounter.utils
 
 import android.annotation.SuppressLint
 import java.text.SimpleDateFormat

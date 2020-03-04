@@ -6,7 +6,7 @@
     <data>
         <variable
                 name="mainViewModel"
-                type="strathclyde.emb15144.stepcounter.MainViewModel"/>
+                type="strathclyde.emb15144.stepcounter.viewmodel.MainViewModel"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

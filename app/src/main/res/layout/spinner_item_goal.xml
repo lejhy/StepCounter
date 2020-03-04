@@ -6,7 +6,7 @@
     <data>
         <variable
                 name="goal"
-                type="strathclyde.emb15144.stepcounter.database.Goal"/>
+                type="strathclyde.emb15144.stepcounter.model.Goal"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

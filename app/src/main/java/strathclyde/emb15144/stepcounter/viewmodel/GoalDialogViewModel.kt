@@ -1,11 +1,11 @@
-package strathclyde.emb15144.stepcounter.ui.goals
+package strathclyde.emb15144.stepcounter.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import kotlinx.coroutines.*
-import strathclyde.emb15144.stepcounter.database.MainDatabase
+import strathclyde.emb15144.stepcounter.model.MainDatabase
 
 class GoalDialogViewModel(
     val title: String,

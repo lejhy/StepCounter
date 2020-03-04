@@ -8,15 +8,15 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
-import strathclyde.emb15144.stepcounter.MainViewModel
-import strathclyde.emb15144.stepcounter.MainViewModelFactory
+import strathclyde.emb15144.stepcounter.viewmodel.MainViewModel
+import strathclyde.emb15144.stepcounter.viewmodel.MainViewModelFactory
 import strathclyde.emb15144.stepcounter.R
-import strathclyde.emb15144.stepcounter.database.Goal
+import strathclyde.emb15144.stepcounter.model.Goal
 import strathclyde.emb15144.stepcounter.databinding.FragmentGoalsBinding
+import strathclyde.emb15144.stepcounter.viewmodel.GoalDialogViewModel
 
 
 class GoalsFragment : Fragment() {
@@ -44,7 +44,8 @@ class GoalsFragment : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentGoalsBinding>(inflater, R.layout.fragment_goals, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
-        val viewModelFactory = MainViewModelFactory(requireActivity().application)
+        val viewModelFactory =
+            MainViewModelFactory(requireActivity().application)
         mainViewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
 
         viewAdapter = GoalsListAdapter(
@@ -61,7 +62,15 @@ class GoalsFragment : Fragment() {
                         .show()
                 },
                 {
-                    val goalDialog = GoalDialogFragment(GoalDialogViewModel("Edit Goal", it.name, it.steps, getEditGoalCallback(it.id), requireActivity().application))
+                    val goalDialog = GoalDialogFragment(
+                        GoalDialogViewModel(
+                            "Edit Goal",
+                            it.name,
+                            it.steps,
+                            getEditGoalCallback(it.id),
+                            requireActivity().application
+                        )
+                    )
                     goalDialog.show(requireActivity().supportFragmentManager, "editGoalDialog")
                 }
             )
@@ -75,7 +84,15 @@ class GoalsFragment : Fragment() {
         }
 
         binding.addGoalButton.setOnClickListener {
-            val goalDialog = GoalDialogFragment(GoalDialogViewModel("Add Goal", "", 0, getAddGoalCallback(), requireActivity().application))
+            val goalDialog = GoalDialogFragment(
+                GoalDialogViewModel(
+                    "Add Goal",
+                    "",
+                    0,
+                    getAddGoalCallback(),
+                    requireActivity().application
+                )
+            )
             goalDialog.show(requireActivity().supportFragmentManager, "addGoalDialog")
         }
 

@@ -1,10 +1,10 @@
-package strathclyde.emb15144.stepcounter
+package strathclyde.emb15144.stepcounter.utils
 
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import strathclyde.emb15144.stepcounter.database.Day
+import strathclyde.emb15144.stepcounter.model.Day
+import strathclyde.emb15144.stepcounter.utils.DateFormat
 
 @BindingAdapter("steps")
 fun TextView.setStepsFormatted(item: Int) {

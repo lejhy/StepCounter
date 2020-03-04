@@ -12,11 +12,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import strathclyde.emb15144.stepcounter.MainViewModel
-import strathclyde.emb15144.stepcounter.MainViewModelFactory
+import strathclyde.emb15144.stepcounter.viewmodel.MainViewModel
+import strathclyde.emb15144.stepcounter.viewmodel.MainViewModelFactory
 import strathclyde.emb15144.stepcounter.R
-import strathclyde.emb15144.stepcounter.database.Day
-import strathclyde.emb15144.stepcounter.database.Goal
+import strathclyde.emb15144.stepcounter.model.Day
+import strathclyde.emb15144.stepcounter.model.Goal
 import strathclyde.emb15144.stepcounter.databinding.FragmentHistoryBinding
 import java.util.*
 
@@ -45,26 +45,31 @@ class HistoryFragment : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentHistoryBinding>(inflater, R.layout.fragment_history, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
-        val viewModelFactory = MainViewModelFactory(requireActivity().application)
+        val viewModelFactory =
+            MainViewModelFactory(requireActivity().application)
         mainViewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
 
-        viewAdapter = HistoryListAdapter(HistoryListListener(
-            {
-                Log.i("HistoryFragment", "AddSteps")
-                val dialog = AddStepsDialog("Add Steps", addStepsCallback(it))
-                dialog.show(requireActivity().supportFragmentManager, "addStepsDialog")
-            },
-            {
-                Log.i("HistoryFragment", "EditGoals")
-                val dialog = ChangeGoalDialog(
-                    "Change Goal",
-                    mainViewModel.goals.value!!,
-                    Goal(it.id, it.goal_name, it.goal_steps),
-                    changeGoalCallback(it)
-                )
-                dialog.show(requireActivity().supportFragmentManager, "changeGoalDialog")
-            }
-        ))
+        viewAdapter =
+            HistoryListAdapter(HistoryListListener(
+                {
+                    Log.i("HistoryFragment", "AddSteps")
+                    val dialog = AddStepsDialog(
+                        "Add Steps",
+                        addStepsCallback(it)
+                    )
+                    dialog.show(requireActivity().supportFragmentManager, "addStepsDialog")
+                },
+                {
+                    Log.i("HistoryFragment", "EditGoals")
+                    val dialog = ChangeGoalDialog(
+                        "Change Goal",
+                        mainViewModel.goals.value!!,
+                        Goal(it.id, it.goal_name, it.goal_steps),
+                        changeGoalCallback(it)
+                    )
+                    dialog.show(requireActivity().supportFragmentManager, "changeGoalDialog")
+                }
+            ))
         mainViewModel.days.observe(viewLifecycleOwner, Observer {
             it?.let {
                 viewAdapter.submitList(it)

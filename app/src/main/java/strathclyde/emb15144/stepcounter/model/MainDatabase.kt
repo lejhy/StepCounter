@@ -1,4 +1,4 @@
-package strathclyde.emb15144.stepcounter.database
+package strathclyde.emb15144.stepcounter.model
 
 import android.content.Context
 import androidx.room.Database

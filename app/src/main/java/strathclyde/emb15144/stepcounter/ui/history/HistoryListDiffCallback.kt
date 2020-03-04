@@ -1,7 +1,7 @@
 package strathclyde.emb15144.stepcounter.ui.history
 
 import androidx.recyclerview.widget.DiffUtil
-import strathclyde.emb15144.stepcounter.database.Day
+import strathclyde.emb15144.stepcounter.model.Day
 
 class HistoryListDiffCallback : DiffUtil.ItemCallback<Day>() {
     override fun areItemsTheSame(oldItem: Day, newItem: Day): Boolean {
