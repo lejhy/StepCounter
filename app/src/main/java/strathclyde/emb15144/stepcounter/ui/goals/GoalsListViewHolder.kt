@@ -5,19 +5,19 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import strathclyde.emb15144.stepcounter.databinding.ListItemGoalBinding
 
-class GoalViewHolder private constructor(val binding: ListItemGoalBinding) : RecyclerView.ViewHolder(binding.root) {
+class GoalsListViewHolder private constructor(val binding: ListItemGoalBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(
-        goalListItem: GoalListItem,
-        clickListener: GoalListListener
+        goalsListItem: GoalsListItem,
+        clickListener: GoalsListListener
     ) {
-        binding.goalItem = goalListItem
+        binding.goalsListItem = goalsListItem
         binding.clickListener = clickListener
         binding.executePendingBindings()
     }
 
     companion object {
-        fun from(parent: ViewGroup): GoalViewHolder {
+        fun from(parent: ViewGroup): GoalsListViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
             val binding = ListItemGoalBinding.inflate(
                 layoutInflater,
@@ -25,7 +25,7 @@ class GoalViewHolder private constructor(val binding: ListItemGoalBinding) : Rec
                 false
             )
 
-            return GoalViewHolder(binding)
+            return GoalsListViewHolder(binding)
         }
     }
 }

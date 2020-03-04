@@ -9,7 +9,7 @@ import strathclyde.emb15144.stepcounter.model.Goal
 import strathclyde.emb15144.stepcounter.databinding.SpinnerItemGoalBinding
 
 
-class GoalSpinnerAdapter(
+class GoalsSpinnerAdapter(
     context: Context
 ) : ArrayAdapter<Goal>(context, 0) {
 

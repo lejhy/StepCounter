@@ -4,8 +4,8 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-                name="viewModel"
-                type="strathclyde.emb15144.stepcounter.viewmodel.GoalDialogViewModel"/>
+                name="editGoalDialogViewModel"
+                type="strathclyde.emb15144.stepcounter.viewmodel.EditGoalDialogViewModel"/>
     </data>
     <LinearLayout
             android:orientation="vertical"
@@ -26,7 +26,7 @@
                     android:id="@+id/nameInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@={viewModel.name}"
+                    android:text="@={editGoalDialogViewModel.name}"
                     />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -42,7 +42,7 @@
                     android:id="@+id/stepsInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@={viewModel.steps}"
+                    android:text="@={editGoalDialogViewModel.steps}"
                     android:inputType="number"/>
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>

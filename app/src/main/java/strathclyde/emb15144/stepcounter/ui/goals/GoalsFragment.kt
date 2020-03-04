@@ -16,7 +16,7 @@ import strathclyde.emb15144.stepcounter.viewmodel.MainViewModelFactory
 import strathclyde.emb15144.stepcounter.R
 import strathclyde.emb15144.stepcounter.model.Goal
 import strathclyde.emb15144.stepcounter.databinding.FragmentGoalsBinding
-import strathclyde.emb15144.stepcounter.viewmodel.GoalDialogViewModel
+import strathclyde.emb15144.stepcounter.viewmodel.EditGoalDialogViewModel
 
 
 class GoalsFragment : Fragment() {
@@ -49,7 +49,7 @@ class GoalsFragment : Fragment() {
         mainViewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
 
         viewAdapter = GoalsListAdapter(
-            GoalListListener(
+            GoalsListListener(
                 {
                     AlertDialog.Builder(requireActivity())
                         .setTitle("Are you sure?")
@@ -62,8 +62,8 @@ class GoalsFragment : Fragment() {
                         .show()
                 },
                 {
-                    val goalDialog = GoalDialogFragment(
-                        GoalDialogViewModel(
+                    val goalDialog = EditGoalDialog(
+                        EditGoalDialogViewModel(
                             "Edit Goal",
                             it.name,
                             it.steps,
@@ -84,8 +84,8 @@ class GoalsFragment : Fragment() {
         }
 
         binding.addGoalButton.setOnClickListener {
-            val goalDialog = GoalDialogFragment(
-                GoalDialogViewModel(
+            val goalDialog = EditGoalDialog(
+                EditGoalDialogViewModel(
                     "Add Goal",
                     "",
                     0,
@@ -102,7 +102,7 @@ class GoalsFragment : Fragment() {
     private fun updateGoalList(goals: List<Goal>?) {
         goals?.let {
             viewAdapter.submitList(goals.map { goal ->
-                GoalListItem(
+                GoalsListItem(
                     goal,
                     goal.id != mainViewModel.todayGoal.value!!.id,
                     mainViewModel.editableGoals.value!! && (goal.id != mainViewModel.todayGoal.value!!.id)

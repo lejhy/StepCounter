@@ -55,7 +55,7 @@ class StepsFragment : Fragment() {
         binding.mainViewModel = mainViewModel
 
         val spinnerAdapter =
-            GoalSpinnerAdapter(requireActivity())
+            GoalsSpinnerAdapter(requireActivity())
         binding.goalSpinner.adapter = spinnerAdapter
         binding.goalSpinner.onItemSelectedListener = onItemSelectedListener
 

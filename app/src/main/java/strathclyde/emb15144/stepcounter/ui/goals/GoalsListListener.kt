@@ -2,7 +2,7 @@ package strathclyde.emb15144.stepcounter.ui.goals
 
 import strathclyde.emb15144.stepcounter.model.Goal
 
-class GoalListListener(
+class GoalsListListener(
     val onDeleteCallback: (goal: Goal) -> Unit,
     val onEditCallback: (goal: Goal) -> Unit
 ) {

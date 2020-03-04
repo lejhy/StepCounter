@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import strathclyde.emb15144.stepcounter.R
 import strathclyde.emb15144.stepcounter.model.Goal
 import strathclyde.emb15144.stepcounter.databinding.DialogChangeGoalBinding
-import strathclyde.emb15144.stepcounter.ui.steps.GoalSpinnerAdapter
+import strathclyde.emb15144.stepcounter.ui.steps.GoalsSpinnerAdapter
 
 class ChangeGoalDialog(
     private val title: String,
@@ -27,7 +27,7 @@ class ChangeGoalDialog(
             val binding = DataBindingUtil.inflate<DialogChangeGoalBinding>(inflater, R.layout.dialog_change_goal, container, false)
 
             val spinnerAdapter =
-                GoalSpinnerAdapter(requireActivity())
+                GoalsSpinnerAdapter(requireActivity())
             spinnerAdapter.addAll(goals)
             binding.goalSpinner.setSelection(goals.indexOf(goal))
             binding.goalSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
