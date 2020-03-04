@@ -1,10 +1,12 @@
 package strathclyde.emb15144.stepcounter.ui.history
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -16,6 +18,7 @@ import strathclyde.emb15144.stepcounter.R
 import strathclyde.emb15144.stepcounter.database.Day
 import strathclyde.emb15144.stepcounter.database.Goal
 import strathclyde.emb15144.stepcounter.databinding.FragmentHistoryBinding
+import java.util.*
 
 class HistoryFragment : Fragment() {
 
@@ -69,6 +72,21 @@ class HistoryFragment : Fragment() {
         })
         recyclerView = binding.daysRecyclerView.apply {
             adapter = viewAdapter
+        }
+
+        binding.addHistoryButton.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            val datePickerDialog = DatePickerDialog(requireActivity())
+            datePickerDialog.datePicker.maxDate = calendar.timeInMillis
+            datePickerDialog.setOnDateSetListener { view, year, month, dayOfMonth ->
+                calendar.set(year, month, dayOfMonth)
+                if (mainViewModel.addHistory(calendar.time)) {
+                    Toast.makeText(requireActivity(), "New date added", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(requireActivity(), "Date already exists", Toast.LENGTH_LONG).show()
+                }
+            }
+            datePickerDialog.show()
         }
 
         return binding.root

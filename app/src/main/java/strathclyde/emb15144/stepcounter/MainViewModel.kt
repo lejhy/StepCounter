@@ -241,4 +241,27 @@ class MainViewModel(
             }
         }
     }
+
+    fun addHistory(date: Date): Boolean {
+        val dateString = DateFormat.standardFormat(date);
+        for(day in days.value!!) {
+            if (day.date == dateString) {
+                return false
+            }
+        }
+        val newDay = Day(
+            0,
+            dateString,
+            0,
+            todayGoal.value!!.id,
+            todayGoal.value!!.name,
+            todayGoal.value!!.steps
+        )
+        uiScope.launch {
+            withContext(Dispatchers.IO) {
+                dayDao.insert(newDay)
+            }
+        }
+        return true
+    }
 }
