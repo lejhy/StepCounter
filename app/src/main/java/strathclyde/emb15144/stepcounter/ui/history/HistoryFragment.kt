@@ -26,22 +26,11 @@ class HistoryFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: HistoryListAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.i("HistoryFragment", "onCreate Called")
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.i("HistoryFragment", "onStart Called")
-    }
-
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        Log.i("HistoryFragment", "onCreateView Called")
         val binding = DataBindingUtil.inflate<FragmentHistoryBinding>(inflater, R.layout.fragment_history, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -52,7 +41,6 @@ class HistoryFragment : Fragment() {
         viewAdapter =
             HistoryListAdapter(HistoryListListener(
                 {
-                    Log.i("HistoryFragment", "AddSteps")
                     val dialog = AddStepsDialog(
                         "Add Steps",
                         addStepsCallback(it)
@@ -60,7 +48,6 @@ class HistoryFragment : Fragment() {
                     dialog.show(requireActivity().supportFragmentManager, "addStepsDialog")
                 },
                 {
-                    Log.i("HistoryFragment", "EditGoals")
                     val dialog = ChangeGoalDialog(
                         "Change Goal",
                         mainViewModel.goals.value!!,

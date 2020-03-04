@@ -16,10 +16,8 @@ class DateChangedBroadcastReceiver : BroadcastReceiver() {
     private val uiScope = CoroutineScope(Dispatchers.Main + receiverJob)
 
     override fun onReceive(context: Context, intent: Intent) {
-        Log.i("DateChangedReceiver", "onReceive")
         val action = intent.action
         if (Intent.ACTION_DATE_CHANGED == action) {
-            Log.i("DateChangedReceiver", "ACTION_DATE_CHANGED")
             uiScope.launch {
                 val datasource = MainDatabase.getInstance(context)
                 @SuppressLint("SimpleDateFormat")

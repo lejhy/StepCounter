@@ -34,7 +34,6 @@ class ChangeGoalDialog(
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
 
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    Log.i("StepFragment", "Item selected")
                     goal = spinnerAdapter.getItem(position)!!
                 }
             }

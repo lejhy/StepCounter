@@ -25,22 +25,11 @@ class GoalsFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: GoalsListAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.i("GoalsFragment", "onCreate Called")
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.i("GoalsFragment", "onStart Called")
-    }
-
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        Log.i("GoalsFragment", "onCreateView Called")
         val binding = DataBindingUtil.inflate<FragmentGoalsBinding>(inflater, R.layout.fragment_goals, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 

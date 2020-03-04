@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         createNotificationChannel()
-        Log.i("MainActivity", "onCreate Called")
         binding = DataBindingUtil.setContentView(this,
             R.layout.activity_main
         )
@@ -44,16 +43,6 @@ class MainActivity : AppCompatActivity() {
 
         PreferenceManager.setDefaultValues(this,
             R.xml.root_preferences, false)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.i("MainActivity", "onStart Called")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.i("MainActivity", "onDestroy Called")
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

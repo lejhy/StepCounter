@@ -52,9 +52,7 @@ class MainViewModel(
     val notifications: LiveData<Boolean> = _notifications
 
     private val activeGoalChangeObserver: Observer<List<Goal>> = Observer { list ->
-        Log.i("Goals", "Goals Changed: " + list.size)
         todayGoal.observeOnce(Observer<Goal> {todayGoal ->
-            Log.i("Goals", "Today goal: " + list.size)
             val goal = list.find { it.id == todayGoal.id }!!
             if (todayGoal != goal) {
                 updateActiveGoal(goal)
@@ -127,7 +125,6 @@ class MainViewModel(
     }
 
     init {
-        Log.i("GoalsViewModel", "GoalsViewModel created!")
         today.observeOnce(newDayObserver)
 
         today.observeForever(notificationObserver)
@@ -142,7 +139,6 @@ class MainViewModel(
 
     override fun onCleared() {
         super.onCleared()
-        Log.i("GoalsViewModel", "GoalsViewModel destroyed!")
         viewModelJob.cancel()
 
         today.removeObserver(notificationObserver)

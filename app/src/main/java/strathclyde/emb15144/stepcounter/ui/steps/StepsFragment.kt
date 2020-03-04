@@ -24,19 +24,8 @@ class StepsFragment : Fragment() {
 
     private lateinit var mainViewModel: MainViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.i("StepsFragment", "onCreate Called")
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.i("StepsFragment", "onStart Called")
-    }
-
     override fun onPause() {
         super.onPause()
-        Log.i("StepsFragment", "onPause Called")
         hideKeyboard()
     }
 
@@ -45,7 +34,6 @@ class StepsFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        Log.i("StepsFragment", "onCreateView Called")
         val binding = DataBindingUtil.inflate<FragmentStepsBinding>(inflater, R.layout.fragment_steps, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -65,9 +53,7 @@ class StepsFragment : Fragment() {
         })
 
         mainViewModel.today.observe(viewLifecycleOwner, Observer { today ->
-            Log.i("StepsFragment", "today changed")
             mainViewModel.goals.observeOnce(Observer {
-                Log.i("StepsFragment", "goal changed")
                 it.forEachIndexed { index, goal ->
                     if (goal.id == today.goal_id) {
                         binding.goalSpinner.setSelection(index)
@@ -88,9 +74,6 @@ class StepsFragment : Fragment() {
         mainViewModel.today.observe(viewLifecycleOwner, Observer {
             binding.progress.max = it.goal_steps
             binding.progress.progress = it.steps
-            Log.i("StepFragment", "Steps updated")
-            Log.i("StepFragment", "steps: "+it.steps)
-            Log.i("StepFragment", "goal: "+it.goal_steps)
         })
 
         return binding.root
@@ -102,7 +85,6 @@ class StepsFragment : Fragment() {
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
             val selection = parent!!.adapter.getItem(position)!! as Goal
             mainViewModel.newGoalSelected(selection)
-            Log.i("StepFragment", "Item selected")
         }
     }
 
