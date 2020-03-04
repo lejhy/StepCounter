@@ -36,14 +36,15 @@ class StepsFragment : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentStepsBinding>(inflater, R.layout.fragment_steps, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
-        val viewModelFactory =
+        mainViewModel = ViewModelProvider(
+            requireActivity(),
             MainViewModelFactory(requireActivity().application)
-        mainViewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
+        ).get(MainViewModel::class.java)
         binding.mainViewModel = mainViewModel
 
-        val spinnerAdapter =
-            GoalsSpinnerAdapter(requireActivity())
+        val spinnerAdapter = GoalsSpinnerAdapter(requireActivity())
         binding.goalSpinner.adapter = spinnerAdapter
+
         binding.goalSpinner.onItemSelectedListener = onItemSelectedListener
 
         mainViewModel.goals.observe(viewLifecycleOwner, Observer {
@@ -64,7 +65,7 @@ class StepsFragment : Fragment() {
         binding.addStepsButton.setOnClickListener {
             val steps = binding.stepsInput.text.toString()
             if (steps.isNotEmpty()) {
-                mainViewModel.addSteps(Integer.parseInt(binding.stepsInput.text.toString()))
+                mainViewModel.addSteps(Integer.parseInt(steps))
                 binding.stepsInput.setText("")
                 hideKeyboard()
             }
@@ -78,16 +79,17 @@ class StepsFragment : Fragment() {
         return binding.root
     }
 
-    val onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-        override fun onNothingSelected(parent: AdapterView<*>?) {}
+    private val onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        override fun onNothingSelected(parent: AdapterView<*>?) {
+            // do nothing...
+        }
 
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-            val selection = parent!!.adapter.getItem(position)!! as Goal
-            mainViewModel.newGoalSelected(selection)
+            mainViewModel.newGoalSelected(parent!!.adapter.getItem(position)!! as Goal)
         }
     }
 
-    fun hideKeyboard() {
+    private fun hideKeyboard() {
         val imm: InputMethodManager = requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(requireView().windowToken, 0)
     }

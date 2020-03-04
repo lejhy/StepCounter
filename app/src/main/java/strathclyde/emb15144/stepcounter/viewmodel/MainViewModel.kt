@@ -47,8 +47,8 @@ class MainViewModel(
         Goal(it.goal_id, it.goal_name, it.goal_steps)
     }
     val editableGoals: LiveData<Boolean> = _editableGoals
-    val automaticStepCounting: LiveData<Boolean> = _automaticStepCounting
-    val notifications: LiveData<Boolean> = _notifications
+    private val automaticStepCounting: LiveData<Boolean> = _automaticStepCounting
+    private val notifications: LiveData<Boolean> = _notifications
 
     private val activeGoalChangeObserver: Observer<List<Goal>> = Observer { list ->
         todayGoal.observeOnce(Observer<Goal> {todayGoal ->
@@ -148,15 +148,15 @@ class MainViewModel(
         preferences.unregisterOnSharedPreferenceChangeListener(prefListener)
     }
 
-    fun createHalfWayThereNotification(day: Day) {
+    private fun createHalfWayThereNotification(day: Day) {
         createProgressNotification(day, "Half Way There!")
     }
 
-    fun createAllTheWayThereNotification(day: Day) {
+    private fun createAllTheWayThereNotification(day: Day) {
         createProgressNotification(day, "All The Way There!")
     }
 
-    fun createProgressNotification(day: Day, title: String) {
+    private fun createProgressNotification(day: Day, title: String) {
         val application = getApplication<Application>()
         val pendingIntent: PendingIntent =
             Intent(application, MainActivity::class.java).let { notificationIntent ->
@@ -204,7 +204,7 @@ class MainViewModel(
         }
     }
 
-    fun updateActiveGoal(goal: Goal) {
+    private fun updateActiveGoal(goal: Goal) {
         val updated = today.value!!
         updated.goal_id = goal.id
         updated.goal_name = goal.name

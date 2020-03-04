@@ -16,7 +16,6 @@ import strathclyde.emb15144.stepcounter.viewmodel.EditGoalDialogViewModel
 import strathclyde.emb15144.stepcounter.viewmodel.MainViewModel
 import strathclyde.emb15144.stepcounter.viewmodel.MainViewModelFactory
 
-
 class GoalsFragment : Fragment() {
 
     private lateinit var mainViewModel: MainViewModel
@@ -30,9 +29,10 @@ class GoalsFragment : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentGoalsBinding>(inflater, R.layout.fragment_goals, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
-        val viewModelFactory =
+        mainViewModel = ViewModelProvider(
+            requireActivity(),
             MainViewModelFactory(requireActivity().application)
-        mainViewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
+        ).get(MainViewModel::class.java)
 
         viewAdapter = GoalsListAdapter(
             GoalsListListener(
@@ -48,7 +48,7 @@ class GoalsFragment : Fragment() {
                         .show()
                 },
                 {
-                    val goalDialog = EditGoalDialog(
+                    EditGoalDialog(
                         EditGoalDialogViewModel(
                             "Edit Goal",
                             it.name,
@@ -56,21 +56,14 @@ class GoalsFragment : Fragment() {
                             getEditGoalCallback(it.id),
                             requireActivity().application
                         )
-                    )
-                    goalDialog.show(requireActivity().supportFragmentManager, "editGoalDialog")
+                    ).show(requireActivity().supportFragmentManager, "editGoalDialog")
                 }
             )
         )
-        mainViewModel.goals.observe(viewLifecycleOwner) { updateGoalList(mainViewModel.goals.value) }
-        mainViewModel.todayGoal.observe(viewLifecycleOwner) { updateGoalList(mainViewModel.goals.value) }
-        mainViewModel.editableGoals.observe(viewLifecycleOwner) { updateGoalList(mainViewModel.goals.value) }
-
-        binding.goalsRecyclerView.apply {
-            adapter = viewAdapter
-        }
+        binding.goalsRecyclerView.adapter = viewAdapter
 
         binding.addGoalButton.setOnClickListener {
-            val goalDialog = EditGoalDialog(
+            EditGoalDialog(
                 EditGoalDialogViewModel(
                     "Add Goal",
                     "",
@@ -78,9 +71,12 @@ class GoalsFragment : Fragment() {
                     getAddGoalCallback(),
                     requireActivity().application
                 )
-            )
-            goalDialog.show(requireActivity().supportFragmentManager, "addGoalDialog")
+            ).show(requireActivity().supportFragmentManager, "addGoalDialog")
         }
+
+        mainViewModel.goals.observe(viewLifecycleOwner) { updateGoalList(mainViewModel.goals.value) }
+        mainViewModel.todayGoal.observe(viewLifecycleOwner) { updateGoalList(mainViewModel.goals.value) }
+        mainViewModel.editableGoals.observe(viewLifecycleOwner) { updateGoalList(mainViewModel.goals.value) }
 
         return binding.root
     }

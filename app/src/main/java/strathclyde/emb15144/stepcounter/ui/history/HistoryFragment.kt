@@ -33,43 +33,34 @@ class HistoryFragment : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentHistoryBinding>(inflater, R.layout.fragment_history, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
-        val viewModelFactory =
+        mainViewModel = ViewModelProvider(
+            requireActivity(),
             MainViewModelFactory(requireActivity().application)
-        mainViewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
+        ).get(MainViewModel::class.java)
 
-        viewAdapter =
-            HistoryListAdapter(HistoryListListener(
-                {
-                    val dialog = AddStepsDialog(
-                        "Add Steps",
-                        addStepsCallback(it)
-                    )
-                    dialog.show(requireActivity().supportFragmentManager, "addStepsDialog")
-                },
-                {
-                    val dialog = ChangeGoalDialog(
-                        "Change Goal",
-                        mainViewModel.goals.value!!,
-                        Goal(it.id, it.goal_name, it.goal_steps),
-                        changeGoalCallback(it)
-                    )
-                    dialog.show(requireActivity().supportFragmentManager, "changeGoalDialog")
-                }
-            ))
-        mainViewModel.days.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                viewAdapter.submitList(it)
+        viewAdapter = HistoryListAdapter(HistoryListListener(
+            {
+                AddStepsDialog(
+                    "Add Steps",
+                    addStepsCallback(it)
+                ).show(requireActivity().supportFragmentManager, "addStepsDialog")
+            },
+            {
+                ChangeGoalDialog(
+                    "Change Goal",
+                    mainViewModel.goals.value!!,
+                    Goal(it.id, it.goal_name, it.goal_steps),
+                    changeGoalCallback(it)
+                ).show(requireActivity().supportFragmentManager, "changeGoalDialog")
             }
-        })
-        recyclerView = binding.daysRecyclerView.apply {
-            adapter = viewAdapter
-        }
+        ))
+        binding.daysRecyclerView.adapter = viewAdapter
 
         binding.addHistoryButton.setOnClickListener {
             val calendar = Calendar.getInstance()
             val datePickerDialog = DatePickerDialog(requireActivity())
             datePickerDialog.datePicker.maxDate = calendar.timeInMillis
-            datePickerDialog.setOnDateSetListener { view, year, month, dayOfMonth ->
+            datePickerDialog.setOnDateSetListener { _, year, month, dayOfMonth ->
                 calendar.set(year, month, dayOfMonth)
                 if (mainViewModel.addHistory(calendar.time)) {
                     Toast.makeText(requireActivity(), "New date added", Toast.LENGTH_SHORT).show()
@@ -79,6 +70,12 @@ class HistoryFragment : Fragment() {
             }
             datePickerDialog.show()
         }
+
+        mainViewModel.days.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                viewAdapter.submitList(it)
+            }
+        })
 
         return binding.root
     }
