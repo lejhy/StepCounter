@@ -41,7 +41,20 @@ class SharedViewModel(
         })
     }
 
-    private val newDayObserver = Observer { day: Day ->
+    init {
+        today.observeOnce(Observer { createMissingHistoryEntries(it) })
+        goals.observeForever(activeGoalChangeObserver)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
+
+        goals.removeObserver(activeGoalChangeObserver)
+        preferences.destroy()
+    }
+
+    private fun createMissingHistoryEntries(day: Day) {
         val currentDate = Calendar.getInstance()
         currentDate.set(Calendar.HOUR_OF_DAY, 0)
         currentDate.set(Calendar.MINUTE, 0)
@@ -64,19 +77,6 @@ class SharedViewModel(
             )
             launchIO(uiScope) { dayDao.insert(newDay) }
         }
-    }
-
-    init {
-        today.observeOnce(newDayObserver)
-        goals.observeForever(activeGoalChangeObserver)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
-
-        goals.removeObserver(activeGoalChangeObserver)
-        preferences.destroy()
     }
 
     private fun updateActiveGoal(goal: Goal) {
