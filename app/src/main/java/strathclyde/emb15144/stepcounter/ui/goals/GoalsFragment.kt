@@ -76,7 +76,7 @@ class GoalsFragment : Fragment() {
 
         mainViewModel.goals.observe(viewLifecycleOwner) { updateGoalList(mainViewModel.goals.value) }
         mainViewModel.todayGoal.observe(viewLifecycleOwner) { updateGoalList(mainViewModel.goals.value) }
-        mainViewModel.editableGoals.observe(viewLifecycleOwner) { updateGoalList(mainViewModel.goals.value) }
+        mainViewModel.preferences.editableGoals.observe(viewLifecycleOwner) { updateGoalList(mainViewModel.goals.value) }
 
         return binding.root
     }
@@ -87,7 +87,7 @@ class GoalsFragment : Fragment() {
                 GoalsListItem(
                     goal,
                     goal.id != mainViewModel.todayGoal.value!!.id,
-                    mainViewModel.editableGoals.value!! && (goal.id != mainViewModel.todayGoal.value!!.id)
+                    mainViewModel.preferences.editableGoals.value!! && (goal.id != mainViewModel.todayGoal.value!!.id)
                 )
             })
         }

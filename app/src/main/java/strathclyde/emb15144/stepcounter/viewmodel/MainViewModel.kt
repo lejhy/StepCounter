@@ -32,25 +32,19 @@ class MainViewModel(
 
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
-    private var dateChangedBroadcastReceiver: DateChangedBroadcastReceiver
-    private val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
-    private val _editableGoals = MutableLiveData<Boolean>(preferences.getBoolean("editableGoals", false))
-    private val _automaticStepCounting = MutableLiveData<Boolean>(preferences.getBoolean("automaticStepCounting", false))
-    private val _notifications = MutableLiveData<Boolean>(preferences.getBoolean("notifications", false))
+    private var dateChangedBroadcastReceiver = DateChangedBroadcastReceiver()
 
-    val goals: LiveData<List<Goal>> = goalDao.getAllObservable()
-    val days: LiveData<List<Day>> = dayDao.getAllObservable()
-    val today: LiveData<Day> = Transformations.map(days) {
+    val preferences = ObservablePreferences(application)
+    val goals = goalDao.getAllObservable()
+    val days = dayDao.getAllObservable()
+    val today = Transformations.map(days) {
          it.first()
     }
-    val todayGoal: LiveData<Goal> = Transformations.map(today) {
+    val todayGoal = Transformations.map(today) {
         Goal(it.goal_id, it.goal_name, it.goal_steps)
     }
-    val editableGoals: LiveData<Boolean> = _editableGoals
-    private val automaticStepCounting: LiveData<Boolean> = _automaticStepCounting
-    private val notifications: LiveData<Boolean> = _notifications
 
-    private val activeGoalChangeObserver: Observer<List<Goal>> = Observer { list ->
+    private val activeGoalChangeObserver = Observer { list: List<Goal> ->
         todayGoal.observeOnce(Observer<Goal> {todayGoal ->
             val goal = list.find { it.id == todayGoal.id }!!
             if (todayGoal != goal) {
@@ -59,21 +53,7 @@ class MainViewModel(
         })
     }
 
-    private val prefListener: SharedPreferences.OnSharedPreferenceChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { sp, key ->
-        when(key) {
-            "editableGoals" -> {
-                _editableGoals.value = sp.getBoolean(key, false)
-            }
-            "automaticStepCounting" -> {
-                _automaticStepCounting.value = sp.getBoolean(key, false)
-            }
-            "notifications" -> {
-                _notifications.value = sp.getBoolean(key, false)
-            }
-        }
-    }
-
-    private val newDayObserver: Observer<Day> = Observer {
+    private val newDayObserver = Observer { day: Day ->
         val currentDate = Calendar.getInstance()
         currentDate.set(Calendar.HOUR_OF_DAY, 0)
         currentDate.set(Calendar.MINUTE, 0)
@@ -81,46 +61,46 @@ class MainViewModel(
         currentDate.set(Calendar.MILLISECOND, 0)
 
         val lastDate = Calendar.getInstance()
-        lastDate.time = DateFormat.standardParse(it.date)
+        lastDate.time = DateFormat.standardParse(day.date)
 
         while (lastDate.time < currentDate.time) {
 
             lastDate.add(Calendar.DATE, 1)
-            val day = Day(
+            val newDay = Day(
                 0,
                 DateFormat.standardFormat(lastDate.time),
                 0,
-                it.goal_id,
-                it.goal_name,
-                it.goal_steps
+                day.goal_id,
+                day.goal_name,
+                day.goal_steps
             )
             uiScope.launch {
                 withContext(Dispatchers.IO) {
-                    dayDao.insert(day)
+                    dayDao.insert(newDay)
                 }
             }
         }
     }
 
-    private val automaticStepCountingObserver: Observer<Boolean> = Observer {
-        when(it) {
+    private val automaticStepCountingObserver = Observer { isEnabled: Boolean ->
+        when(isEnabled) {
             true -> application.startService(Intent(application, StepsSensorService::class.java))
             false -> application.stopService(Intent(application, StepsSensorService::class.java))
         }
     }
 
     private var lastTodayStepsValue: Int = Int.MAX_VALUE
-    private val notificationObserver: Observer<Day> = Observer{
-        if (notifications.value!!) {
-            val lastStepRatio = lastTodayStepsValue.toFloat() / it.goal_steps.toFloat()
-            val newStepRatio = it.steps.toFloat() / it.goal_steps.toFloat()
+    private val notificationObserver = Observer{ day: Day ->
+        if (preferences.notifications.value!!) {
+            val lastStepRatio = lastTodayStepsValue.toFloat() / day.goal_steps.toFloat()
+            val newStepRatio = day.steps.toFloat() / day.goal_steps.toFloat()
             if (lastStepRatio < 1.0 && newStepRatio > 1.0) {
-                createAllTheWayThereNotification(it)
+                createAllTheWayThereNotification(day)
             } else if (lastStepRatio < 0.5 && newStepRatio >= 0.5) {
-                createHalfWayThereNotification(it)
+                createHalfWayThereNotification(day)
             }
         }
-        lastTodayStepsValue = it.steps
+        lastTodayStepsValue = day.steps
     }
 
     init {
@@ -128,12 +108,9 @@ class MainViewModel(
 
         today.observeForever(notificationObserver)
         goals.observeForever(activeGoalChangeObserver)
-        automaticStepCounting.observeForever(automaticStepCountingObserver)
+        preferences.automaticStepCounting.observeForever(automaticStepCountingObserver)
 
-        dateChangedBroadcastReceiver =
-            DateChangedBroadcastReceiver()
         getApplication<Application>().registerReceiver(dateChangedBroadcastReceiver, IntentFilter(Intent.ACTION_DATE_CHANGED))
-        preferences.registerOnSharedPreferenceChangeListener(prefListener)
     }
 
     override fun onCleared() {
@@ -142,10 +119,10 @@ class MainViewModel(
 
         today.removeObserver(notificationObserver)
         goals.removeObserver(activeGoalChangeObserver)
-        automaticStepCounting.removeObserver(automaticStepCountingObserver)
+        preferences.automaticStepCounting.removeObserver(automaticStepCountingObserver)
+        preferences.destroy()
 
         getApplication<Application>().unregisterReceiver(dateChangedBroadcastReceiver)
-        preferences.unregisterOnSharedPreferenceChangeListener(prefListener)
     }
 
     private fun createHalfWayThereNotification(day: Day) {
@@ -172,6 +149,18 @@ class MainViewModel(
 
         val notificationManager: NotificationManager = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(R.integer.progress_notification_id, notification)
+    }
+
+    private fun updateActiveGoal(goal: Goal) {
+        val updated = today.value!!
+        updated.goal_id = goal.id
+        updated.goal_name = goal.name
+        updated.goal_steps = goal.steps
+        uiScope.launch {
+            withContext(Dispatchers.IO) {
+                dayDao.update(updated)
+            }
+        }
     }
 
     fun addGoal(goal: String, steps: Int) {
@@ -201,18 +190,6 @@ class MainViewModel(
     fun newGoalSelected(selection: Goal) {
         if (today.value!!.goal_id != selection.id) {
             updateActiveGoal(selection)
-        }
-    }
-
-    private fun updateActiveGoal(goal: Goal) {
-        val updated = today.value!!
-        updated.goal_id = goal.id
-        updated.goal_name = goal.name
-        updated.goal_steps = goal.steps
-        uiScope.launch {
-            withContext(Dispatchers.IO) {
-                dayDao.update(updated)
-            }
         }
     }
 
