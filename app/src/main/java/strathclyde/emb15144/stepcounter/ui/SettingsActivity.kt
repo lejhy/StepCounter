@@ -8,6 +8,7 @@ import androidx.preference.PreferenceFragmentCompat
 import kotlinx.coroutines.*
 import strathclyde.emb15144.stepcounter.R
 import strathclyde.emb15144.stepcounter.model.MainDatabase
+import strathclyde.emb15144.stepcounter.utils.launchIO
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -39,10 +40,8 @@ class SettingsActivity : AppCompatActivity() {
                         .setTitle("Are you sure?")
                         .setMessage("You'll lose all your history!")
                         .setPositiveButton("Delete") { _, _ ->
-                            uiScope.launch {
-                                withContext(Dispatchers.IO) {
-                                    MainDatabase.getInstance(requireActivity()).dayDao.deleteAllButLatest()
-                                }
+                            launchIO(uiScope) {
+                                MainDatabase.getInstance(requireActivity()).dayDao.deleteAllButLatest()
                             }
                         }
                         .setNegativeButton("Cancel") { _, _ -> }

@@ -8,6 +8,7 @@ import kotlinx.coroutines.*
 import strathclyde.emb15144.stepcounter.model.Day
 import strathclyde.emb15144.stepcounter.model.MainDatabase
 import strathclyde.emb15144.stepcounter.utils.DateFormat
+import strathclyde.emb15144.stepcounter.utils.launchIO
 import java.util.*
 
 class DateChangedBroadcastReceiver : BroadcastReceiver() {
@@ -17,23 +18,21 @@ class DateChangedBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action
         if (Intent.ACTION_DATE_CHANGED == action) {
-            uiScope.launch {
-                val datasource = MainDatabase.getInstance(context)
-                @SuppressLint("SimpleDateFormat")
-                val newDate = DateFormat.standardFormat(Calendar.getInstance().time)
-                withContext(Dispatchers.IO) {
-                    val lastDate = datasource.dayDao.getLatest()
-                    datasource.dayDao.insert(
-                        Day(
-                            0,
-                            newDate,
-                            0,
-                            lastDate.goal_id,
-                            lastDate.goal_name,
-                            lastDate.goal_steps
-                        )
+            val datasource = MainDatabase.getInstance(context)
+            @SuppressLint("SimpleDateFormat")
+            val newDate = DateFormat.standardFormat(Calendar.getInstance().time)
+            launchIO(uiScope) {
+                val lastDate = datasource.dayDao.getLatest()
+                datasource.dayDao.insert(
+                    Day(
+                        0,
+                        newDate,
+                        0,
+                        lastDate.goal_id,
+                        lastDate.goal_name,
+                        lastDate.goal_steps
                     )
-                }
+                )
             }
         }
     }

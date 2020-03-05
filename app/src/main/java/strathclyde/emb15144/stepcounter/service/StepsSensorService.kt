@@ -17,6 +17,7 @@ import strathclyde.emb15144.stepcounter.model.Day
 import strathclyde.emb15144.stepcounter.model.DayDao
 import strathclyde.emb15144.stepcounter.model.MainDatabase
 import strathclyde.emb15144.stepcounter.ui.MainActivity
+import strathclyde.emb15144.stepcounter.utils.launchIO
 
 class StepsSensorService : Service(), SensorEventListener {
 
@@ -74,10 +75,8 @@ class StepsSensorService : Service(), SensorEventListener {
 
                 val updated = it.copy()
                 updated.steps += deltaSteps
-                uiScope.launch {
-                    withContext(Dispatchers.IO) {
-                        dayDao.update(updated)
-                    }
+                launchIO(uiScope) {
+                    dayDao.update(updated)
                 }
             }
         }

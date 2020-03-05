@@ -10,6 +10,7 @@ import strathclyde.emb15144.stepcounter.model.Goal
 import strathclyde.emb15144.stepcounter.model.GoalDao
 import strathclyde.emb15144.stepcounter.utils.DateFormat
 import strathclyde.emb15144.stepcounter.utils.ObservablePreferences
+import strathclyde.emb15144.stepcounter.utils.launchIO
 import strathclyde.emb15144.stepcounter.utils.observeOnce
 import java.util.*
 
@@ -61,11 +62,7 @@ class SharedViewModel(
                 day.goal_name,
                 day.goal_steps
             )
-            uiScope.launch {
-                withContext(Dispatchers.IO) {
-                    dayDao.insert(newDay)
-                }
-            }
+            launchIO(uiScope) { dayDao.insert(newDay) }
         }
     }
 
@@ -87,27 +84,19 @@ class SharedViewModel(
         updated.goal_id = goal.id
         updated.goal_name = goal.name
         updated.goal_steps = goal.steps
-        launchIO { dayDao.update(updated) }
-    }
-
-    private fun launchIO(code: () -> Unit) {
-        uiScope.launch {
-            withContext(Dispatchers.IO) {
-                code()
-            }
-        }
+        launchIO(uiScope) { dayDao.update(updated) }
     }
 
     fun addGoal(goal: String, steps: Int) {
-        launchIO { goalDao.insert(Goal(0, goal, steps)) }
+        launchIO(uiScope) { goalDao.insert(Goal(0, goal, steps)) }
     }
 
     fun editGoal(goal: Goal) {
-        launchIO { goalDao.update(goal) }
+        launchIO(uiScope) { goalDao.update(goal) }
     }
 
     fun deleteGoal(id: Long) {
-        launchIO { goalDao.delete(Goal(id)) }
+        launchIO(uiScope) { goalDao.delete(Goal(id)) }
     }
 
     fun newGoalSelected(selection: Goal) {
@@ -123,7 +112,7 @@ class SharedViewModel(
     fun addSteps(day: Day, steps: Int) {
         val updated = day.copy()
         updated.steps += steps
-        launchIO { dayDao.update(updated) }
+        launchIO(uiScope) { dayDao.update(updated) }
     }
 
     fun changeGoal(day: Day, goal: Goal) {
@@ -133,7 +122,7 @@ class SharedViewModel(
             goal_name = goal.name
             goal_steps = goal.steps
         }
-        launchIO { dayDao.update(updated) }
+        launchIO(uiScope) { dayDao.update(updated) }
     }
 
     fun addHistory(date: Date): Boolean {
@@ -151,7 +140,7 @@ class SharedViewModel(
             todayGoal.value!!.name,
             todayGoal.value!!.steps
         )
-        launchIO { dayDao.insert(newDay) }
+        launchIO(uiScope) { dayDao.insert(newDay) }
         return true
     }
 }
