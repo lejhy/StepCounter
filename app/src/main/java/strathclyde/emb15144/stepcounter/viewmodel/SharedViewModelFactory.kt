@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import strathclyde.emb15144.stepcounter.model.MainDatabase
+import strathclyde.emb15144.stepcounter.utils.ObservablePreferences
 
 class SharedViewModelFactory(
         private val application: Application) : ViewModelProvider.Factory {
@@ -15,7 +16,7 @@ class SharedViewModelFactory(
             return SharedViewModel(
                 datasource.goalDao,
                 datasource.dayDao,
-                application
+                ObservablePreferences(application)
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

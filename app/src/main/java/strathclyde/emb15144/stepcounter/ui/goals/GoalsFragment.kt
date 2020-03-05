@@ -12,6 +12,7 @@ import androidx.lifecycle.observe
 import strathclyde.emb15144.stepcounter.R
 import strathclyde.emb15144.stepcounter.databinding.FragmentGoalsBinding
 import strathclyde.emb15144.stepcounter.model.Goal
+import strathclyde.emb15144.stepcounter.model.MainDatabase
 import strathclyde.emb15144.stepcounter.viewmodel.EditGoalDialogViewModel
 import strathclyde.emb15144.stepcounter.viewmodel.SharedViewModel
 import strathclyde.emb15144.stepcounter.viewmodel.SharedViewModelFactory
@@ -54,7 +55,7 @@ class GoalsFragment : Fragment() {
                             it.name,
                             it.steps,
                             getEditGoalCallback(it.id),
-                            requireActivity().application
+                            MainDatabase.getInstance(requireActivity().application).goalDao
                         )
                     ).show(requireActivity().supportFragmentManager, "editGoalDialog")
                 }
@@ -69,7 +70,7 @@ class GoalsFragment : Fragment() {
                     "",
                     0,
                     getAddGoalCallback(),
-                    requireActivity().application
+                    MainDatabase.getInstance(requireActivity().application).goalDao
                 )
             ).show(requireActivity().supportFragmentManager, "addGoalDialog")
         }

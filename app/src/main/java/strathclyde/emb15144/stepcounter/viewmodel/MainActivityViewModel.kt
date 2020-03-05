@@ -5,10 +5,12 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
 import androidx.preference.PreferenceManager
 import strathclyde.emb15144.stepcounter.R
+import strathclyde.emb15144.stepcounter.receiver.DateChangedBroadcastReceiver
 import strathclyde.emb15144.stepcounter.utils.ObservablePreferences
 import strathclyde.emb15144.stepcounter.service.NotificationService
 import strathclyde.emb15144.stepcounter.service.StepsSensorService
@@ -18,6 +20,7 @@ class MainActivityViewModel(
 ): AndroidViewModel(application) {
 
     private val preferences: ObservablePreferences
+    private var dateChangedBroadcastReceiver = DateChangedBroadcastReceiver()
 
     private val automaticStepCountingObserver = Observer { isEnabled: Boolean ->
         when(isEnabled) {
@@ -39,9 +42,11 @@ class MainActivityViewModel(
         preferences = ObservablePreferences(application)
         preferences.automaticStepCounting.observeForever(automaticStepCountingObserver)
         preferences.automaticStepCounting.observeForever(notificationObserver)
+        application.registerReceiver(dateChangedBroadcastReceiver, IntentFilter(Intent.ACTION_DATE_CHANGED))
     }
 
     override fun onCleared() {
+        getApplication<Application>().unregisterReceiver(dateChangedBroadcastReceiver)
         preferences.automaticStepCounting.removeObserver(automaticStepCountingObserver)
         preferences.automaticStepCounting.removeObserver(notificationObserver)
         preferences.destroy()

@@ -1,13 +1,13 @@
 package strathclyde.emb15144.stepcounter.viewmodel
 
-import android.app.Application
-import android.content.Intent
-import android.content.IntentFilter
-import androidx.lifecycle.*
 import androidx.lifecycle.Observer
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
-import strathclyde.emb15144.stepcounter.model.*
-import strathclyde.emb15144.stepcounter.receiver.DateChangedBroadcastReceiver
+import strathclyde.emb15144.stepcounter.model.Day
+import strathclyde.emb15144.stepcounter.model.DayDao
+import strathclyde.emb15144.stepcounter.model.Goal
+import strathclyde.emb15144.stepcounter.model.GoalDao
 import strathclyde.emb15144.stepcounter.utils.DateFormat
 import strathclyde.emb15144.stepcounter.utils.ObservablePreferences
 import strathclyde.emb15144.stepcounter.utils.observeOnce
@@ -16,14 +16,12 @@ import java.util.*
 class SharedViewModel(
     private val goalDao: GoalDao,
     private val dayDao: DayDao,
-    application: Application
-) : AndroidViewModel(application) {
+    val preferences: ObservablePreferences
+) : ViewModel() {
 
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
-    private var dateChangedBroadcastReceiver = DateChangedBroadcastReceiver()
 
-    val preferences = ObservablePreferences(application)
     val goals = goalDao.getAllObservable()
     val days = dayDao.getAllObservable()
     val today = Transformations.map(days) {
@@ -73,10 +71,7 @@ class SharedViewModel(
 
     init {
         today.observeOnce(newDayObserver)
-
         goals.observeForever(activeGoalChangeObserver)
-
-        getApplication<Application>().registerReceiver(dateChangedBroadcastReceiver, IntentFilter(Intent.ACTION_DATE_CHANGED))
     }
 
     override fun onCleared() {
@@ -85,8 +80,6 @@ class SharedViewModel(
 
         goals.removeObserver(activeGoalChangeObserver)
         preferences.destroy()
-
-        getApplication<Application>().unregisterReceiver(dateChangedBroadcastReceiver)
     }
 
     private fun updateActiveGoal(goal: Goal) {

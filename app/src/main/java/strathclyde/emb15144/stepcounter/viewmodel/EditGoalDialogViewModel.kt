@@ -1,10 +1,10 @@
 package strathclyde.emb15144.stepcounter.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
+import strathclyde.emb15144.stepcounter.model.GoalDao
 import strathclyde.emb15144.stepcounter.model.MainDatabase
 
 class EditGoalDialogViewModel(
@@ -12,9 +12,8 @@ class EditGoalDialogViewModel(
     goalName: String,
     goalSteps: Int,
     accept: (name: String, steps: Int) -> Unit,
-    application: Application
-): AndroidViewModel(application) {
-    private val goalDao = MainDatabase.getInstance(application).goalDao
+    private val goalDao: GoalDao
+): ViewModel() {
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
     private val valueObserver = Observer<String> {
