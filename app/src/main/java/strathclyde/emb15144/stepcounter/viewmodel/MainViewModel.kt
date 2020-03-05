@@ -82,33 +82,10 @@ class MainViewModel(
         }
     }
 
-    private val automaticStepCountingObserver = Observer { isEnabled: Boolean ->
-        when(isEnabled) {
-            true -> application.startService(Intent(application, StepsSensorService::class.java))
-            false -> application.stopService(Intent(application, StepsSensorService::class.java))
-        }
-    }
-
-    private var lastTodayStepsValue: Int = Int.MAX_VALUE
-    private val notificationObserver = Observer{ day: Day ->
-        if (preferences.notifications.value!!) {
-            val lastStepRatio = lastTodayStepsValue.toFloat() / day.goal_steps.toFloat()
-            val newStepRatio = day.steps.toFloat() / day.goal_steps.toFloat()
-            if (lastStepRatio < 1.0 && newStepRatio > 1.0) {
-                createAllTheWayThereNotification(day)
-            } else if (lastStepRatio < 0.5 && newStepRatio >= 0.5) {
-                createHalfWayThereNotification(day)
-            }
-        }
-        lastTodayStepsValue = day.steps
-    }
-
     init {
         today.observeOnce(newDayObserver)
 
-        today.observeForever(notificationObserver)
         goals.observeForever(activeGoalChangeObserver)
-        preferences.automaticStepCounting.observeForever(automaticStepCountingObserver)
 
         getApplication<Application>().registerReceiver(dateChangedBroadcastReceiver, IntentFilter(Intent.ACTION_DATE_CHANGED))
     }
@@ -117,38 +94,10 @@ class MainViewModel(
         super.onCleared()
         viewModelJob.cancel()
 
-        today.removeObserver(notificationObserver)
         goals.removeObserver(activeGoalChangeObserver)
-        preferences.automaticStepCounting.removeObserver(automaticStepCountingObserver)
         preferences.destroy()
 
         getApplication<Application>().unregisterReceiver(dateChangedBroadcastReceiver)
-    }
-
-    private fun createHalfWayThereNotification(day: Day) {
-        createProgressNotification(day, "Half Way There!")
-    }
-
-    private fun createAllTheWayThereNotification(day: Day) {
-        createProgressNotification(day, "All The Way There!")
-    }
-
-    private fun createProgressNotification(day: Day, title: String) {
-        val application = getApplication<Application>()
-        val pendingIntent: PendingIntent =
-            Intent(application, MainActivity::class.java).let { notificationIntent ->
-                PendingIntent.getActivity(application, 0, notificationIntent, 0)
-            }
-
-        val notification: Notification = Notification.Builder(application, application.getString(R.string.channel_id))
-            .setContentTitle(title)
-            .setContentText(String.format("You have completed %d%% today's goal!", 100 * day.steps / day.goal_steps))
-            .setSmallIcon(R.drawable.ic_directions_run_black_24dp)
-            .setContentIntent(pendingIntent)
-            .build()
-
-        val notificationManager: NotificationManager = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(R.integer.progress_notification_id, notification)
     }
 
     private fun updateActiveGoal(goal: Goal) {

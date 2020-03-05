@@ -17,6 +17,11 @@
                 android:enabled="true"
                 android:exported="false">
         </service>
+        <service
+                android:name=".service.NotificationService"
+                android:enabled="true"
+                android:exported="false">
+        </service>
 
         <activity
                 android:name=".ui.SettingsActivity"

@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -17,9 +18,13 @@ import androidx.preference.PreferenceManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import strathclyde.emb15144.stepcounter.R
 import strathclyde.emb15144.stepcounter.databinding.ActivityMainBinding
+import strathclyde.emb15144.stepcounter.service.NotificationService
+import strathclyde.emb15144.stepcounter.service.StepsSensorService
+import strathclyde.emb15144.stepcounter.viewmodel.ObservablePreferences
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var preferences: ObservablePreferences
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +47,16 @@ class MainActivity : AppCompatActivity() {
 
         PreferenceManager.setDefaultValues(this,
             R.xml.root_preferences, false)
+
+        preferences = ObservablePreferences(application)
+        preferences.automaticStepCounting.observeForever(automaticStepCountingObserver)
+        preferences.automaticStepCounting.observeForever(notificationObserver)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        preferences.automaticStepCounting.removeObserver(automaticStepCountingObserver)
+        preferences.automaticStepCounting.removeObserver(notificationObserver)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -70,5 +85,19 @@ class MainActivity : AppCompatActivity() {
         )
         val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
+    }
+
+    private val automaticStepCountingObserver = Observer { isEnabled: Boolean ->
+        when(isEnabled) {
+            true -> application.startService(Intent(application, StepsSensorService::class.java))
+            false -> application.stopService(Intent(application, StepsSensorService::class.java))
+        }
+    }
+
+    private val notificationObserver = Observer { isEnabled: Boolean ->
+        when(isEnabled) {
+            true -> application.startService(Intent(application, NotificationService::class.java))
+            false -> application.stopService(Intent(application, NotificationService::class.java))
+        }
     }
 }
