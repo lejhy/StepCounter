@@ -24,7 +24,7 @@ import strathclyde.emb15144.stepcounter.utils.DateFormat
 import strathclyde.emb15144.stepcounter.utils.observeOnce
 import java.util.*
 
-class MainViewModel(
+class SharedViewModel(
     private val goalDao: GoalDao,
     private val dayDao: DayDao,
     application: Application

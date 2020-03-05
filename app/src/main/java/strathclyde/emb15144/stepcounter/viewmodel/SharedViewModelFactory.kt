@@ -5,14 +5,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import strathclyde.emb15144.stepcounter.model.MainDatabase
 
-class MainViewModelFactory(
+class SharedViewModelFactory(
         private val application: Application) : ViewModelProvider.Factory {
 
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         val datasource = MainDatabase.getInstance(application)
-        if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-            return MainViewModel(
+        if (modelClass.isAssignableFrom(SharedViewModel::class.java)) {
+            return SharedViewModel(
                 datasource.goalDao,
                 datasource.dayDao,
                 application

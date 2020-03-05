@@ -15,13 +15,13 @@ import strathclyde.emb15144.stepcounter.R
 import strathclyde.emb15144.stepcounter.databinding.FragmentHistoryBinding
 import strathclyde.emb15144.stepcounter.model.Day
 import strathclyde.emb15144.stepcounter.model.Goal
-import strathclyde.emb15144.stepcounter.viewmodel.MainViewModel
-import strathclyde.emb15144.stepcounter.viewmodel.MainViewModelFactory
+import strathclyde.emb15144.stepcounter.viewmodel.SharedViewModel
+import strathclyde.emb15144.stepcounter.viewmodel.SharedViewModelFactory
 import java.util.*
 
 class HistoryFragment : Fragment() {
 
-    private lateinit var mainViewModel: MainViewModel
+    private lateinit var viewModel: SharedViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: HistoryListAdapter
 
@@ -33,10 +33,10 @@ class HistoryFragment : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentHistoryBinding>(inflater, R.layout.fragment_history, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
-        mainViewModel = ViewModelProvider(
+        viewModel = ViewModelProvider(
             requireActivity(),
-            MainViewModelFactory(requireActivity().application)
-        ).get(MainViewModel::class.java)
+            SharedViewModelFactory(requireActivity().application)
+        ).get(SharedViewModel::class.java)
 
         viewAdapter = HistoryListAdapter(HistoryListListener(
             {
@@ -48,7 +48,7 @@ class HistoryFragment : Fragment() {
             {
                 ChangeGoalDialog(
                     "Change Goal",
-                    mainViewModel.goals.value!!,
+                    viewModel.goals.value!!,
                     Goal(it.id, it.goal_name, it.goal_steps),
                     changeGoalCallback(it)
                 ).show(requireActivity().supportFragmentManager, "changeGoalDialog")
@@ -62,7 +62,7 @@ class HistoryFragment : Fragment() {
             datePickerDialog.datePicker.maxDate = calendar.timeInMillis
             datePickerDialog.setOnDateSetListener { _, year, month, dayOfMonth ->
                 calendar.set(year, month, dayOfMonth)
-                if (mainViewModel.addHistory(calendar.time)) {
+                if (viewModel.addHistory(calendar.time)) {
                     Toast.makeText(requireActivity(), "New date added", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(requireActivity(), "Date already exists", Toast.LENGTH_LONG).show()
@@ -71,7 +71,7 @@ class HistoryFragment : Fragment() {
             datePickerDialog.show()
         }
 
-        mainViewModel.days.observe(viewLifecycleOwner, Observer {
+        viewModel.days.observe(viewLifecycleOwner, Observer {
             it?.let {
                 viewAdapter.submitList(it)
             }
@@ -81,10 +81,10 @@ class HistoryFragment : Fragment() {
     }
 
     private fun addStepsCallback(day: Day) = { steps: Int ->
-        mainViewModel.addSteps(day, steps)
+        viewModel.addSteps(day, steps)
     }
 
     private fun changeGoalCallback(day: Day) = { goal: Goal ->
-        mainViewModel.changeGoal(day, goal)
+        viewModel.changeGoal(day, goal)
     }
 }

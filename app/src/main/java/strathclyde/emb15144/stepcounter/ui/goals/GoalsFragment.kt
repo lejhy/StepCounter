@@ -13,12 +13,12 @@ import strathclyde.emb15144.stepcounter.R
 import strathclyde.emb15144.stepcounter.databinding.FragmentGoalsBinding
 import strathclyde.emb15144.stepcounter.model.Goal
 import strathclyde.emb15144.stepcounter.viewmodel.EditGoalDialogViewModel
-import strathclyde.emb15144.stepcounter.viewmodel.MainViewModel
-import strathclyde.emb15144.stepcounter.viewmodel.MainViewModelFactory
+import strathclyde.emb15144.stepcounter.viewmodel.SharedViewModel
+import strathclyde.emb15144.stepcounter.viewmodel.SharedViewModelFactory
 
 class GoalsFragment : Fragment() {
 
-    private lateinit var mainViewModel: MainViewModel
+    private lateinit var viewModel: SharedViewModel
     private lateinit var viewAdapter: GoalsListAdapter
 
     override fun onCreateView(
@@ -29,10 +29,10 @@ class GoalsFragment : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentGoalsBinding>(inflater, R.layout.fragment_goals, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
-        mainViewModel = ViewModelProvider(
+        viewModel = ViewModelProvider(
             requireActivity(),
-            MainViewModelFactory(requireActivity().application)
-        ).get(MainViewModel::class.java)
+            SharedViewModelFactory(requireActivity().application)
+        ).get(SharedViewModel::class.java)
 
         viewAdapter = GoalsListAdapter(
             GoalsListListener(
@@ -41,7 +41,7 @@ class GoalsFragment : Fragment() {
                         .setTitle("Are you sure?")
                         .setMessage("This goal will be deleted!")
                         .setPositiveButton("Delete") { _, _ ->
-                            mainViewModel.deleteGoal(it.id)
+                            viewModel.deleteGoal(it.id)
                         }
                         .setNegativeButton("Cancel") { _, _ -> }
                         .create()
@@ -74,9 +74,9 @@ class GoalsFragment : Fragment() {
             ).show(requireActivity().supportFragmentManager, "addGoalDialog")
         }
 
-        mainViewModel.goals.observe(viewLifecycleOwner) { updateGoalList(mainViewModel.goals.value) }
-        mainViewModel.todayGoal.observe(viewLifecycleOwner) { updateGoalList(mainViewModel.goals.value) }
-        mainViewModel.preferences.editableGoals.observe(viewLifecycleOwner) { updateGoalList(mainViewModel.goals.value) }
+        viewModel.goals.observe(viewLifecycleOwner) { updateGoalList(viewModel.goals.value) }
+        viewModel.todayGoal.observe(viewLifecycleOwner) { updateGoalList(viewModel.goals.value) }
+        viewModel.preferences.editableGoals.observe(viewLifecycleOwner) { updateGoalList(viewModel.goals.value) }
 
         return binding.root
     }
@@ -86,18 +86,18 @@ class GoalsFragment : Fragment() {
             viewAdapter.submitList(goals.map { goal ->
                 GoalsListItem(
                     goal,
-                    goal.id != mainViewModel.todayGoal.value!!.id,
-                    mainViewModel.preferences.editableGoals.value!! && (goal.id != mainViewModel.todayGoal.value!!.id)
+                    goal.id != viewModel.todayGoal.value!!.id,
+                    viewModel.preferences.editableGoals.value!! && (goal.id != viewModel.todayGoal.value!!.id)
                 )
             })
         }
     }
 
     private fun getAddGoalCallback() = { name: String, steps: Int ->
-        mainViewModel.addGoal(name, steps)
+        viewModel.addGoal(name, steps)
     }
 
     private fun getEditGoalCallback(id: Long) = { name: String, steps: Int ->
-        mainViewModel.editGoal(Goal(id, name, steps))
+        viewModel.editGoal(Goal(id, name, steps))
     }
 }

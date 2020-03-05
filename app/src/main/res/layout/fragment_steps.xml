@@ -5,8 +5,8 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-                name="mainViewModel"
-                type="strathclyde.emb15144.stepcounter.viewmodel.MainViewModel"/>
+                name="viewModel"
+                type="strathclyde.emb15144.stepcounter.viewmodel.SharedViewModel"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -43,7 +43,7 @@
                 app:layout_constraintBottom_toTopOf="@id/percentage"
                 app:layout_constraintStart_toStartOf="@+id/progress"
                 app:layout_constraintEnd_toEndOf="@+id/progress"
-                app:int="@{mainViewModel.today.steps}"
+                app:int="@{viewModel.today.steps}"
                 tools:text="1257"
                 android:textSize="36sp"
                 android:textStyle="bold"/>
@@ -56,7 +56,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/progress"
                 app:layout_constraintStart_toStartOf="@+id/progress"
                 app:layout_constraintEnd_toEndOf="@+id/progress"
-                app:stepsPercentage="@{mainViewModel.today}"
+                app:stepsPercentage="@{viewModel.today}"
                 tools:text="(63%)"
                 android:textSize="18sp"
                 />

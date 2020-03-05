@@ -15,13 +15,13 @@ import strathclyde.emb15144.stepcounter.R
 import strathclyde.emb15144.stepcounter.databinding.FragmentStepsBinding
 import strathclyde.emb15144.stepcounter.model.Goal
 import strathclyde.emb15144.stepcounter.utils.observeOnce
-import strathclyde.emb15144.stepcounter.viewmodel.MainViewModel
-import strathclyde.emb15144.stepcounter.viewmodel.MainViewModelFactory
+import strathclyde.emb15144.stepcounter.viewmodel.SharedViewModel
+import strathclyde.emb15144.stepcounter.viewmodel.SharedViewModelFactory
 
 
 class StepsFragment : Fragment() {
 
-    private lateinit var mainViewModel: MainViewModel
+    private lateinit var viewModel: SharedViewModel
 
     override fun onPause() {
         super.onPause()
@@ -36,24 +36,24 @@ class StepsFragment : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentStepsBinding>(inflater, R.layout.fragment_steps, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
-        mainViewModel = ViewModelProvider(
+        viewModel = ViewModelProvider(
             requireActivity(),
-            MainViewModelFactory(requireActivity().application)
-        ).get(MainViewModel::class.java)
-        binding.mainViewModel = mainViewModel
+            SharedViewModelFactory(requireActivity().application)
+        ).get(SharedViewModel::class.java)
+        binding.viewModel = viewModel
 
         val spinnerAdapter = GoalsSpinnerAdapter(requireActivity())
         binding.goalSpinner.adapter = spinnerAdapter
 
         binding.goalSpinner.onItemSelectedListener = onItemSelectedListener
 
-        mainViewModel.goals.observe(viewLifecycleOwner, Observer {
+        viewModel.goals.observe(viewLifecycleOwner, Observer {
             spinnerAdapter.clear()
             spinnerAdapter.addAll(it)
         })
 
-        mainViewModel.today.observe(viewLifecycleOwner, Observer { today ->
-            mainViewModel.goals.observeOnce(Observer {
+        viewModel.today.observe(viewLifecycleOwner, Observer { today ->
+            viewModel.goals.observeOnce(Observer {
                 it.forEachIndexed { index, goal ->
                     if (goal.id == today.goal_id) {
                         binding.goalSpinner.setSelection(index)
@@ -65,13 +65,13 @@ class StepsFragment : Fragment() {
         binding.addStepsButton.setOnClickListener {
             val steps = binding.stepsInput.text.toString()
             if (steps.isNotEmpty()) {
-                mainViewModel.addSteps(Integer.parseInt(steps))
+                viewModel.addSteps(Integer.parseInt(steps))
                 binding.stepsInput.setText("")
                 hideKeyboard()
             }
         }
 
-        mainViewModel.today.observe(viewLifecycleOwner, Observer {
+        viewModel.today.observe(viewLifecycleOwner, Observer {
             binding.progress.max = it.goal_steps
             binding.progress.progress = it.steps
         })
@@ -85,7 +85,7 @@ class StepsFragment : Fragment() {
         }
 
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-            mainViewModel.newGoalSelected(parent!!.adapter.getItem(position)!! as Goal)
+            viewModel.newGoalSelected(parent!!.adapter.getItem(position)!! as Goal)
         }
     }
 
