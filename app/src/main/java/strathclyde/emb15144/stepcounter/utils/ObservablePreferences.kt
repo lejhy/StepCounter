@@ -1,4 +1,4 @@
-package strathclyde.emb15144.stepcounter.model
+package strathclyde.emb15144.stepcounter.utils
 
 import android.content.Context
 import android.content.SharedPreferences

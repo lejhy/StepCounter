@@ -9,6 +9,7 @@ import kotlinx.coroutines.*
 import strathclyde.emb15144.stepcounter.model.*
 import strathclyde.emb15144.stepcounter.receiver.DateChangedBroadcastReceiver
 import strathclyde.emb15144.stepcounter.utils.DateFormat
+import strathclyde.emb15144.stepcounter.utils.ObservablePreferences
 import strathclyde.emb15144.stepcounter.utils.observeOnce
 import java.util.*
 
