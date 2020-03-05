@@ -1,25 +1,13 @@
 package strathclyde.emb15144.stepcounter.viewmodel
 
 import android.app.Application
-import android.app.Notification
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.SharedPreferences
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
-import androidx.preference.PreferenceManager
 import kotlinx.coroutines.*
-import strathclyde.emb15144.stepcounter.R
-import strathclyde.emb15144.stepcounter.model.Day
-import strathclyde.emb15144.stepcounter.model.DayDao
-import strathclyde.emb15144.stepcounter.model.Goal
-import strathclyde.emb15144.stepcounter.model.GoalDao
+import strathclyde.emb15144.stepcounter.model.*
 import strathclyde.emb15144.stepcounter.receiver.DateChangedBroadcastReceiver
-import strathclyde.emb15144.stepcounter.service.StepsSensorService
-import strathclyde.emb15144.stepcounter.ui.MainActivity
 import strathclyde.emb15144.stepcounter.utils.DateFormat
 import strathclyde.emb15144.stepcounter.utils.observeOnce
 import java.util.*

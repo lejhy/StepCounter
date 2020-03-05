@@ -9,6 +9,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
 import androidx.preference.PreferenceManager
 import strathclyde.emb15144.stepcounter.R
+import strathclyde.emb15144.stepcounter.model.ObservablePreferences
 import strathclyde.emb15144.stepcounter.service.NotificationService
 import strathclyde.emb15144.stepcounter.service.StepsSensorService
 
