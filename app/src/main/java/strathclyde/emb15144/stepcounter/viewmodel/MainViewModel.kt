@@ -156,35 +156,27 @@ class MainViewModel(
         updated.goal_id = goal.id
         updated.goal_name = goal.name
         updated.goal_steps = goal.steps
+        launchIO { dayDao.update(updated) }
+    }
+
+    private fun launchIO(code: () -> Unit) {
         uiScope.launch {
             withContext(Dispatchers.IO) {
-                dayDao.update(updated)
+                code()
             }
         }
     }
 
     fun addGoal(goal: String, steps: Int) {
-        uiScope.launch {
-            withContext(Dispatchers.IO) {
-                goalDao.insert(Goal(0, goal, steps))
-            }
-        }
+        launchIO { goalDao.insert(Goal(0, goal, steps)) }
     }
 
     fun editGoal(goal: Goal) {
-        uiScope.launch {
-            withContext(Dispatchers.IO) {
-                goalDao.update(goal)
-            }
-        }
+        launchIO { goalDao.update(goal) }
     }
 
     fun deleteGoal(id: Long) {
-        uiScope.launch {
-            withContext(Dispatchers.IO) {
-                goalDao.delete(Goal(id))
-            }
-        }
+        launchIO { goalDao.delete(Goal(id)) }
     }
 
     fun newGoalSelected(selection: Goal) {
@@ -200,11 +192,7 @@ class MainViewModel(
     fun addSteps(day: Day, steps: Int) {
         val updated = day.copy()
         updated.steps += steps
-        uiScope.launch {
-            withContext(Dispatchers.IO) {
-                dayDao.update(updated)
-            }
-        }
+        launchIO { dayDao.update(updated) }
     }
 
     fun changeGoal(day: Day, goal: Goal) {
@@ -214,11 +202,7 @@ class MainViewModel(
             goal_name = goal.name
             goal_steps = goal.steps
         }
-        uiScope.launch {
-            withContext(Dispatchers.IO) {
-                dayDao.update(updated)
-            }
-        }
+        launchIO { dayDao.update(updated) }
     }
 
     fun addHistory(date: Date): Boolean {
@@ -236,11 +220,7 @@ class MainViewModel(
             todayGoal.value!!.name,
             todayGoal.value!!.steps
         )
-        uiScope.launch {
-            withContext(Dispatchers.IO) {
-                dayDao.insert(newDay)
-            }
-        }
+        launchIO { dayDao.insert(newDay) }
         return true
     }
 }
