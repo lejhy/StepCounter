@@ -14,25 +14,23 @@ class AddStepsDialog (
     private val accept: (steps: Int) -> Unit
 ) : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return activity?.let {
-            val builder = AlertDialog.Builder(it)
-            val inflater = requireActivity().layoutInflater
-            val binding = DataBindingUtil.inflate<DialogAddStepsBinding>(inflater, R.layout.dialog_add_steps, container, false)
+        val builder = AlertDialog.Builder(requireActivity())
+        val inflater = requireActivity().layoutInflater
+        val binding = DataBindingUtil.inflate<DialogAddStepsBinding>(inflater, R.layout.dialog_add_steps, container, false)
 
-            builder.setView(binding.root)
-                .setTitle(title)
-                .setPositiveButton(getString(R.string.Accept)) { _, _ ->
-                    val steps = binding.stepsInput.text.toString()
-                    if (steps.isNotEmpty()) {
-                        accept(
-                            Integer.parseInt(steps)
-                        )
-                    }
+        builder.setView(binding.root)
+            .setTitle(title)
+            .setPositiveButton(getString(R.string.Accept)) { _, _ ->
+                val steps = binding.stepsInput.text.toString()
+                if (steps.isNotEmpty()) {
+                    accept(
+                        Integer.parseInt(steps)
+                    )
                 }
-                .setNegativeButton(getString(R.string.Cancel)) { dialog, _ ->
-                    dialog.cancel()
-                }
-            builder.create()
-        } ?: throw IllegalStateException("Activity cannot be null")
+            }
+            .setNegativeButton(getString(R.string.Cancel)) { dialog, _ ->
+                dialog.cancel()
+            }
+        return builder.create()
     }
 }

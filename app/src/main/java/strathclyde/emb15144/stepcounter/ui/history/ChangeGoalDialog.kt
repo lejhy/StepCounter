@@ -20,35 +20,33 @@ class ChangeGoalDialog(
     private val accept: (goal: Goal) -> Unit
 ) : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return activity?.let {
-            val builder = AlertDialog.Builder(it)
-            val inflater = requireActivity().layoutInflater
-            val binding = DataBindingUtil.inflate<DialogChangeGoalBinding>(inflater, R.layout.dialog_change_goal, container, false)
+        val builder = AlertDialog.Builder(requireActivity())
+        val inflater = requireActivity().layoutInflater
+        val binding = DataBindingUtil.inflate<DialogChangeGoalBinding>(inflater, R.layout.dialog_change_goal, container, false)
 
-            val spinnerAdapter =
-                GoalsSpinnerAdapter(requireActivity())
-            spinnerAdapter.addAll(goals)
-            binding.goalSpinner.setSelection(goals.indexOf(goal))
-            binding.goalSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
+        val spinnerAdapter =
+            GoalsSpinnerAdapter(requireActivity())
+        spinnerAdapter.addAll(goals)
+        binding.goalSpinner.setSelection(goals.indexOf(goal))
+        binding.goalSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
 
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    goal = spinnerAdapter.getItem(position)!!
-                }
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                goal = spinnerAdapter.getItem(position)!!
             }
-            binding.goalSpinner.adapter = spinnerAdapter
+        }
+        binding.goalSpinner.adapter = spinnerAdapter
 
-            builder.setView(binding.root)
-                .setTitle(title)
-                .setPositiveButton(getString(R.string.Accept)) { _, _ ->
-                    accept(
-                        goal
-                    )
-                }
-                .setNegativeButton(getString(R.string.Cancel)) { dialog, _ ->
-                    dialog.cancel()
-                }
-            builder.create()
-        } ?: throw IllegalStateException("Activity cannot be null")
+        builder.setView(binding.root)
+            .setTitle(title)
+            .setPositiveButton(getString(R.string.Accept)) { _, _ ->
+                accept(
+                    goal
+                )
+            }
+            .setNegativeButton(getString(R.string.Cancel)) { dialog, _ ->
+                dialog.cancel()
+            }
+        return builder.create()
     }
 }

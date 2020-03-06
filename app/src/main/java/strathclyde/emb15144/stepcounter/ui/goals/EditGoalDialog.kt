@@ -16,24 +16,22 @@ class EditGoalDialog(
 ) : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return activity?.let {
-            val builder = AlertDialog.Builder(it)
-            val inflater = requireActivity().layoutInflater
-            val binding = DataBindingUtil.inflate<DialogGoalBinding>(inflater, R.layout.dialog_goal, container, false)
+        val builder = AlertDialog.Builder(requireActivity())
+        val inflater = requireActivity().layoutInflater
+        val binding = DataBindingUtil.inflate<DialogGoalBinding>(inflater, R.layout.dialog_goal, container, false)
 
-            binding.editGoalDialogViewModel = editGoalDialogViewModel
-            binding.lifecycleOwner = it
+        binding.editGoalDialogViewModel = editGoalDialogViewModel
+        binding.lifecycleOwner = requireActivity()
 
-            builder.setView(binding.root)
-                .setTitle(editGoalDialogViewModel.title)
-                .setPositiveButton(getString(R.string.Accept)) { _, _ ->
-                    editGoalDialogViewModel.accept()
-                }
-                .setNegativeButton(getString(R.string.Cancel)) { dialog, _ ->
-                    dialog.cancel()
-                }
-            builder.create()
-        } ?: throw IllegalStateException("Activity cannot be null")
+        builder.setView(binding.root)
+            .setTitle(editGoalDialogViewModel.title)
+            .setPositiveButton(getString(R.string.Accept)) { _, _ ->
+                editGoalDialogViewModel.accept()
+            }
+            .setNegativeButton(getString(R.string.Cancel)) { dialog, _ ->
+                dialog.cancel()
+            }
+        return builder.create()
     }
 
     override fun onResume() {
