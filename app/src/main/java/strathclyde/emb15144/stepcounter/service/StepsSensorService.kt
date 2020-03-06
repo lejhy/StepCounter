@@ -44,8 +44,8 @@ class StepsSensorService : Service(), SensorEventListener {
             }
 
         val notification: Notification = Notification.Builder(this, getString(R.string.channel_id))
-            .setContentTitle("Automatic Step Counting")
-            .setContentText("StepCounter now automatically records your steps")
+            .setContentTitle(getString(R.string.AutomaticStepCounting))
+            .setContentText(getString(R.string.AutomaticStepCountingText))
             .setSmallIcon(R.drawable.ic_directions_run_black_24dp)
             .setContentIntent(pendingIntent)
             .build()

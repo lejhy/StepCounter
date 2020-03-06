@@ -50,11 +50,11 @@ class NotificationService : Service() {
     }
 
     private fun createHalfWayThereNotification(day: Day) {
-        createProgressNotification(day, "Half Way There!")
+        createProgressNotification(day, getString(R.string.halfWayThere))
     }
 
     private fun createAllTheWayThereNotification(day: Day) {
-        createProgressNotification(day, "All The Way There!")
+        createProgressNotification(day, getString(R.string.AllTheWayThere))
     }
 
     private fun createProgressNotification(day: Day, title: String) {
@@ -65,7 +65,7 @@ class NotificationService : Service() {
 
         val notification: Notification = Notification.Builder(application, application.getString(R.string.channel_id))
             .setContentTitle(title)
-            .setContentText(String.format("You have completed %d%% today's goal!", 100 * day.steps / day.goal_steps))
+            .setContentText(String.format(getString(R.string.ProgressNotificationFormat), 100 * day.steps / day.goal_steps))
             .setSmallIcon(R.drawable.ic_directions_run_black_24dp)
             .setContentIntent(pendingIntent)
             .build()

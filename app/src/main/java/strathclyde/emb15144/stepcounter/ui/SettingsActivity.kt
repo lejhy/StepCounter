@@ -37,14 +37,14 @@ class SettingsActivity : AppCompatActivity() {
             preference?.let {
                 if (it.key == "deleteHistory") {
                     AlertDialog.Builder(requireActivity())
-                        .setTitle("Are you sure?")
-                        .setMessage("You'll lose all your history!")
-                        .setPositiveButton("Delete") { _, _ ->
+                        .setTitle(getString(R.string.AreYouSure))
+                        .setMessage(getString(R.string.DeleteHistoryAlertText))
+                        .setPositiveButton(getString(R.string.Delete)) { _, _ ->
                             launchIO(uiScope) {
                                 MainDatabase.getInstance(requireActivity()).dayDao.deleteAllButLatest()
                             }
                         }
-                        .setNegativeButton("Cancel") { _, _ -> }
+                        .setNegativeButton(getString(R.string.Cancel)) { _, _ -> }
                         .create()
                         .show()
                     return true

@@ -16,6 +16,23 @@
     <string name="channel_name">StepService notification channel</string>
     <string name="channel_id">STEPSERVICE CHANNEL</string>
     <string name="automaticStepCounting">Automatic Step Counting</string>
+    <string name="halfWayThere">Half Way There!</string>
+    <string name="AllTheWayThere">All The Way There!</string>
+    <string name="ProgressNotificationFormat">You have completed %d%% of today\'s goal!</string>
+    <string name="AutomaticStepCounting">Automatic Step Counting</string>
+    <string name="AutomaticStepCountingText">StepCounter now automatically records your steps</string>
+    <string name="AreYouSure">Are you sure?</string>
+    <string name="DeleteHistoryAlertText">You\'ll lose all your history!</string>
+    <string name="Delete">Delete</string>
+    <string name="Cancel">Cancel</string>
+    <string name="Accept">Accept</string>
+    <string name="DeleteGoalAlertText">This goal will be deleted!</string>
+    <string name="EditGoal">Edit Goal</string>
+    <string name="AddGoal">Add Goal</string>
+    <string name="AddSteps">Add Steps</string>
+    <string name="ChangeGoal">Change Goal</string>
+    <string name="NewDateAdded">New date added</string>
+    <string name="DateAlreadyExists">Date already exists</string>
     <integer name="automaticStepCounting_notification_id">1</integer>
     <integer name="progress_notification_id">2</integer>
 

@@ -39,19 +39,19 @@ class GoalsFragment : Fragment() {
             GoalsListListener(
                 {
                     AlertDialog.Builder(requireActivity())
-                        .setTitle("Are you sure?")
-                        .setMessage("This goal will be deleted!")
-                        .setPositiveButton("Delete") { _, _ ->
+                        .setTitle(getString(R.string.AreYouSure))
+                        .setMessage(getString(R.string.DeleteGoalAlertText))
+                        .setPositiveButton(getString(R.string.Delete)) { _, _ ->
                             viewModel.deleteGoal(it.id)
                         }
-                        .setNegativeButton("Cancel") { _, _ -> }
+                        .setNegativeButton(getString(R.string.Cancel)) { _, _ -> }
                         .create()
                         .show()
                 },
                 {
                     EditGoalDialog(
                         EditGoalDialogViewModel(
-                            "Edit Goal",
+                            getString(R.string.EditGoal),
                             it.name,
                             it.steps,
                             getEditGoalCallback(it.id),
@@ -66,7 +66,7 @@ class GoalsFragment : Fragment() {
         binding.addGoalButton.setOnClickListener {
             EditGoalDialog(
                 EditGoalDialogViewModel(
-                    "Add Goal",
+                    getString(R.string.AddGoal),
                     "",
                     0,
                     getAddGoalCallback(),

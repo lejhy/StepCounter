@@ -40,12 +40,12 @@ class ChangeGoalDialog(
 
             builder.setView(binding.root)
                 .setTitle(title)
-                .setPositiveButton("Accept") { _, _ ->
+                .setPositiveButton(getString(R.string.Accept)) { _, _ ->
                     accept(
                         goal
                     )
                 }
-                .setNegativeButton("Cancel") { dialog, _ ->
+                .setNegativeButton(getString(R.string.Cancel)) { dialog, _ ->
                     dialog.cancel()
                 }
             builder.create()

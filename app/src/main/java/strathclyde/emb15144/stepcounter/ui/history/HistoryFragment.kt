@@ -41,13 +41,13 @@ class HistoryFragment : Fragment() {
         viewAdapter = HistoryListAdapter(HistoryListListener(
             {
                 AddStepsDialog(
-                    "Add Steps",
+                    getString(R.string.AddSteps),
                     addStepsCallback(it)
                 ).show(requireActivity().supportFragmentManager, "addStepsDialog")
             },
             {
                 ChangeGoalDialog(
-                    "Change Goal",
+                    getString(R.string.ChangeGoal),
                     viewModel.goals.value!!,
                     Goal(it.id, it.goal_name, it.goal_steps),
                     changeGoalCallback(it)
@@ -63,9 +63,9 @@ class HistoryFragment : Fragment() {
             datePickerDialog.setOnDateSetListener { _, year, month, dayOfMonth ->
                 calendar.set(year, month, dayOfMonth)
                 if (viewModel.addHistory(calendar.time)) {
-                    Toast.makeText(requireActivity(), "New date added", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireActivity(), getString(R.string.NewDateAdded), Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(requireActivity(), "Date already exists", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireActivity(), getString(R.string.DateAlreadyExists), Toast.LENGTH_LONG).show()
                 }
             }
             datePickerDialog.show()
