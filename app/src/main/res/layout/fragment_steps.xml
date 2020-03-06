@@ -87,8 +87,7 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginBottom="16dp"
                 android:hint="@string/steps"
-                app:helperText="@string/stepsInputHelperText"
-                app:helperTextEnabled="false">
+                app:helperText="@string/stepsInputHelperText">
 
             <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/stepsInput"
