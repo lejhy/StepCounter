@@ -14,10 +14,11 @@ import strathclyde.emb15144.stepcounter.model.Day
 import strathclyde.emb15144.stepcounter.model.DayDao
 import strathclyde.emb15144.stepcounter.model.MainDatabase
 import strathclyde.emb15144.stepcounter.ui.MainActivity
+import strathclyde.emb15144.stepcounter.utils.MAX_STEPS
 
 class NotificationService : Service() {
 
-    private var lastStepsValue: Int = Int.MAX_VALUE
+    private var lastStepsValue: Int = MAX_STEPS
 
     private lateinit var dayDao: DayDao
     private lateinit var today: LiveData<Day>
