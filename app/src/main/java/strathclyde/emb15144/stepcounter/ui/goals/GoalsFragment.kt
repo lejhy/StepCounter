@@ -13,7 +13,7 @@ import strathclyde.emb15144.stepcounter.R
 import strathclyde.emb15144.stepcounter.databinding.FragmentGoalsBinding
 import strathclyde.emb15144.stepcounter.model.Goal
 import strathclyde.emb15144.stepcounter.model.MainDatabase
-import strathclyde.emb15144.stepcounter.viewmodel.EditGoalDialogViewModel
+import strathclyde.emb15144.stepcounter.viewmodel.GoalDialogViewModel
 import strathclyde.emb15144.stepcounter.viewmodel.SharedViewModel
 import strathclyde.emb15144.stepcounter.viewmodel.SharedViewModelFactory
 
@@ -50,7 +50,7 @@ class GoalsFragment : Fragment() {
                 },
                 {
                     EditGoalDialog(
-                        EditGoalDialogViewModel(
+                        GoalDialogViewModel(
                             getString(R.string.EditGoal),
                             it.name,
                             it.steps,
@@ -65,7 +65,7 @@ class GoalsFragment : Fragment() {
 
         binding.addGoalButton.setOnClickListener {
             EditGoalDialog(
-                EditGoalDialogViewModel(
+                GoalDialogViewModel(
                     getString(R.string.AddGoal),
                     "",
                     0,

@@ -9,10 +9,10 @@ import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_main.*
 import strathclyde.emb15144.stepcounter.R
 import strathclyde.emb15144.stepcounter.databinding.DialogGoalBinding
-import strathclyde.emb15144.stepcounter.viewmodel.EditGoalDialogViewModel
+import strathclyde.emb15144.stepcounter.viewmodel.GoalDialogViewModel
 
 class EditGoalDialog(
-    private val editGoalDialogViewModel: EditGoalDialogViewModel
+    private val goalDialogViewModel: GoalDialogViewModel
 ) : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -20,13 +20,13 @@ class EditGoalDialog(
         val inflater = requireActivity().layoutInflater
         val binding = DataBindingUtil.inflate<DialogGoalBinding>(inflater, R.layout.dialog_goal, container, false)
 
-        binding.editGoalDialogViewModel = editGoalDialogViewModel
+        binding.editGoalDialogViewModel = goalDialogViewModel
         binding.lifecycleOwner = requireActivity()
 
         builder.setView(binding.root)
-            .setTitle(editGoalDialogViewModel.title)
+            .setTitle(goalDialogViewModel.title)
             .setPositiveButton(getString(R.string.Accept)) { _, _ ->
-                editGoalDialogViewModel.accept()
+                goalDialogViewModel.accept()
             }
             .setNegativeButton(getString(R.string.Cancel)) { dialog, _ ->
                 dialog.cancel()
@@ -36,12 +36,12 @@ class EditGoalDialog(
 
     override fun onResume() {
         super.onResume()
-        editGoalDialogViewModel.isValid.observe(activity!!, isValidObserver)
+        goalDialogViewModel.isValid.observe(activity!!, isValidObserver)
     }
 
     override fun onPause() {
         super.onPause()
-        editGoalDialogViewModel.isValid.removeObserver(isValidObserver)
+        goalDialogViewModel.isValid.removeObserver(isValidObserver)
     }
 
     private val isValidObserver = Observer<Boolean>{ setPositiveButtonEnabled(it) }

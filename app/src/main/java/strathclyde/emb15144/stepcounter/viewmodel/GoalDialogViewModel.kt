@@ -5,9 +5,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
 import strathclyde.emb15144.stepcounter.model.GoalDao
-import strathclyde.emb15144.stepcounter.model.MainDatabase
 
-class EditGoalDialogViewModel(
+class GoalDialogViewModel(
     val title: String,
     goalName: String,
     goalSteps: Int,
