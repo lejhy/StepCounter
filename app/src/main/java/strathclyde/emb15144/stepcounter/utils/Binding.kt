@@ -33,7 +33,7 @@ fun TextView.setStepsPercentageFormatted(item: Day?) {
     }
 }
 
-@BindingAdapter("app:goneUnless")
+@BindingAdapter("goneUnless")
 fun goneUnless(view: View, visible: Boolean) {
     view.visibility = if (visible) View.VISIBLE else View.GONE
 }
