@@ -41,7 +41,7 @@ class NotificationService : Service() {
 
     private val notificationObserver = Observer{ day: Day ->
         val newStepRatio = day.steps.toFloat() / day.goal_steps.toFloat()
-        if (lastStepRatio < 1.0 && newStepRatio > 1.0) {
+        if (lastStepRatio < 1.0 && newStepRatio >= 1.0) {
             createAllTheWayThereNotification(day)
         } else if (lastStepRatio < 0.5 && newStepRatio >= 0.5) {
             createHalfWayThereNotification(day)
