@@ -42,8 +42,10 @@ class SettingsActivity : AppCompatActivity() {
                         .setMessage(getString(R.string.DeleteHistoryAlertText))
                         .setPositiveButton(getString(R.string.Delete)) { _, _ ->
                             uiScope.launch {
+                                val dayDao = MainDatabase.getInstance(requireActivity()).dayDao
                                 withContext(Dispatchers.IO) {
-                                    MainDatabase.getInstance(requireActivity()).dayDao.deleteAllButLatest()
+                                    dayDao.deleteAllButLatest()
+                                    dayDao.update(dayDao.getLatest().apply { steps = 0 })
                                 }
                                 Toast.makeText(requireActivity(), getString(R.string.HistoryDeleted), Toast.LENGTH_SHORT).show()
                             }
