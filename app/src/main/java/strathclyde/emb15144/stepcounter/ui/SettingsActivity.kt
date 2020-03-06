@@ -1,6 +1,7 @@
 package strathclyde.emb15144.stepcounter.ui
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
@@ -40,8 +41,11 @@ class SettingsActivity : AppCompatActivity() {
                         .setTitle(getString(R.string.AreYouSure))
                         .setMessage(getString(R.string.DeleteHistoryAlertText))
                         .setPositiveButton(getString(R.string.Delete)) { _, _ ->
-                            launchIO(uiScope) {
-                                MainDatabase.getInstance(requireActivity()).dayDao.deleteAllButLatest()
+                            uiScope.launch {
+                                withContext(Dispatchers.IO) {
+                                    MainDatabase.getInstance(requireActivity()).dayDao.deleteAllButLatest()
+                                }
+                                Toast.makeText(requireActivity(), getString(R.string.HistoryDeleted), Toast.LENGTH_SHORT).show()
                             }
                         }
                         .setNegativeButton(getString(R.string.Cancel)) { _, _ -> }

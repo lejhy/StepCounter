@@ -33,6 +33,7 @@
     <string name="ChangeGoal">Change Goal</string>
     <string name="NewDateAdded">New date added</string>
     <string name="DateAlreadyExists">Date already exists</string>
+    <string name="HistoryDeleted">History deleted</string>
     <integer name="automaticStepCounting_notification_id">1</integer>
     <integer name="progress_notification_id">2</integer>
 
