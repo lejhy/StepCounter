@@ -18,7 +18,7 @@ import strathclyde.emb15144.stepcounter.utils.MAX_STEPS
 
 class NotificationService : Service() {
 
-    private var lastStepsValue: Int = MAX_STEPS
+    private var lastStepRatio: Float = Float.MAX_VALUE
 
     private lateinit var dayDao: DayDao
     private lateinit var today: LiveData<Day>
@@ -40,14 +40,13 @@ class NotificationService : Service() {
     }
 
     private val notificationObserver = Observer{ day: Day ->
-        val lastStepRatio = lastStepsValue.toFloat() / day.goal_steps.toFloat()
         val newStepRatio = day.steps.toFloat() / day.goal_steps.toFloat()
         if (lastStepRatio < 1.0 && newStepRatio > 1.0) {
             createAllTheWayThereNotification(day)
         } else if (lastStepRatio < 0.5 && newStepRatio >= 0.5) {
             createHalfWayThereNotification(day)
         }
-        lastStepsValue = day.steps
+        lastStepRatio = newStepRatio
     }
 
     private fun createHalfWayThereNotification(day: Day) {
