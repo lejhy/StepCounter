@@ -10,10 +10,10 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.IBinder
-import androidx.lifecycle.LiveData
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import strathclyde.emb15144.stepcounter.R
-import strathclyde.emb15144.stepcounter.model.Day
 import strathclyde.emb15144.stepcounter.model.DayDao
 import strathclyde.emb15144.stepcounter.model.MainDatabase
 import strathclyde.emb15144.stepcounter.ui.MainActivity
@@ -26,7 +26,6 @@ class StepsSensorService : Service(), SensorEventListener {
     private var steps = 0
 
     private lateinit var dayDao: DayDao
-    private lateinit var today: LiveData<Day>
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         return START_STICKY
@@ -56,7 +55,6 @@ class StepsSensorService : Service(), SensorEventListener {
         val sensor: Sensor? = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
         sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
         dayDao = MainDatabase.getInstance(this).dayDao
-        today = dayDao.getLatestObservable()
     }
 
 
@@ -69,15 +67,13 @@ class StepsSensorService : Service(), SensorEventListener {
         if (steps == 0) {
             steps = eventSteps
         } else {
-            today.value?.let {
+            launchIO(uiScope) {
                 val deltaSteps = eventSteps - steps
                 steps = eventSteps
 
-                val updated = it.copy()
-                updated.steps += deltaSteps
-                launchIO(uiScope) {
-                    dayDao.update(updated)
-                }
+                val todayUpdated = dayDao.getLatest()
+                todayUpdated.steps += deltaSteps
+                dayDao.update(todayUpdated)
             }
         }
     }
