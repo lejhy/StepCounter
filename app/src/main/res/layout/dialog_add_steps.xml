@@ -18,7 +18,8 @@
                     android:id="@+id/stepsInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberSigned"/>
+                    android:inputType="numberSigned"
+                    android:maxLength="6"/>
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 </layout>

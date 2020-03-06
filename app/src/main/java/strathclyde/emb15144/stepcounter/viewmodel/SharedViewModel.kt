@@ -8,10 +8,7 @@ import strathclyde.emb15144.stepcounter.model.Day
 import strathclyde.emb15144.stepcounter.model.DayDao
 import strathclyde.emb15144.stepcounter.model.Goal
 import strathclyde.emb15144.stepcounter.model.GoalDao
-import strathclyde.emb15144.stepcounter.utils.DateFormat
-import strathclyde.emb15144.stepcounter.utils.ObservablePreferences
-import strathclyde.emb15144.stepcounter.utils.launchIO
-import strathclyde.emb15144.stepcounter.utils.observeOnce
+import strathclyde.emb15144.stepcounter.utils.*
 import java.util.*
 
 class SharedViewModel(
@@ -111,7 +108,7 @@ class SharedViewModel(
 
     fun addSteps(day: Day, steps: Int) {
         val updated = day.copy()
-        updated.steps += steps
+        updated.steps = (updated.steps + steps).coerceIn(0, MAX_STEPS)
         launchIO(uiScope) { dayDao.update(updated) }
     }
 
