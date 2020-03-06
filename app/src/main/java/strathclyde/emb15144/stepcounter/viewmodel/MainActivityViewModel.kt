@@ -41,14 +41,14 @@ class MainActivityViewModel(
         PreferenceManager.setDefaultValues(application, R.xml.root_preferences, false)
         preferences = ObservablePreferences(application)
         preferences.automaticStepCounting.observeForever(automaticStepCountingObserver)
-        preferences.automaticStepCounting.observeForever(notificationObserver)
+        preferences.notifications.observeForever(notificationObserver)
         application.registerReceiver(dateChangedBroadcastReceiver, IntentFilter(Intent.ACTION_DATE_CHANGED))
     }
 
     override fun onCleared() {
         getApplication<Application>().unregisterReceiver(dateChangedBroadcastReceiver)
         preferences.automaticStepCounting.removeObserver(automaticStepCountingObserver)
-        preferences.automaticStepCounting.removeObserver(notificationObserver)
+        preferences.notifications.removeObserver(notificationObserver)
         preferences.destroy()
     }
 
