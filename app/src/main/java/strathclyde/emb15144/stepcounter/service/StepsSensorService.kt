@@ -67,13 +67,10 @@ class StepsSensorService : Service(), SensorEventListener {
         if (steps == 0) {
             steps = eventSteps
         } else {
+            val deltaSteps = eventSteps - steps
+            steps = eventSteps
             launchIO(uiScope) {
-                val deltaSteps = eventSteps - steps
-                steps = eventSteps
-
-                val todayUpdated = dayDao.getLatest()
-                todayUpdated.steps += deltaSteps
-                dayDao.update(todayUpdated)
+                dayDao.addLatestSteps(deltaSteps)
             }
         }
     }

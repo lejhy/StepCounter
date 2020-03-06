@@ -12,6 +12,8 @@ interface DayDao {
     fun insert(day: Day)
     @Update
     fun update(day: Day)
+    @Query("UPDATE days_table SET steps = steps + :stepsToAdd WHERE id IN(SELECT id FROM days_table ORDER BY date DESC LIMIT 1)")
+    fun addLatestSteps(stepsToAdd: Int)
     @Query("SELECT * FROM days_table WHERE id = :key")
     fun get(key: Long): Day?
     @Query("SELECT * FROM days_table ORDER BY date DESC")
