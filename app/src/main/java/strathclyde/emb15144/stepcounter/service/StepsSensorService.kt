@@ -26,6 +26,7 @@ class StepsSensorService : Service(), SensorEventListener {
     private var steps = 0
 
     private lateinit var dayDao: DayDao
+    private lateinit var sensorManager: SensorManager
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         return START_STICKY
@@ -51,12 +52,17 @@ class StepsSensorService : Service(), SensorEventListener {
 
         startForeground(R.integer.automaticStepCounting_notification_id, notification)
 
-        val sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         val sensor: Sensor? = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
         sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
         dayDao = MainDatabase.getInstance(this).dayDao
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        sensorManager.unregisterListener(this)
+        viewModelJob.cancel()
+    }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
         // do nothing...
