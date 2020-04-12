@@ -11,7 +11,8 @@ class MainContentProvider : ContentProvider() {
 
     private val uriMatcher = UriMatcher(UriMatcher.NO_MATCH).apply {
         addURI("strathclyde.emb15144.stepcounter.provider", "goals", 1)
-        addURI("strathclyde.emb15144.stepcounter.provider", "state", 2)
+        addURI("strathclyde.emb15144.stepcounter.provider", "today", 2)
+        addURI("strathclyde.emb15144.stepcounter.provider", "history", 3)
     }
 
     private lateinit var datasource: MainDatabase
@@ -30,6 +31,7 @@ class MainContentProvider : ContentProvider() {
         return when(uriMatcher.match(uri)) {
             1 -> datasource.goalDao.getAllCursor()
             2 -> datasource.dayDao.getLatestCursor()
+            3 -> datasource.dayDao.getAllCursor()
             else -> null
         }
     }

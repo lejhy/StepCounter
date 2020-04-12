@@ -19,6 +19,8 @@ interface DayDao {
     fun get(key: Long): Day?
     @Query("SELECT * FROM days_table ORDER BY date DESC")
     fun getAllObservable(): LiveData<List<Day>>
+    @Query("SELECT * FROM days_table ORDER BY date DESC")
+    fun getAllCursor(): Cursor
     @Query("SELECT * FROM days_table ORDER BY date DESC LIMIT 1")
     fun getLatest(): Day
     @Query("SELECT * FROM days_table ORDER BY date DESC LIMIT 1")
