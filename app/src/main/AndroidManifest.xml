@@ -53,6 +53,11 @@
             </intent-filter>
         </receiver>
 
+        <provider
+                android:authorities="strathclyde.emb15144.stepcounter.provider"
+                android:name=".provider.MainContentProvider"
+                android:exported="true"/>
+
     </application>
 
 </manifest>

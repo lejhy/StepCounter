@@ -1,5 +1,6 @@
 package strathclyde.emb15144.stepcounter.model
 
+import android.database.Cursor
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
@@ -22,6 +23,8 @@ interface DayDao {
     fun getLatest(): Day
     @Query("SELECT * FROM days_table ORDER BY date DESC LIMIT 1")
     fun getLatestObservable(): LiveData<Day>
+    @Query("SELECT * FROM days_table ORDER BY date DESC LIMIT 1")
+    fun getLatestCursor(): Cursor
     @Query("DELETE FROM days_table WHERE id NOT IN(SELECT id FROM days_table ORDER BY date DESC LIMIT 1)")
     fun deleteAllButLatest()
 }

@@ -1,5 +1,6 @@
 package strathclyde.emb15144.stepcounter.model
 
+import android.database.Cursor
 import androidx.lifecycle.LiveData
 import androidx.room.*
 
@@ -17,4 +18,6 @@ interface GoalDao {
     fun get(name: String): Goal?
     @Query("SELECT * FROM goals_table")
     fun getAllObservable(): LiveData<List<Goal>>
+    @Query("SELECT * FROM goals_table")
+    fun getAllCursor(): Cursor
 }
