@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
             .putExtra("active", true)
             .putExtra("useProgressBar", true)
             .putExtra("progressContentUri", "content://strathclyde.emb15144.stepcounter.provider/progress")
-            .putExtra("actionKeys", "view,change")
+            .putExtra("actionKeys", "view")
             .putExtra("actionContentUri", "strathclyde.emb15144.stepcounter.receiver.ActionBroadcastReceiver")
             .putStringArrayListExtra("contextKeyList", arrayListOf("TIME"))
             .putIntegerArrayListExtra("greaterThanOrEqualToList", arrayListOf(0))
