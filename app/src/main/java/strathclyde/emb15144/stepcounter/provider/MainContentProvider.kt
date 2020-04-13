@@ -4,6 +4,7 @@ import android.content.ContentProvider
 import android.content.ContentValues
 import android.content.UriMatcher
 import android.database.Cursor
+import android.database.MatrixCursor
 import android.net.Uri
 import strathclyde.emb15144.stepcounter.model.MainDatabase
 
@@ -13,6 +14,7 @@ class MainContentProvider : ContentProvider() {
         addURI("strathclyde.emb15144.stepcounter.provider", "goals", 1)
         addURI("strathclyde.emb15144.stepcounter.provider", "today", 2)
         addURI("strathclyde.emb15144.stepcounter.provider", "history", 3)
+        addURI("strathclyde.emb15144.stepcounter.provider", "progress", 4)
     }
 
     private lateinit var datasource: MainDatabase
@@ -32,6 +34,12 @@ class MainContentProvider : ContentProvider() {
             1 -> datasource.goalDao.getAllCursor()
             2 -> datasource.dayDao.getLatestCursor()
             3 -> datasource.dayDao.getAllCursor()
+            4 -> {
+                val today = datasource.dayDao.getLatest()
+                val cursor = MatrixCursor(arrayOf("value", "max"))
+                cursor.addRow(arrayOf(today.steps, today.goal_steps))
+                cursor
+            }
             else -> null
         }
     }
@@ -55,4 +63,6 @@ class MainContentProvider : ContentProvider() {
     override fun getType(uri: Uri): String? {
         return null
     }
+
+
 }
