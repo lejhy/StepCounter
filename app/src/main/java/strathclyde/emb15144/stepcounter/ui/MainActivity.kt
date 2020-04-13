@@ -1,7 +1,9 @@
 package strathclyde.emb15144.stepcounter.ui
 
+import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +26,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        registerTriggers()
 
         viewModel = ViewModelProvider(
             this,
@@ -61,5 +65,20 @@ class MainActivity : AppCompatActivity() {
                 super.onOptionsItemSelected(item)
             }
         }
+    }
+
+    private fun registerTriggers() {
+        val intent = Intent("strathclyde.contextualtriggers.intent.action.NEW_TRIGGER")
+            .putExtra("title", "Current Step Count!")
+            .putExtra("content", "Keep on going!")
+            .putExtra("iconKey", "NOTIFICATION_IMPORTANT")
+            .putExtra("active", true)
+            .putExtra("useProgressBar", true)
+            .putExtra("progressContentUri", "content://strathclyde.emb15144.stepcounter.provider/progress")
+            .putStringArrayListExtra("contextKeyList", arrayListOf("TIME"))
+            .putIntegerArrayListExtra("greaterThanOrEqualToList", arrayListOf(0))
+            .putIntegerArrayListExtra("lessThanOrEqualToList", arrayListOf(999))
+            .setComponent(ComponentName("strathclyde.contextualtriggers", "strathclyde.contextualtriggers.receiver.TriggersBroadcastReceiver"))
+        applicationContext.sendBroadcast(intent)
     }
 }
