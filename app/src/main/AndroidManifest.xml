@@ -53,6 +53,13 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".receiver.ActionBroadcastReceiver">
+            <intent-filter>
+                <action android:name="view"/>
+                <action android:name="change"/>
+            </intent-filter>
+        </receiver>
+
         <provider
                 android:authorities="strathclyde.emb15144.stepcounter.provider"
                 android:name=".provider.MainContentProvider"

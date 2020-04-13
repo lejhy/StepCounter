@@ -69,12 +69,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun registerTriggers() {
         val intent = Intent("strathclyde.contextualtriggers.intent.action.NEW_TRIGGER")
+            .putExtra("owner", "strathclyde.emb15144.stepcounter")
             .putExtra("title", "Current Step Count!")
             .putExtra("content", "Keep on going!")
             .putExtra("iconKey", "NOTIFICATION_IMPORTANT")
             .putExtra("active", true)
             .putExtra("useProgressBar", true)
             .putExtra("progressContentUri", "content://strathclyde.emb15144.stepcounter.provider/progress")
+            .putExtra("actionKeys", "view,change")
+            .putExtra("actionContentUri", "strathclyde.emb15144.stepcounter.receiver.ActionBroadcastReceiver")
             .putStringArrayListExtra("contextKeyList", arrayListOf("TIME"))
             .putIntegerArrayListExtra("greaterThanOrEqualToList", arrayListOf(0))
             .putIntegerArrayListExtra("lessThanOrEqualToList", arrayListOf(999))
