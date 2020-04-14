@@ -15,6 +15,8 @@ class MainContentProvider : ContentProvider() {
         addURI("strathclyde.emb15144.stepcounter.provider", "today", 2)
         addURI("strathclyde.emb15144.stepcounter.provider", "history", 3)
         addURI("strathclyde.emb15144.stepcounter.provider", "progress", 4)
+        addURI("strathclyde.emb15144.stepcounter.provider", "week", 5)
+        addURI("strathclyde.emb15144.stepcounter.provider", "next_unsatisfied_goal", 6)
     }
 
     private lateinit var datasource: MainDatabase
@@ -29,8 +31,7 @@ class MainContentProvider : ContentProvider() {
         selection: String?,
         selectionArgs: Array<out String>?,
         sortOrder: String?
-    ): Cursor? {
-        return when(uriMatcher.match(uri)) {
+    ): Cursor? { return when (uriMatcher.match(uri)) {
             1 -> datasource.goalDao.getAllCursor()
             2 -> datasource.dayDao.getLatestCursor()
             3 -> datasource.dayDao.getAllCursor()
@@ -39,6 +40,33 @@ class MainContentProvider : ContentProvider() {
                 val cursor = MatrixCursor(arrayOf("value", "max"))
                 cursor.addRow(arrayOf(today.steps, today.goal_steps))
                 cursor
+            }
+            5 -> {
+                val cursor = datasource.dayDao.getAllCursor()
+                cursor.moveToLast()
+                for (i in 0..5)
+                    cursor.moveToPrevious()
+                cursor
+            }
+            6 -> {
+                val day = datasource.dayDao.getLatest()
+                val goals = datasource.goalDao.getAll()
+
+
+                var closest_goal = Pair(day.goal_name, day.goal_steps)
+                var closest_id: Int = (day.goal_id+1).toInt()
+                val steps = day.steps
+
+                goals.forEach { goal ->
+                    if ((goal.steps < steps     && closest_goal.second < steps && goal.steps > closest_goal.second)
+                        || (goal.steps > steps  && closest_goal.second < steps)
+                        || (goal.steps > steps  && closest_goal.second > steps && goal.steps < closest_goal.second)){
+                        closest_goal = Pair(goal.name, goal.steps)
+                        closest_id = goal.id.toInt()
+                    }
+                }
+
+                return datasource.goalDao.getCursor(closest_id.toLong())
             }
             else -> null
         }
@@ -52,7 +80,12 @@ class MainContentProvider : ContentProvider() {
         return false
     }
 
-    override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<out String>?): Int {
+    override fun update(
+        uri: Uri,
+        values: ContentValues?,
+        selection: String?,
+        selectionArgs: Array<out String>?
+    ): Int {
         return 0
     }
 
