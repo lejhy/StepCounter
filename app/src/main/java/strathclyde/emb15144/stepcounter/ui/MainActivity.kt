@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
             .putExtra("actionContentUri", "strathclyde.emb15144.stepcounter.receiver.ActionBroadcastReceiver")
             .putStringArrayListExtra("contextKeyList", arrayListOf("TIME"))
             .putIntegerArrayListExtra("greaterThanOrEqualToList", arrayListOf(0))
-            .putIntegerArrayListExtra("lessThanOrEqualToList", arrayListOf(999))
+            .putIntegerArrayListExtra("lessThanOrEqualToList", arrayListOf(999999))
             .setComponent(ComponentName("strathclyde.contextualtriggers", "strathclyde.contextualtriggers.receiver.TriggersBroadcastReceiver"))
         applicationContext.sendBroadcast(intent)
     }
