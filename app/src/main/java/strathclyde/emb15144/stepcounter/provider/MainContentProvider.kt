@@ -6,7 +6,6 @@ import android.content.UriMatcher
 import android.database.Cursor
 import android.database.MatrixCursor
 import android.net.Uri
-import strathclyde.emb15144.stepcounter.model.Goal
 import strathclyde.emb15144.stepcounter.model.MainDatabase
 
 class MainContentProvider : ContentProvider() {
@@ -32,8 +31,7 @@ class MainContentProvider : ContentProvider() {
         selection: String?,
         selectionArgs: Array<out String>?,
         sortOrder: String?
-    ): Cursor? {
-        return when (uriMatcher.match(uri)) {
+    ): Cursor? { return when (uriMatcher.match(uri)) {
             1 -> datasource.goalDao.getAllCursor()
             2 -> datasource.dayDao.getLatestCursor()
             3 -> datasource.dayDao.getAllCursor()
@@ -51,33 +49,26 @@ class MainContentProvider : ContentProvider() {
                 cursor
             }
             6 -> {
-                return datasource.goalDao.getCursor(getClosestGoal(datasource).id)
+                val day = datasource.dayDao.getLatest()
+                val goals = datasource.goalDao.getAll()
+
+
+                var closest_goal = Pair(day.goal_name, day.goal_steps)
+                var closest_id: Int = (day.goal_id+1).toInt()
+                val steps = day.steps
+
+                goals.forEach { goal ->
+                    if ((goal.steps < steps     && closest_goal.second < steps && goal.steps > closest_goal.second)
+                        || (goal.steps > steps  && closest_goal.second < steps)
+                        || (goal.steps > steps  && closest_goal.second > steps && goal.steps < closest_goal.second)){
+                        closest_goal = Pair(goal.name, goal.steps)
+                        closest_id = goal.id.toInt()
+                    }
+                }
+
+                return datasource.goalDao.getCursor(closest_id.toLong())
             }
             else -> null
-        }
-    }
-
-    companion object {
-        fun getClosestGoal(datasource: MainDatabase): Goal {
-            val day = datasource.dayDao.getLatest()
-            val goals = datasource.goalDao.getAll()
-
-
-            var closest_goal = Pair(day.goal_name, day.goal_steps)
-            var closest_id: Int = (day.goal_id + 1).toInt()
-            val steps = day.steps
-
-            goals.forEach { goal ->
-                if ((goal.steps < steps && closest_goal.second < steps && goal.steps > closest_goal.second)
-                    || (goal.steps > steps && closest_goal.second < steps)
-                    || (goal.steps > steps && closest_goal.second > steps && goal.steps < closest_goal.second)
-                ) {
-                    closest_goal = Pair(goal.name, goal.steps)
-                    closest_id = goal.id.toInt()
-                }
-            }
-
-            return Goal(closest_id.toLong(), closest_goal.first, closest_goal.second)
         }
     }
 
