@@ -6,9 +6,6 @@ import android.content.UriMatcher
 import android.database.Cursor
 import android.database.MatrixCursor
 import android.net.Uri
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import strathclyde.emb15144.stepcounter.model.Goal
 import strathclyde.emb15144.stepcounter.model.MainDatabase
 
@@ -47,11 +44,16 @@ class MainContentProvider : ContentProvider() {
                 cursor
             }
             5 -> {
+
                 val cursor = datasource.dayDao.getAllCursor()
-                cursor.moveToLast()
-                for (i in 0..5)
-                    cursor.moveToPrevious()
-                cursor
+                val return_cursor = MatrixCursor(cursor.columnNames,7)
+                cursor.moveToFirst()
+                for(i in 0..6){
+                    return_cursor.addRow(listOf(cursor.getLong(0),cursor.getString(1),cursor.getInt(2),cursor.getLong(3),cursor.getString(4),cursor.getInt(5)))
+                    if(!cursor.moveToNext())
+                        break
+                }
+                return_cursor
             }
             6 -> {
                 return datasource.goalDao.getCursor(getClosestGoal(datasource).id)
