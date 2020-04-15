@@ -52,7 +52,7 @@ class ActionBroadcastReceiver : BroadcastReceiver() {
             "view" -> {
                 view(context)
             }
-            "Change Goal" -> {
+            "change" -> {
                 changeGoal(context)
                 view(context)
             }
