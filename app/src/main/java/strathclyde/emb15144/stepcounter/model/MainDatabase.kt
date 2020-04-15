@@ -18,6 +18,7 @@ abstract class MainDatabase : RoomDatabase() {
     companion object {
         @Volatile
         private var INSTANCE: MainDatabase? = null
+
         fun getInstance(context: Context): MainDatabase {
             synchronized(this) {
                 var instance = INSTANCE
@@ -26,7 +27,7 @@ abstract class MainDatabase : RoomDatabase() {
                         context.applicationContext,
                         MainDatabase::class.java,
                         "main_database"
-                    )
+                    ).allowMainThreadQueries()
                         .fallbackToDestructiveMigration()
                         .addCallback(CALLBACK)
                         .build()
